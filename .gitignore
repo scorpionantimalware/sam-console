@@ -1,0 +1,10 @@
+/**/*
+
+!/.gitignore
+
+!/CMakeLists.txt
+!/main.cpp
+!/mainwindow.cpp
+!/mainwindow.h
+
+!/README.md
