@@ -14,7 +14,7 @@ git clone https://github.com/ScorpionAntimalware/scorpion-antimalware.git
 5. Select root ``CMakeLists.txt`` file
 6. Press configure project button on the right
 7. Run the project
-8. If you are not using Qt Creator: have a look at the root ``CMakeLists.txt`` file and uncomment the lines needed.
+8. If you are not using Qt Creator: have a look at the root ``CMakeLists.txt`` file.
 9. Create a build directory for CMake output
 ```bash
 mkdir .build
@@ -60,7 +60,7 @@ git clone https://github.com/ScorpionAntimalware/scorpion-antimalware.git
 4. Select root ``CMakeLists.txt`` file
 5. Press configure project button on the right
 6. Run the project
-7. If you are not using Qt Creator: have a look at the root ``CMakeLists.txt`` file and uncomment the lines needed.
+7. If you are not using Qt Creator: have a look at the root ``CMakeLists.txt`` file.
 8. Create a build directory for CMake output
 ```bash
 mkdir .build
