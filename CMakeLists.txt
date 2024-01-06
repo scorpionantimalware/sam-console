@@ -1,89 +1,57 @@
 cmake_minimum_required(VERSION 3.5)
 
-set(PROJECT_NAME scorpion-antimalware)
+if (CMAKE_BUILD_TYPE MATCHES "Debug")
+  set(PROJECT_NAME "scorpion-antimalware-debug")
+  add_definitions(-DSCORPION_ANTIMALWARE_DEBUG)
+else()
+  set(PROJECT_NAME "scorpion-antimalware")
+endif()
 
-project(${PROJECT_NAME} VERSION 0.1 LANGUAGES CXX)
+set(PROJECT_DESCRIPTION "Scorpion Anti-malware")
 
+project(${PROJECT_NAME} VERSION 1.0.0 LANGUAGES CXX)
+
+# Find includes in corresponding build directories.
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+# Create code from a list of Qt designer ui files.
 set(CMAKE_AUTOUIC ON)
+
+# Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
+
+# Create code from Qt rc files.
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if (WIN32)
-    set(QT_FULL_VERSION "6.5.3")
-
-    set(QT_CMAKE_CONFIG_BASE_PATH "C:/Qt/${QT_FULL_VERSION}/mingw_64/lib/cmake")
-
-    set(QT_DIR "${QT_CMAKE_CONFIG_BASE_PATH}/Qt6")
-    set(Qt6_DIR "${QT_CMAKE_CONFIG_BASE_PATH}/Qt6")
-    set(Qt6WidgetsTools_DIR "${QT_CMAKE_CONFIG_BASE_PATH}/Qt6WidgetsTools")
-    set(Qt6CoreTools_DIR "${QT_CMAKE_CONFIG_BASE_PATH}/Qt6CoreTools")
-    set(Qt6GuiTools_DIR "${QT_CMAKE_CONFIG_BASE_PATH}/Qt6GuiTools")
-endif()
-
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+set(SCORPION_ANTIMALWARE_QT_VERSION "6")
 
 set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
+    main.cpp
+    mainwindow.cpp
+    mainwindow.h
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(${PROJECT_NAME}
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+add_executable(${PROJECT_NAME}
+    ${PROJECT_SOURCES}
+)
+
+# Find Qt
+find_package(Qt${SCORPION_ANTIMALWARE_QT_VERSION} REQUIRED COMPONENTS Widgets)
+
+if(Qt${SCORPION_ANTIMALWARE_QT_VERSION}_FOUND)
+    message(STATUS "Qt${SCORPION_ANTIMALWARE_QT_VERSION} found successfully.")
+    message(STATUS "Qt${SCORPION_ANTIMALWARE_QT_VERSION} Version: ${Qt${SCORPION_ANTIMALWARE_QT_VERSION}_VERSION}")
+    target_link_libraries(${PROJECT_NAME} PRIVATE 
+        Qt${SCORPION_ANTIMALWARE_QT_VERSION}::Widgets 
     )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
-    if(ANDROID)
-        add_library(${PROJECT_NAME} SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(${PROJECT_NAME}
-            ${PROJECT_SOURCES}
-        )
-    endif()
+    message(FATAL_ERROR "Qt${SCORPION_ANTIMALWARE_QT_VERSION} not found.")
 endif()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.${PROJECT_NAME})
-endif()
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
-
-include(GNUInstallDirs)
-install(TARGETS ${PROJECT_NAME}
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
-
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(${PROJECT_NAME})
-endif()
-
-if (WIN32) # Windows
-    target_compile_options(${PROJECT_NAME} PRIVATE /EHs-c- /Zc:__cplusplus) # disable exceptions for MSVC
-elseif (UNIX) # Linux or MacOS
-    target_compile_options(${PROJECT_NAME} PRIVATE -fno-exceptions) # disable exceptions for GCC
-endif()
