@@ -15,7 +15,7 @@ project(${PROJECT_NAME} VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Create code from a list of Qt designer ui files.
-set(CMAKE_AUTOUIC ON)
+# set(CMAKE_AUTOUIC ON)
 
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
@@ -34,24 +34,13 @@ set(PROJECT_SOURCES
     mainwindow.h
 )
 
-add_executable(${PROJECT_NAME}
+# Find Qt
+find_package(Qt${SCORPION_ANTIMALWARE_QT_VERSION} COMPONENTS Core Widgets REQUIRED)
+
+add_executable(${PROJECT_NAME} WIN32 
     ${PROJECT_SOURCES}
 )
 
-# Find Qt
-find_package(Qt${SCORPION_ANTIMALWARE_QT_VERSION} REQUIRED COMPONENTS Widgets)
-
-if(Qt${SCORPION_ANTIMALWARE_QT_VERSION}_FOUND)
-    message(STATUS "Qt${SCORPION_ANTIMALWARE_QT_VERSION} found successfully.")
-    message(STATUS "Qt${SCORPION_ANTIMALWARE_QT_VERSION} Version: ${Qt${SCORPION_ANTIMALWARE_QT_VERSION}_VERSION}")
-    target_link_libraries(${PROJECT_NAME} PRIVATE 
-        Qt${SCORPION_ANTIMALWARE_QT_VERSION}::Widgets 
-    )
-else()
-    message(FATAL_ERROR "Qt${SCORPION_ANTIMALWARE_QT_VERSION} not found.")
-endif()
-
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+    Qt${SCORPION_ANTIMALWARE_QT_VERSION}::Widgets 
 )
