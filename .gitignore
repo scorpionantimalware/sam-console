@@ -8,3 +8,7 @@
 !/mainwindow.h
 
 !/README.md
+
+!/dummy-sam-engine/
+!/dummy-sam-engine/dummy-sam-engine.h
+!/dummy-sam-engine/dummy-sam-engine.cpp
