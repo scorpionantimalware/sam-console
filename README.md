@@ -1,4 +1,4 @@
-# Scorpion Antimalware
+# Scorpion Antimalware Console
 
 This is a temporary GUI using Qt framework for Scorpion Anti-malware project until the next scratch version is done.
 
