@@ -40,11 +40,13 @@ file(GLOB SAM_CONSOLE_SRC_FILES
 find_package(Qt${SAM_CONSOLE_QT_VERSION} COMPONENTS Core Widgets REQUIRED)
 
 if (NOT LINK_CONSOLE)
+    message(STATUS "Building the console without an engine...")
     add_executable(${SAM_CONSOLE_PROJECT_NAME} WIN32 
         ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp 
         ${SAM_CONSOLE_SRC_FILES} 
     )
 
+    message(STATUS "Linking Qt${SAM_CONSOLE_QT_VERSION} to the console...")
     target_link_libraries(${SAM_CONSOLE_PROJECT_NAME} PRIVATE 
         Qt${SAM_CONSOLE_QT_VERSION}::Widgets 
     )
@@ -61,6 +63,7 @@ else()
     )
 
     message(STATUS "Linking Qt${SAM_CONSOLE_QT_VERSION} to the console...")
+    # Link with public because we build the executable in the engine's CMakeLists.txt file.
     target_link_libraries(${SAM_CONSOLE_PROJECT_NAME} PUBLIC 
         Qt${SAM_CONSOLE_QT_VERSION}::Widgets 
     )

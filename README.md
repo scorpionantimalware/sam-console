@@ -29,7 +29,7 @@ git clone https://github.com/ScorpionAntimalware/sam-console.git
 5. Change directory to project's root.
 
 ```bash
-cd scorpion-antimalware/
+cd sam-console/
 ```
 
 6. Create a build directory for CMake output.
@@ -51,7 +51,7 @@ cd .build/
 8. Run cmake
 
 ```bash
-cmake .. -G "Visual Studio 17 2022" -DCMAKE_PREFIX_PATH="C:/Qt/{QT_VERSION}/{MSVC_VERSION}/lib/cmake/"
+cmake .. -G "Visual Studio 17 2022" -DCMAKE_PREFIX_PATH="C:/Qt/{QT_VERSION}/{MSVC_VERSION}/lib/cmake/" -DLINK_CONSOLE=OFF
 ```
 
 9. Build the project using solution file.
@@ -65,10 +65,8 @@ cmake --build .
 11. Run the project.
 
 ```bash
-./Debug/scorpion-antimalware.exe
+./Debug/sam-console.exe
 ```
-
-12. For any update you make in the source files just repeat steps 10 - 12
 
 ## Windows 64-bit (Using MSYS MinGW GCC)
 
@@ -97,7 +95,7 @@ git clone https://github.com/ScorpionAntimalware/sam-console.git
 6. Change directory to project's root.
 
 ```bash
-cd scorpion-antimalware/
+cd sam-console/
 ```
 
 7. Create a build directory for CMake output.
@@ -115,7 +113,7 @@ cd .build/
 9. Run ``cmake`` to produce the ``Makefile`` file needed.
 
 ```bash
-cmake .. -G "MSYS Makefiles" -DCMAKE_PREFIX_PATH="C:/Qt/{QT_VERSION}/{MINGW_VERSION}/lib/cmake/"
+cmake .. -G "MSYS Makefiles" -DCMAKE_PREFIX_PATH="C:/Qt/{QT_VERSION}/{MINGW_VERSION}/lib/cmake/" -DLINK_CONSOLE=OFF
 ```
 
 10. Build the project using ``make``. You can find ``make`` inside ``C:\msys64\usr\bin``.
@@ -127,7 +125,5 @@ make
 11. Run the project.
 
 ```bash
-./scorpion-antimalware.exe
+./Debug/sam-console.exe
 ```
-
-12. For any update you make in the source files just repeat steps 10 - 12
