@@ -4,7 +4,7 @@ This is a temporary GUI using Qt framework for Scorpion Anti-malware project unt
 
 # Table of Contents
 
-- [Scorpion Antimalware](#scorpion-antimalware)
+- [Scorpion Antimalware Console](#sam-console)
 - [Table of Contents](#table-of-contents)
 - [Building the project](#building-the-project)
   - [Windows 64-bit](#windows-64-bit)
@@ -23,7 +23,7 @@ This is a temporary GUI using Qt framework for Scorpion Anti-malware project unt
 4. Clone the repository.
 
 ```bash
-git clone https://github.com/ScorpionAntimalware/scorpion-antimalware.git
+git clone https://github.com/ScorpionAntimalware/sam-console.git
 ```
 
 5. Change directory to project's root.
@@ -91,7 +91,7 @@ pacman -Sy mingw64/mingw-w64-x86_64-gdb
 5. Clone the repository.
 
 ```bash
-git clone https://github.com/ScorpionAntimalware/scorpion-antimalware.git
+git clone https://github.com/ScorpionAntimalware/sam-console.git
 ```
 
 6. Change directory to project's root.
