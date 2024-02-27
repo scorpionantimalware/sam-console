@@ -14,6 +14,13 @@ set(SAM_CONSOLE_PROJECT_DESCRIPTION "Scorpion Anti-malware Console")
 
 project(${SAM_CONSOLE_PROJECT_NAME} VERSION ${SAM_CONSOLE_PROJECT_VERSION} LANGUAGES CXX)
 
+if(${PROJECT_SOURCE_DIR} STREQUAL ${PROJECT_BINARY_DIR})
+  message(
+    FATAL_ERROR
+      "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there.\n"
+  )
+endif()
+
 # Find includes in corresponding build directories.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -29,15 +36,32 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Check https://stackoverflow.com/q/33062728/14629018 for more information.
+if(MSVC)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+endif()
+
 set(SAM_CONSOLE_QT_VERSION "6")
 
 file(GLOB SAM_CONSOLE_SRC_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/statusviewer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/statusviewer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/summary.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/summary.cpp
 )
 
 # Find Qt
-find_package(Qt${SAM_CONSOLE_QT_VERSION} COMPONENTS Core Widgets REQUIRED)
+find_package(Qt${SAM_CONSOLE_QT_VERSION} CONFIG REQUIRED COMPONENTS Core Widgets)
 
 if (NOT LINK_CONSOLE)
     message(STATUS "Building the console without an engine...")
@@ -52,13 +76,14 @@ if (NOT LINK_CONSOLE)
     )
 
     target_include_directories(${SAM_CONSOLE_PROJECT_NAME} PRIVATE 
-        "${CMAKE_CURRENT_SOURCE_DIR}/" 
+        "${CMAKE_CURRENT_SOURCE_DIR}/"
+        "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/"
     )
 
 else()
     message(STATUS "Building the console as library...")
     set(SAM_CONSOLE_PROJECT_NAME ${SAM_CONSOLE_PROJECT_NAME} CACHE STRING "The name of the engine project.")
-    add_library(${SAM_CONSOLE_PROJECT_NAME} SHARED STATIC 
+    add_library(${SAM_CONSOLE_PROJECT_NAME} SHARED  
         ${SAM_CONSOLE_SRC_FILES} 
     )
 
@@ -70,6 +95,7 @@ else()
 
     target_include_directories(${SAM_CONSOLE_PROJECT_NAME} PUBLIC 
         "${CMAKE_CURRENT_SOURCE_DIR}/" 
+        "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/"
     )
 
 endif()
