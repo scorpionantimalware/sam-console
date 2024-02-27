@@ -1,16 +1,16 @@
+# TODO: We can use an older version of CMake.
 cmake_minimum_required(VERSION 3.5)
 
 option(LINK_CONSOLE "Builds Scorpion Anti-malware console and links the engine." OFF)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
-    set(SAM_CONSOLE_PROJECT_NAME "sam-console-debug")
     add_definitions(-DSAM_CONSOLE_DEBUG)
-else()
-    set(SAM_CONSOLE_PROJECT_NAME "sam-console")
 endif()
 
+set(SAM_CONSOLE_PROJECT_NAME "sam-console")
+
 set(SAM_CONSOLE_PROJECT_VERSION "1.0.0")
-set(SAM_CONSOLE_PROJECT_DESCRIPTION "Scorpion Anti-malware Console")
+set(SAM_CONSOLE_PROJECT_DESCRIPTION "Scorpion Anti-malware Console.")
 
 project(${SAM_CONSOLE_PROJECT_NAME} VERSION ${SAM_CONSOLE_PROJECT_VERSION} LANGUAGES CXX)
 
@@ -82,18 +82,18 @@ if (NOT LINK_CONSOLE)
 
 else()
     message(STATUS "Building the console as library...")
-    set(SAM_CONSOLE_PROJECT_NAME ${SAM_CONSOLE_PROJECT_NAME} CACHE STRING "The name of the engine project.")
-    add_library(${SAM_CONSOLE_PROJECT_NAME} SHARED  
+    set(SAM_CONSOLE "sam_console" CACHE STRING "SAM console library name.")
+    add_library(${SAM_CONSOLE} SHARED 
         ${SAM_CONSOLE_SRC_FILES} 
     )
 
     message(STATUS "Linking Qt${SAM_CONSOLE_QT_VERSION} to the console...")
     # Link with public because we build the executable in the engine's CMakeLists.txt file.
-    target_link_libraries(${SAM_CONSOLE_PROJECT_NAME} PUBLIC 
+    target_link_libraries(${SAM_CONSOLE} PUBLIC 
         Qt${SAM_CONSOLE_QT_VERSION}::Widgets 
     )
 
-    target_include_directories(${SAM_CONSOLE_PROJECT_NAME} PUBLIC 
+    target_include_directories(${SAM_CONSOLE} PUBLIC 
         "${CMAKE_CURRENT_SOURCE_DIR}/" 
         "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/"
     )
