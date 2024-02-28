@@ -1,3 +1,6 @@
+> [!CAUTION]
+> # This repository is no longer maintained due to a problem with NumPy when embedding Python. Check [#25888](https://github.com/numpy/numpy/issues/25888) for more information.
+
 # Scorpion Antimalware Console
 
 This is a temporary GUI using Qt framework for Scorpion Anti-malware project until the next scratch version is done.
