@@ -65,8 +65,9 @@ find_package(Qt${SAM_CONSOLE_QT_VERSION} CONFIG REQUIRED COMPONENTS Core Widgets
 
 if (NOT LINK_CONSOLE)
     message(STATUS "Building the console without an engine...")
+    # TODO: Is this Windows specific?
     add_executable(${SAM_CONSOLE_PROJECT_NAME} WIN32 
-        ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/samconsolemain.cpp 
         ${SAM_CONSOLE_SRC_FILES} 
     )
 

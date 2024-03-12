@@ -3,7 +3,7 @@
 !/.gitignore
 
 !/CMakeLists.txt
-!/main.cpp
+!/samconsolemain.cpp
 !/mainwindow.cpp
 !/mainwindow.h
 
