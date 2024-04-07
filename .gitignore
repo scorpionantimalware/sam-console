@@ -9,6 +9,12 @@
 
 !/README.md
 
+!/.github/
+!/.github/CODEOWNERS
+
+!/.vscode/
+!/.vscode/settings.json
+
 !/dummy-sam-engine/
 !/dummy-sam-engine/CMakeLists.txt
 !/dummy-sam-engine/dummy-sam-engine.h
