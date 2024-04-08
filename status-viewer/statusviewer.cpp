@@ -16,7 +16,7 @@
 typedef SAMDummyEngine SAMEngine;
 #else // If no engine is active, throw an error.
 #error "No engine found"
-#endif
+#endif // SAM_ENGINE_ACTIVE
 
 StatusViewer::StatusViewer() : main_layout(nullptr), progress_bar(nullptr), summary(nullptr)
 {
