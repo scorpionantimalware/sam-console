@@ -6,7 +6,11 @@
 
 // If the real engine is active, include the real engine.
 #ifdef SAM_ENGINE_ACTIVE
+#ifdef SAM_DUMMY_ENGINE_ACTIVE // If both engines are active, throw an error.
+#error "Both real and dummy engines are active"
+#else // If only the real engine is active, include the real engine.
 #include "samengine.hpp"
+#endif // SAM_DUMMY_ENGINE_ACTIVE
 #elif SAM_DUMMY_ENGINE_ACTIVE // If the dummy engine is active, include the dummy engine.
 #include "samdummyengine.hpp"
 typedef SAMDummyEngine SAMEngine;
