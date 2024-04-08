@@ -1,10 +1,10 @@
-#include "scanbutton.h"
+#include "scanbutton.hpp"
 
 #include <QWidget>
 
 ScanButton::ScanButton()
 {
-    setFixedSize(100, 100);
+    this->setFixedSize(100, 100);
 }
 
 ScanButton::~ScanButton()

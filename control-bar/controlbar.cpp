@@ -1,8 +1,8 @@
-#include "controlbar.h"
+#include "controlbar.hpp"
 
-#include "scanbutton.h"
-#include "stopbutton.h"
-#include "pausebutton.h"
+#include "scanbutton.hpp"
+#include "stopbutton.hpp"
+#include "pausebutton.hpp"
 
 ControlBar::ControlBar() {
 

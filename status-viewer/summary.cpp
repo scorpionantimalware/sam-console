@@ -1,12 +1,11 @@
-#include "summary.h"
+#include "summary.hpp"
 
 Summary::Summary()
 {
-    setColumnCount(3); // Set the number of columns
-    setRowCount(3); // Set the number of rows
+    this->setColumnCount(2); // Set the number of columns
 
     // Set the header labels for the columns
-    setHorizontalHeaderLabels(QStringList() << "Column 1" << "Column 2" << "Column 3");
+    setHorizontalHeaderLabels(QStringList() << "File Name" << "Status");
 
     // Set the header labels for the rows (using QTableWidgetItem)
     QTableWidgetItem *headerItem1 = new QTableWidgetItem("Row 1");

@@ -1,15 +1,12 @@
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 
-#include "control-bar/controlbar.h"
-#include "status-viewer/statusviewer.h"
-
-MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
+MainWindow::MainWindow(QWidget *parent) : QWidget(parent), main_layout(nullptr), control_bar(nullptr), status_viewer(nullptr){
     main_layout = new QVBoxLayout(this);
 
     main_layout->setSpacing(20);
 
-    ControlBar *control_bar = new ControlBar();
-    StatusViewer *status_viewer = new StatusViewer();
+    control_bar = new ControlBar();
+    status_viewer = new StatusViewer();
 
 
     // Add left bar to the main layout
@@ -21,6 +18,23 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 
 MainWindow::~MainWindow()
 {
+    if (status_viewer)
+    {
+        delete status_viewer;
+        status_viewer = nullptr;
+    }
+
+    if (control_bar)
+    {
+        delete control_bar;
+        control_bar = nullptr;
+    }
+
+    if (main_layout)
+    {
+        delete main_layout;
+        main_layout = nullptr;
+    }
 }
 
 

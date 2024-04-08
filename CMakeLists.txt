@@ -1,8 +1,6 @@
 # TODO: We can use an older version of CMake.
 cmake_minimum_required(VERSION 3.5)
 
-option(LINK_CONSOLE "Builds Scorpion Anti-malware console and links the engine." OFF)
-
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     add_definitions(-DSAM_CONSOLE_DEBUG)
 endif()
@@ -20,6 +18,8 @@ if(${PROJECT_SOURCE_DIR} STREQUAL ${PROJECT_BINARY_DIR})
       "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there.\n"
   )
 endif()
+
+set(SAM_CONSOLE_ROOTDIR ${PROJECT_SOURCE_DIR})
 
 # Find includes in corresponding build directories.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -44,30 +44,40 @@ endif()
 set(SAM_CONSOLE_QT_VERSION "6")
 
 file(GLOB SAM_CONSOLE_SRC_FILES 
-    ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/statusviewer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/statusviewer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/statusviewer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/summary.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/summary.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/summary.cpp
 )
+
+# Safety check: Ensure that all the files exist.
+foreach(file ${SAM_CONSOLE_SRC_FILES})
+    if(NOT EXISTS "${file}")
+        message(FATAL_ERROR "File '${file}' does not exist!")
+    endif()
+endforeach()
 
 # Find Qt
 find_package(Qt${SAM_CONSOLE_QT_VERSION} CONFIG REQUIRED COMPONENTS Core Widgets)
 
-if (NOT LINK_CONSOLE)
+if (NOT SAM_LINK_CONSOLE)
+    # If the engine did not request to link the console, use the dummy engine.
+
     message(STATUS "Building the console without an engine...")
     # TODO: Is this Windows specific?
+    set(SAM_CONSOLE_MAIN_ENTRY "${SAM_CONSOLE_ROOTDIR}/samconsolemain.cpp")
     add_executable(${SAM_CONSOLE_PROJECT_NAME} WIN32 
-        ${CMAKE_CURRENT_SOURCE_DIR}/samconsolemain.cpp 
+        ${SAM_CONSOLE_MAIN_ENTRY} 
         ${SAM_CONSOLE_SRC_FILES} 
     )
 
@@ -81,7 +91,41 @@ if (NOT LINK_CONSOLE)
         "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/"
     )
 
+    # Link the dummy engine.
+    message(STATUS "Linking the dummy engine to the console...")
+    set(SAM_DUMMY_ENGINE_ROOTDIR "${SAM_CONSOLE_ROOTDIR}/sam-dummy-engine")
+    add_subdirectory(${SAM_DUMMY_ENGINE_ROOTDIR})
+
+    target_link_libraries(${SAM_CONSOLE_PROJECT_NAME} PRIVATE 
+        ${SAM_DUMMY_ENGINE}
+    )
+
+    # Specify the directory containing the shared libraries.
+    set(SAM_DUMMY_ENGINE_BUILD_ROOTDIR "${PROJECT_BINARY_DIR}/sam-dummy-engine")
+    
+    # TODO: Why copy_if_different isn't working?
+    # Copy the shared libraries to the executable directory.
+    file(GLOB SAM_DUMMY_ENGINE_DLLS 
+        "${SAM_DUMMY_ENGINE_BUILD_ROOTDIR}/Debug/${SAM_DUMMY_ENGINE}.dll"
+    )
+
+    # Safety check: Ensure that all the files exist.
+    foreach(file ${SAM_DUMMY_ENGINE_DLLS})
+        if(NOT EXISTS "${file}")
+            message(FATAL_ERROR "File '${file}' does not exist!")
+        endif()
+    endforeach()
+
+    foreach(SAM_DUMMY_ENGINE_DLL ${SAM_DUMMY_ENGINE_DLLS})
+        add_custom_command(TARGET ${SAM_CONSOLE_PROJECT_NAME} POST_BUILD
+                        COMMAND ${CMAKE_COMMAND} -E copy ${SAM_DUMMY_ENGINE_DLL} $<TARGET_FILE_DIR:${SAM_CONSOLE_PROJECT_NAME}>
+                        COMMENT "Copying ${SAM_DUMMY_ENGINE_DLL} to the executable directory."
+        )
+    endforeach()
+
 else()
+    # If the engine requested to link the console.
+
     message(STATUS "Building the console as library...")
     set(SAM_CONSOLE "sam_console" CACHE STRING "SAM console library name.")
     add_library(${SAM_CONSOLE} SHARED 

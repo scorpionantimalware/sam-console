@@ -5,6 +5,9 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
+#include "summary.hpp"
+#include <QProgressBar>
+
 class StatusViewer : public QWidget
 {
 public:
@@ -16,6 +19,9 @@ public slots:
 
 private:
     QVBoxLayout *main_layout;
+
+    QProgressBar *progress_bar;
+    Summary *summary;
 };
 
 #endif // STATUSVIEWER_H

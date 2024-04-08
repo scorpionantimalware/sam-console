@@ -1,4 +1,4 @@
-#include "stopbutton.h"
+#include "stopbutton.hpp"
 
 #include <QWidget>
 
