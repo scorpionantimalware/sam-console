@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "samdummyengine.hpp"
-
 // If the real engine is active, include the real engine.
 #ifdef SAM_ENGINE_ACTIVE
 #ifdef SAM_DUMMY_ENGINE_ACTIVE // If both engines are active, throw an error.
