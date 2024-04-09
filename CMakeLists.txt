@@ -86,6 +86,7 @@ if (NOT SAM_LINK_CONSOLE)
     # TODO: Is this Windows specific?
 
     # Find Qt
+    # TODO: Move this find package outside the if statement.
     find_package(Qt${SAM_CONSOLE_QT_VERSION} CONFIG REQUIRED COMPONENTS Core Widgets)
 
     add_executable(${SAM_CONSOLE_PROJECT_NAME} WIN32 
