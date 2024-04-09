@@ -79,14 +79,14 @@ foreach(file ${SAM_CONSOLE_SRC_FILES})
     endif()
 endforeach()
 
-# Find Qt
-find_package(Qt${SAM_CONSOLE_QT_VERSION} CONFIG REQUIRED COMPONENTS Core Widgets)
-
 if (NOT SAM_LINK_CONSOLE)
     # If the engine did not request to link the console, use the dummy engine.
 
     message(STATUS "Building the console without an engine...")
     # TODO: Is this Windows specific?
+
+    # Find Qt
+    find_package(Qt${SAM_CONSOLE_QT_VERSION} CONFIG REQUIRED COMPONENTS Core Widgets)
 
     add_executable(${SAM_CONSOLE_PROJECT_NAME} WIN32 
         ${SAM_CONSOLE_MAIN_ENTRY} 
@@ -138,21 +138,10 @@ if (NOT SAM_LINK_CONSOLE)
 else()
     # If the engine requested to link the console.
 
-    message(STATUS "Building the console as library...")
-    set(SAM_CONSOLE "sam_console" CACHE STRING "SAM console library name.")
-    add_library(${SAM_CONSOLE} SHARED 
-        ${SAM_CONSOLE_SRC_FILES} 
-    )
+    set(SAM_CONSOLE_QT_VERSION ${SAM_CONSOLE_QT_VERSION} CACHE INTERNAL "Sam Console Qt Version" FORCE) 
 
-    message(STATUS "Linking Qt${SAM_CONSOLE_QT_VERSION} to the console...")
-    # Link with public because we build the executable in the engine's CMakeLists.txt file.
-    target_link_libraries(${SAM_CONSOLE} PUBLIC 
-        Qt${SAM_CONSOLE_QT_VERSION}::Widgets 
-    )
-
-    target_include_directories(${SAM_CONSOLE} PUBLIC 
-        "${CMAKE_CURRENT_SOURCE_DIR}/" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/"
-    )
+    # Cache the main entry files to be used in parent CMakeLists.txt file.
+    set(SAM_CONSOLE_MAIN_ENTRY ${SAM_CONSOLE_MAIN_ENTRY} CACHE INTERNAL "Sam Console Main Entry" FORCE)
+    set(SAM_CONSOLE_SRC_FILES ${SAM_CONSOLE_SRC_FILES} CACHE INTERNAL "Sam Console Source Files" FORCE)
 
 endif()

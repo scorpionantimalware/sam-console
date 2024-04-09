@@ -23,6 +23,8 @@ target_include_directories(${SAM_DUMMY_ENGINE} PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/" 
 )
 
+# This is to build with the console with the dummy engine.
+# There is another definition for the real engine.
 target_compile_definitions(${SAM_DUMMY_ENGINE} PUBLIC 
     SAM_DUMMY_ENGINE_ACTIVE
 )
