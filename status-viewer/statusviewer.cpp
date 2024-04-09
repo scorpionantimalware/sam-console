@@ -2,56 +2,73 @@
 
 #include <iostream>
 
-// If the real engine is active, include the real engine.
-#ifdef SAM_ENGINE_ACTIVE
-#ifdef SAM_DUMMY_ENGINE_ACTIVE // If both engines are active, throw an error.
-#error "Both real and dummy engines are active"
-#else // If only the real engine is active, include the real engine.
-#include "samengine.hpp"
-#endif // SAM_DUMMY_ENGINE_ACTIVE
-#elif SAM_DUMMY_ENGINE_ACTIVE // If the dummy engine is active, include the dummy engine.
-#include "samdummyengine.hpp"
-typedef SAMDummyEngine SAMEngine;
-#else // If no engine is active, throw an error.
-#error "No engine found"
-#endif // SAM_ENGINE_ACTIVE
+#include "samconsolemain.hpp"
 
 StatusViewer::StatusViewer() : main_layout(nullptr), progress_bar(nullptr), summary(nullptr)
 {
-    main_layout = new QVBoxLayout(this);
-    main_layout->setSpacing(10);
+    StatusViewer::main_layout = new QVBoxLayout(this);
+    StatusViewer::main_layout->setSpacing(10);
     
-    progress_bar = new QProgressBar();
-    progress_bar->setRange(0, 0); // Indeterminate progress
-    progress_bar->setAlignment(Qt::AlignCenter); // Center align the progress bar
+    StatusViewer::progress_bar = new QProgressBar();
+    StatusViewer::progress_bar->setRange(0, 0); // Indeterminate progress
+    StatusViewer::progress_bar->setAlignment(Qt::AlignCenter); // Center align the progress bar
     
-    summary = new Summary();
+    StatusViewer::summary = new Summary();
 
-    main_layout->addWidget(progress_bar, 1);
-    main_layout->addWidget(summary, 1);
+    StatusViewer::main_layout->addWidget(StatusViewer::progress_bar, 1);
+    StatusViewer::main_layout->addWidget(StatusViewer::summary, 1);
 
     this->setEnabled(false);
 }
 
 StatusViewer::~StatusViewer()
 {
-    if (progress_bar)
+    if (StatusViewer::progress_bar)
     {
-        delete progress_bar;
-        progress_bar = nullptr;
+        delete StatusViewer::progress_bar;
+        StatusViewer::progress_bar = nullptr;
     }
 
-    if (summary)
+    if (StatusViewer::summary)
     {
-        delete summary;
-        summary = nullptr;
+        delete StatusViewer::summary;
+        StatusViewer::summary = nullptr;
     }
+}
+
+void StatusViewer::on_scan_fire()
+{
+    std::cout << "Scan fired" << std::endl;
+}
+
+void StatusViewer::on_scan_complete()
+{
+    std::cout << "Scan complete" << std::endl;
+}
+
+int StatusViewer::on_new_file(const std::string& filename)
+{
+    std::cout << "New file: " << filename << std::endl;
+    return StatusViewer::summary->add_row(filename);
+}
+
+void StatusViewer::on_status(const int& row_index, const float& prediction)
+{
+    std::cout << "Status for row " << row_index << ": " << prediction << std::endl;
+    std::string status = prediction > 0.5 ? "Malware" : "Benign";
+    StatusViewer::summary->set_status_for_row(row_index, status, prediction);
 }
 
 void StatusViewer::on_scan_clicked()
 {
     this->setEnabled(true);
+
+    if (!engine)
+    { 
+        std::cout << "Error: Engine not found" << std::endl;
+        return;
+    }
+
     std::cout << "Scanning..." << std::endl;
-    SAMEngine engine;
-    engine.scan();
+    engine->scan();
 }

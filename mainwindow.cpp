@@ -37,5 +37,7 @@ MainWindow::~MainWindow()
     }
 }
 
-
-
+StatusViewer* MainWindow::get_status_viewer()
+{
+    return status_viewer;
+}

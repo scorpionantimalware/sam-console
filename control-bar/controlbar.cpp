@@ -4,7 +4,7 @@
 #include "stopbutton.hpp"
 #include "pausebutton.hpp"
 
-ControlBar::ControlBar() {
+ControlBar::ControlBar() : main_layout(nullptr) {
 
     main_layout = new QHBoxLayout(this);
     main_layout->setSpacing(10);

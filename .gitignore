@@ -4,6 +4,7 @@
 
 !/CMakeLists.txt
 !/samconsolemain.cpp
+!/samconsolemain.hpp
 !/mainwindow.cpp
 !/mainwindow.hpp
 
@@ -16,9 +17,7 @@
 !/.vscode/settings.json
 
 !/sam-dummy-engine/
-!/sam-dummy-engine/CMakeLists.txt
-!/sam-dummy-engine/sam-dummy-engine.hpp
-!/sam-dummy-engine/sam-dummy-engine.cpp
+!/sam-dummy-engine/**/*
 
 !/control-bar/
 !/control-bar/controlbar.hpp

@@ -4,7 +4,7 @@
 
 PauseButton::PauseButton()
 {
-    setFixedSize(100, 100);
+    this->setFixedSize(100, 100);
 }
 
 PauseButton::~PauseButton()

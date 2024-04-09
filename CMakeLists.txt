@@ -43,6 +43,18 @@ endif()
 
 set(SAM_CONSOLE_QT_VERSION "6")
 
+file(GLOB SAM_CONSOLE_MAIN_ENTRY 
+    ${CMAKE_CURRENT_SOURCE_DIR}/samconsolemain.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/samconsolemain.cpp
+)
+
+# Safety check: Ensure that all the files exist.
+foreach(file ${SAM_CONSOLE_MAIN_ENTRY})
+if(NOT EXISTS "${file}")
+    message(FATAL_ERROR "File '${file}' does not exist!")
+endif()
+endforeach()
+
 file(GLOB SAM_CONSOLE_SRC_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.cpp
@@ -75,7 +87,7 @@ if (NOT SAM_LINK_CONSOLE)
 
     message(STATUS "Building the console without an engine...")
     # TODO: Is this Windows specific?
-    set(SAM_CONSOLE_MAIN_ENTRY "${SAM_CONSOLE_ROOTDIR}/samconsolemain.cpp")
+
     add_executable(${SAM_CONSOLE_PROJECT_NAME} WIN32 
         ${SAM_CONSOLE_MAIN_ENTRY} 
         ${SAM_CONSOLE_SRC_FILES} 

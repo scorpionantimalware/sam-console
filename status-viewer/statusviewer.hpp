@@ -14,6 +14,11 @@ public:
     StatusViewer();
     ~StatusViewer();
 
+    void on_scan_fire();
+    void on_scan_complete();
+    int on_new_file(const std::string& filename);
+    void on_status(const int& row_index, const float& prediction);
+
 public slots:
     void on_scan_clicked();
 

@@ -1,0 +1,7 @@
+/**/*
+
+!/.gitignore
+
+!/CMakeLists.txt
+!/samdummyengine.cpp
+!/samdummyengine.hpp
