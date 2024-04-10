@@ -6,6 +6,9 @@ StatusViewer *status_viewer {nullptr};
 
 int main(int argc, char **argv)
 {
+    /*
+        Initialize the engine and register callbacks.
+    */
     engine = new SAMEngine();
     engine->hook_scan_fire_callback(&scan_fire_callback);
     engine->hook_scan_complete_callback(&scan_complete_callback);
