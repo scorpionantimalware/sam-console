@@ -55,7 +55,7 @@ int StatusViewer::on_new_file(const std::string& filename)
 void StatusViewer::on_status(const int& row_index, const float& prediction)
 {
     std::cout << "Status for row " << row_index << ": " << prediction << std::endl;
-    std::string status = prediction > 0.5 ? "Malware" : "Benign";
+    std::string status {prediction == -1.0f ? "Failed" : prediction > 0.5f ? "Malware" : "Benign"};
     StatusViewer::summary->set_status_for_row(row_index, status, prediction);
 }
 
