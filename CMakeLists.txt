@@ -1,8 +1,15 @@
 # TODO: We can use an older version of CMake.
 cmake_minimum_required(VERSION 3.5)
 
-if (CMAKE_BUILD_TYPE MATCHES "Debug")
-    add_definitions(-DSAM_CONSOLE_DEBUG)
+# Set default build type
+if(NOT CMAKE_BUILD_TYPE)
+  message(STATUS "Build type not set - defaulting to Debug")
+  set(
+    CMAKE_BUILD_TYPE "Debug"
+    CACHE
+      STRING
+      "Choose the type of build from:  Debug Release RelWithDebInfo MinSizeRel."
+    FORCE)
 endif()
 
 set(SAM_CONSOLE_PROJECT_NAME "sam-console")
@@ -12,14 +19,22 @@ set(SAM_CONSOLE_PROJECT_DESCRIPTION "Scorpion Anti-malware Console.")
 
 project(${SAM_CONSOLE_PROJECT_NAME} VERSION ${SAM_CONSOLE_PROJECT_VERSION} LANGUAGES CXX)
 
+if (WIN32)
+    string(APPEND CMAKE_CXX_FLAGS " /W4")
+else()
+    string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra")
+    string(APPEND CMAKE_C_FLAGS " -Wall -Wextra")
+
+    # SAM console require a Windows build environment
+    message(WARNING "Scorpion Anti-malware console requires a Windows build environment.")
+endif()
+
 if(${PROJECT_SOURCE_DIR} STREQUAL ${PROJECT_BINARY_DIR})
   message(
     FATAL_ERROR
       "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there.\n"
   )
 endif()
-
-set(SAM_CONSOLE_ROOTDIR ${PROJECT_SOURCE_DIR})
 
 # Find includes in corresponding build directories.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -35,6 +50,23 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(SAM_CONSOLE_ROOTDIR ${PROJECT_SOURCE_DIR})
+
+if(MSVC)
+    string(APPEND CMAKE_CXX_FLAGS " /EHsc /wd26812")
+    string(APPEND CMAKE_C_FLAGS " /EHsc /wd26812")
+endif()
+
+add_compile_definitions("SAM_CONSOLE_NO_EXCEPTIONS")
+
+# Disable C++ exceptions.
+if(MSVC)
+    string(REGEX REPLACE "/EHsc" "/EHs-c-" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    add_definitions(-D_HAS_EXCEPTIONS=0)
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -fno-unwind-tables -fno-asynchronous-unwind-tables")
+endif()
 
 # Check https://stackoverflow.com/q/33062728/14629018 for more information.
 if(MSVC)
