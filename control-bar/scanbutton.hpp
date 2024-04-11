@@ -13,7 +13,7 @@ public:
     ~ScanButton();
 
 private:
-    QPointF rotate_point(const QPointF& point, const QPointF& center, double angle);
+    QPointF rotate_point(const QPointF& point, const QPointF& center, float angle);
 
 protected:
     void paintEvent(QPaintEvent *event) override;

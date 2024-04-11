@@ -18,14 +18,15 @@ void StopButton::paintEvent(QPaintEvent *event)
     QPainter painter = QPainter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    double min_side = qMin(width(), height());
+    float min_side = qMin(width(), height());
 
     QPointF center = QPointF(width() / 2, height() / 2);
 
-    double radius = min_side * 0.3; // Radius of the circle
+    float side = min_side * 0.4; // Side length of the square
 
-    // Draw the circle
+    // Draw the square
     painter.setBrush(Qt::red);
     painter.setPen(Qt::NoPen); // Set the pen to Qt::NoPen to remove the stroke
-    painter.drawEllipse(QPointF(center.x(), center.y()), radius, radius);
+    
+    painter.drawRect(center.x() - side / 2, center.y() - side / 2, side, side);
 }

@@ -19,14 +19,15 @@ void PauseButton::paintEvent(QPaintEvent *event)
     QPainter painter = QPainter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    double min_side = qMin(width(), height());
+    float min_side = qMin(width(), height());
 
     QPointF center = QPointF(width() / 2, height() / 2);
 
-    double separation = min_side * 0.2;
+    float separation = min_side * 0.15;
+    float pen_width = separation;
 
     QPen pen(Qt::black);
-    pen.setWidth(min_side * 0.2);
+    pen.setWidth(pen_width);
     painter.setPen(pen);
 
     painter.drawLine(QPointF(center.x() - separation, center.y() - separation), QPointF(center.x() - separation, center.y() + separation));

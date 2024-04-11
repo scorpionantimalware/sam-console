@@ -19,6 +19,9 @@
 !/sam-dummy-engine/
 !/sam-dummy-engine/**/*
 
+!/scan-areas-controller/
+!/scan-areas-controller/**/*
+
 !/control-bar/
 !/control-bar/controlbar.hpp
 !/control-bar/controlbar.cpp
@@ -28,7 +31,8 @@
 !/control-bar/scanbutton.cpp
 !/control-bar/stopbutton.hpp
 !/control-bar/stopbutton.cpp
-
+!/control-bar/scanareascontrollerbutton.hpp
+!/control-bar/scanareascontrollerbutton.cpp
 
 !/status-viewer/
 !/status-viewer/statusviewer.hpp

@@ -98,6 +98,8 @@ file(GLOB SAM_CONSOLE_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanareascontrollerbutton.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanareascontrollerbutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/statusviewer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/statusviewer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/summary.hpp

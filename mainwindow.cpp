@@ -37,6 +37,11 @@ MainWindow::~MainWindow()
     }
 }
 
+ControlBar* MainWindow::get_control_bar()
+{
+    return control_bar;
+}
+
 StatusViewer* MainWindow::get_status_viewer()
 {
     return status_viewer;

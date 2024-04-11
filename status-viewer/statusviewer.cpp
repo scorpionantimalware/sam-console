@@ -34,6 +34,12 @@ StatusViewer::~StatusViewer()
         delete StatusViewer::summary;
         StatusViewer::summary = nullptr;
     }
+
+    if (StatusViewer::main_layout)
+    {
+        delete StatusViewer::main_layout;
+        StatusViewer::main_layout = nullptr;
+    }
 }
 
 void StatusViewer::on_scan_fire()

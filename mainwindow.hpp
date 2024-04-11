@@ -17,6 +17,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    ControlBar* get_control_bar();
     StatusViewer* get_status_viewer();
 
 private:

@@ -2,6 +2,7 @@
 
 SAMEngine* engine {nullptr};
 
+ControlBar *control_bar {nullptr};
 StatusViewer *status_viewer {nullptr};
 
 int main(int argc, char **argv)
@@ -17,6 +18,7 @@ int main(int argc, char **argv)
     
     QApplication a(argc, argv);
     MainWindow w;
+    control_bar = w.get_control_bar();
     status_viewer = w.get_status_viewer();
     w.resize(1440, 720);
     w.show();
