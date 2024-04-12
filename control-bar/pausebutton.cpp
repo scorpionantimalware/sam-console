@@ -22,9 +22,9 @@ void PauseButton::paintEvent(QPaintEvent *event)
     float min_side {(float)qMin(width(), height())};
 
     // Use Multiplication instead of Division as it is faster
-    QPointF center {QPointF(width() * 0.5, height() * 0.5)};
+    QPointF center {QPointF(width() * 0.5f, height() * 0.5f)};
 
-    float separation {static_cast<float>(min_side * 0.15)};
+    float separation {min_side * 0.15f};
     float pen_width {separation};
 
     QPen pen(Qt::black);

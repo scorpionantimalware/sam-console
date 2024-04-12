@@ -21,7 +21,7 @@ void ScanAreasControllerButton::paintEvent(QPaintEvent *event)
 
     float min_side {(float)qMin(width(), height())};
 
-    QPointF center {QPointF(width() * 0.5, height() * 0.5)};
+    QPointF center {QPointF(width() * 0.5f, height() * 0.5f)};
 
     QPen pen(Qt::SolidLine); // Set pen style to SolidLine
     pen.setColor(Qt::black); // Set pen color
@@ -29,8 +29,8 @@ void ScanAreasControllerButton::paintEvent(QPaintEvent *event)
     painter.setPen(pen);
 
     // Draw the lens.
-    QPointF lens_circle_center {center - QPointF(min_side * 0.1, min_side * 0.1)};
-    float lens_circle_radius {static_cast<float>(min_side * 0.2)};
+    QPointF lens_circle_center {center - QPointF(min_side * 0.1f, min_side * 0.1f)};
+    float lens_circle_radius {min_side * 0.2f};
     painter.drawEllipse(lens_circle_center, lens_circle_radius, lens_circle_radius);
 
     // Draw the line.

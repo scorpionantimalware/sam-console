@@ -30,8 +30,8 @@ void Summary::resizeEvent(QResizeEvent *event)
 void Summary::update_column_widths()
 {
     int table_width {this->viewport()->width()}; // Use viewport's width to exclude scrollbar width
-    int filename_column_width {static_cast<int>(table_width * 0.75)}; // 75% of table's width for filename column
-    int status_column_width {static_cast<int>(table_width * 0.25)}; // 25% of table's width for status column
+    int filename_column_width {static_cast<int>(table_width * 0.75f)}; // 75% of table's width for filename column
+    int status_column_width {static_cast<int>(table_width * 0.25f)}; // 25% of table's width for status column
     this->setColumnWidth(0, filename_column_width);
     this->setColumnWidth(1, status_column_width);
 }

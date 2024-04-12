@@ -86,7 +86,7 @@ float SAMDummyEngine::generate_dummy_prediction() {
     std::mt19937 gen(rd());
 
     // Create a uniform real distribution between 0 and 1
-    std::uniform_real_distribution<float> dist(0.0, 1.0);
+    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 
     // Generate a random number between 0 and 1
     return dist(gen);

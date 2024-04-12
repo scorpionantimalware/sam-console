@@ -20,9 +20,9 @@ void ScanButton::paintEvent(QPaintEvent *event)
 
     float min_side {(float)qMin(width(), height())};
     
-    QPointF center {QPointF(width() * 0.5, height() * 0.5)};
+    QPointF center {QPointF(width() * 0.5f, height() * 0.5f)};
 
-    float vc_length {static_cast<float>(min_side * 0.25)}; // Length from each triangle's vertex to the center of the widget
+    float vc_length {min_side * 0.25f}; // Length from each triangle's vertex to the center of the widget
 
     // Calculate the vertices of the triangle based on the center of the widget
     QPointF v1 {QPointF(center.x(), center.y() - vc_length)};
