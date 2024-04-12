@@ -29,15 +29,15 @@ void Summary::resizeEvent(QResizeEvent *event)
 
 void Summary::update_column_widths()
 {
-    int table_width = viewport()->width(); // Use viewport's width to exclude scrollbar width
-    int filename_column_width = table_width * 0.75; // 75% of table's width for filename column
-    int status_column_width = table_width * 0.25; // 25% of table's width for status column
+    int table_width {this->viewport()->width()}; // Use viewport's width to exclude scrollbar width
+    int filename_column_width {static_cast<int>(table_width * 0.75)}; // 75% of table's width for filename column
+    int status_column_width {static_cast<int>(table_width * 0.25)}; // 25% of table's width for status column
     this->setColumnWidth(0, filename_column_width);
     this->setColumnWidth(1, status_column_width);
 }
 
 int Summary::add_row(const std::string& filename) {
-    int row_index = this->rowCount(); // Get the current row count as the index for the new row
+    int row_index {this->rowCount()}; // Get the current row count as the index for the new row
     this->insertRow(row_index);
     QTableWidgetItem *filename_item = new QTableWidgetItem(QString::fromStdString(filename));
     QTableWidgetItem *status_item = new QTableWidgetItem("Pending");
@@ -52,7 +52,7 @@ void Summary::set_status_for_row(const int& row_index, const std::string& status
         return; // Invalid row index
     }
 
-    QTableWidgetItem *status_item = this->item(row_index, 1); // Get the item in the second column
+    QTableWidgetItem *status_item {this->item(row_index, 1)}; // Get the item in the second column
 
     if (!status_item) {
         std::cerr << "Status item not found for row: " << row_index << std::endl;

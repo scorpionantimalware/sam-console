@@ -19,12 +19,13 @@ void PauseButton::paintEvent(QPaintEvent *event)
     QPainter painter = QPainter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    float min_side = qMin(width(), height());
+    float min_side {(float)qMin(width(), height())};
 
-    QPointF center = QPointF(width() / 2, height() / 2);
+    // Use Multiplication instead of Division as it is faster
+    QPointF center {QPointF(width() * 0.5, height() * 0.5)};
 
-    float separation = min_side * 0.15;
-    float pen_width = separation;
+    float separation {static_cast<float>(min_side * 0.15)};
+    float pen_width {separation};
 
     QPen pen(Qt::black);
     pen.setWidth(pen_width);

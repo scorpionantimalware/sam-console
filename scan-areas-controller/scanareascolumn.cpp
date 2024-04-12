@@ -55,12 +55,12 @@ void ScanAreasColumn::on_browse_area_button_clicked()
 
 void ScanAreasColumn::update_column_widths()
 {
-    int table_width = viewport()->width(); // Use viewport's width to exclude scrollbar width
+    int table_width {this->viewport()->width()}; // Use viewport's width to exclude scrollbar width
     this->setColumnWidth(0, table_width);
 }
 
 int ScanAreasColumn::add_row(const std::string& area) {
-    int row_index = this->rowCount(); // Get the current row count as the index for the new row
+    int row_index {this->rowCount()}; // Get the current row count as the index for the new row
     this->insertRow(row_index);
     QTableWidgetItem *area_item = new QTableWidgetItem(QString::fromStdString(area));
     this->setItem(row_index, 0, area_item); // Set the area in the first column
