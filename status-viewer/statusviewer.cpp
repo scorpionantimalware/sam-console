@@ -18,7 +18,7 @@ StatusViewer::StatusViewer() : main_layout(nullptr), progress_bar(nullptr), summ
     StatusViewer::main_layout->addWidget(StatusViewer::progress_bar, 1);
     StatusViewer::main_layout->addWidget(StatusViewer::summary, 1);
 
-    this->setEnabled(false);
+    // this->setEnabled(false);
 }
 
 StatusViewer::~StatusViewer()
@@ -61,13 +61,18 @@ int StatusViewer::on_new_file(const std::string& filename)
 void StatusViewer::on_status(const int& row_index, const float& prediction)
 {
     std::cout << "Status for row " << row_index << ": " << prediction << std::endl;
+
+    /*
+        -1.0 is the default value for the buffer that is being sent to the model.
+        If the model is not able to predict the file, it will not fill the buffer.
+    */
     std::string status {prediction == -1.0f ? "Failed" : prediction > 0.5f ? "Malware" : "Benign"};
     StatusViewer::summary->set_status_for_row(row_index, status, prediction);
 }
 
-void StatusViewer::on_scan_clicked()
+void StatusViewer::on_scan_button_clicked()
 {
-    this->setEnabled(true);
+    // this->setEnabled(true);
 
     if (!engine)
     { 

@@ -7,10 +7,13 @@
 #error "Both real and dummy engines are active"
 #else // If only the real engine is active, include the real engine.
 #include "samengine.hpp"
+#include "scanareasprocessor.hpp"
 #endif // SAM_DUMMY_ENGINE_ACTIVE
 #elif SAM_DUMMY_ENGINE_ACTIVE // If the dummy engine is active, include the dummy engine.
 #include "samdummyengine.hpp"
+#include "scanareasdummyprocessor.hpp"
 typedef SAMDummyEngine SAMEngine;
+typedef ScanAreasDummyProcessor ScanAreasProcessor;
 #else // If no engine is active, throw an error.
 #error "No engine found"
 #endif // SAM_ENGINE_ACTIVE

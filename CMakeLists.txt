@@ -104,6 +104,10 @@ file(GLOB SAM_CONSOLE_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/statusviewer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/summary.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/summary.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascontroller.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascontroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascolumn.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascolumn.cpp
 )
 
 # Safety check: Ensure that all the files exist.
@@ -134,8 +138,11 @@ if (NOT SAM_LINK_CONSOLE)
     )
 
     target_include_directories(${SAM_CONSOLE_PROJECT_NAME} PRIVATE 
-        "${CMAKE_CURRENT_SOURCE_DIR}/"
-        "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/"
+        "${CMAKE_CURRENT_SOURCE_DIR}/" 
+        "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/" 
+        "${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/" 
+        "${CMAKE_CURRENT_SOURCE_DIR}/sam-dummy-engine/" 
+        "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/" 
     )
 
     # Link the dummy engine.

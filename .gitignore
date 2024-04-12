@@ -39,3 +39,6 @@
 !/status-viewer/statusviewer.cpp
 !/status-viewer/summary.hpp
 !/status-viewer/summary.cpp
+
+!/tests/
+!/tests/**/*

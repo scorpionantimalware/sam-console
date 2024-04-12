@@ -1,5 +1,5 @@
-#ifndef STATUSVIEWER_H
-#define STATUSVIEWER_H
+#ifndef STATUS_VIEWER_H
+#define STATUS_VIEWER_H
 
 #include <QWidget>
 #include <QVBoxLayout>
@@ -20,7 +20,7 @@ public:
     void on_status(const int& row_index, const float& prediction);
 
 public slots:
-    void on_scan_clicked();
+    void on_scan_button_clicked();
 
 private:
     QVBoxLayout *main_layout;
@@ -29,4 +29,4 @@ private:
     Summary *summary;
 };
 
-#endif // STATUSVIEWER_H
+#endif // STATUS_VIEWER_H

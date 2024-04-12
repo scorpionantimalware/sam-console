@@ -1,6 +1,6 @@
 #include "controlbar.hpp"
 
-ControlBar::ControlBar() : main_layout(nullptr), scan_button(nullptr), stop_button(nullptr), pause_button(nullptr), scan_areas_processor_button(nullptr){
+ControlBar::ControlBar() : main_layout(nullptr), scan_button(nullptr), stop_button(nullptr), pause_button(nullptr), scan_areas_controller_button(nullptr){
 
     ControlBar::main_layout = new QHBoxLayout(this);
     ControlBar::main_layout->setSpacing(20);
@@ -9,17 +9,18 @@ ControlBar::ControlBar() : main_layout(nullptr), scan_button(nullptr), stop_butt
     ControlBar::scan_button = new ScanButton();
     ControlBar::stop_button = new StopButton();
     ControlBar::pause_button = new PauseButton();
-    ControlBar::scan_areas_processor_button = new ScanAreasControllerButton();
+    ControlBar::scan_areas_controller_button = new ScanAreasControllerButton();
 
     ControlBar::main_layout->addWidget(ControlBar::scan_button, 1);
     ControlBar::main_layout->addWidget(ControlBar::stop_button, 1);
     ControlBar::main_layout->addWidget(ControlBar::pause_button, 1);
-    ControlBar::main_layout->addWidget(ControlBar::scan_areas_processor_button, 1);
+    ControlBar::main_layout->addWidget(ControlBar::scan_areas_controller_button, 1);
 
     this->setLayout(ControlBar::main_layout);
     this->setContentsMargins(10, 10, 10, 10); // left, top, right, and bottom respectively.
 
-    this->connect(ControlBar::scan_button, &QPushButton::released, this, &ControlBar::scan_button_clicked);
+    this->connect(ControlBar::scan_button, &QPushButton::released, this, &ControlBar::start_scan);
+    this->connect(ControlBar::scan_areas_controller_button, &QPushButton::released, this, &ControlBar::show_scan_areas_controller);
 }
 
 ControlBar::~ControlBar() {
@@ -38,9 +39,9 @@ ControlBar::~ControlBar() {
         ControlBar::pause_button = nullptr;
     }
 
-    if (ControlBar::scan_areas_processor_button) {
-        delete ControlBar::scan_areas_processor_button;
-        ControlBar::scan_areas_processor_button = nullptr;
+    if (ControlBar::scan_areas_controller_button) {
+        delete ControlBar::scan_areas_controller_button;
+        ControlBar::scan_areas_controller_button = nullptr;
     }
 
     if (ControlBar::main_layout) {
@@ -49,18 +50,16 @@ ControlBar::~ControlBar() {
     }
 }
 
-void ControlBar::scan_button_clicked() {
-    emit scan_started();
+void ControlBar::start_scan() {
+    emit scan_button_clicked();
 }
 
-void ControlBar::stop_button_clicked() {
-    // emit scan_stopped();
+void ControlBar::stop_scan() {
 }
 
-void ControlBar::pause_button_clicked() {
-    // emit scan_paused();
+void ControlBar::pause_scan() {
 }
 
-void ControlBar::scan_areas_processor_button_clicked() {
-    // emit scan_areas_processor();
+void ControlBar::show_scan_areas_controller() {
+    emit scan_areas_controller_button_clicked();
 }

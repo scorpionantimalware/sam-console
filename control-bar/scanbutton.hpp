@@ -1,5 +1,5 @@
-#ifndef SCANBUTTON_H
-#define SCANBUTTON_H
+#ifndef SCAN_BUTTON_H
+#define SCAN_BUTTON_H
 
 #include <QPushButton>
 #include <QPainter>
@@ -12,11 +12,11 @@ public:
     explicit ScanButton();
     ~ScanButton();
 
-private:
-    QPointF rotate_point(const QPointF& point, const QPointF& center, float angle);
-
 protected:
     void paintEvent(QPaintEvent *event) override;
+
+private:
+    QPointF rotate_point(const QPointF& point, const QPointF& center, float angle);
 };
 
-#endif // SCANBUTTON_H
+#endif // SCAN_BUTTON_H

@@ -4,3 +4,5 @@
 
 !/scanareascontroller.hpp
 !/scanareascontroller.cpp
+!/scanareascolumn.hpp
+!/scanareascolumn.cpp

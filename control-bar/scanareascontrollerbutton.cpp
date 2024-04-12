@@ -14,7 +14,7 @@ ScanAreasControllerButton::~ScanAreasControllerButton()
 
 void ScanAreasControllerButton::paintEvent(QPaintEvent *event)
 {
-    Q_UNUSED(event);
+    QPushButton::paintEvent(event);
 
     QPainter painter(this);
 

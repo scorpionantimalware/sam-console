@@ -5,3 +5,7 @@
 !/CMakeLists.txt
 !/samdummyengine.cpp
 !/samdummyengine.hpp
+
+!/scan-areas-dummy-processor/
+!/scan-areas-dummy-processor/scanareasdummyprocessor.cpp
+!/scan-areas-dummy-processor/scanareasdummyprocessor.hpp

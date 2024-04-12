@@ -1,5 +1,5 @@
-#ifndef PAUSEBUTTON_H
-#define PAUSEBUTTON_H
+#ifndef PAUSE_BUTTON_H
+#define PAUSE_BUTTON_H
 
 #include <QPushButton>
 #include <QPainter>
@@ -11,11 +11,12 @@ class PauseButton : public QPushButton
 public:
     explicit PauseButton();
     ~PauseButton();
+    
+protected:
+    void paintEvent(QPaintEvent *event) override;
 
 private:
 
-protected:
-    void paintEvent(QPaintEvent *event) override;
 };
 
-#endif // PAUSEBUTTON_H
+#endif // PAUSE_BUTTON_H

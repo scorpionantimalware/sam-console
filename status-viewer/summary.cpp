@@ -1,9 +1,12 @@
 #include "summary.hpp"
 
 #include <iostream>
+#include <QColor>
+#include <QBrush>
 
 Summary::Summary()
 {
+    // Disable editing for the entire table
     this->setEditTriggers(QAbstractItemView::NoEditTriggers); // Disable editing for the entire table
 
     this->setColumnCount(2); // Set the number of columns
@@ -29,8 +32,8 @@ void Summary::update_column_widths()
     int table_width = viewport()->width(); // Use viewport's width to exclude scrollbar width
     int filename_column_width = table_width * 0.75; // 75% of table's width for filename column
     int status_column_width = table_width * 0.25; // 25% of table's width for status column
-    setColumnWidth(0, filename_column_width);
-    setColumnWidth(1, status_column_width);
+    this->setColumnWidth(0, filename_column_width);
+    this->setColumnWidth(1, status_column_width);
 }
 
 int Summary::add_row(const std::string& filename) {
@@ -57,5 +60,10 @@ void Summary::set_status_for_row(const int& row_index, const std::string& status
     }
         
     status_item->setText(QString::fromStdString(status)); // Set the status text
-    status_item->setBackground(QColor(prediction * 255, (1.0 - prediction) * 255, 0.0, 1.0));
+
+    // Check https://doc.qt.io/qt-6/qcolor.html#QColor-2 for QColor documentation
+    QBrush brush(QColor((int)(prediction * 255), (int)((1.0 - prediction) * 255), 0, 150)); // Create a brush with the color based on prediction
+
+    // Check https://doc.qt.io/qt-6/qtablewidgetitem.html#setBackground for set background documentation
+    status_item->setBackground(brush);
 }

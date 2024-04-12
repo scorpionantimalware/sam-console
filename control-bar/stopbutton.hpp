@@ -1,5 +1,5 @@
-#ifndef STOPBUTTON_H
-#define STOPBUTTON_H
+#ifndef STOP_BUTTON_H
+#define STOP_BUTTON_H
 
 #include <QPushButton>
 #include <QPainter>
@@ -19,4 +19,4 @@ private:
 
 };
 
-#endif // STOPBUTTON_H
+#endif // STOP_BUTTON_H

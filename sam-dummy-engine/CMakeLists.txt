@@ -4,6 +4,8 @@ set(SAM_DUMMY_ENGINE "sam_dummy_engine" CACHE STRING "Dummy SAM engine library n
 file(GLOB SAM_DUMMY_ENGINE_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/samdummyengine.hpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/samdummyengine.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-dummy-processor/scanareasdummyprocessor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-dummy-processor/scanareasdummyprocessor.hpp
 )
 
 # Safety check: Ensure that all the files exist.
@@ -21,6 +23,7 @@ set_target_properties(${SAM_DUMMY_ENGINE} PROPERTIES VERSION ${SAM_CONSOLE_PROJE
 
 target_include_directories(${SAM_DUMMY_ENGINE} PUBLIC 
     "${CMAKE_CURRENT_SOURCE_DIR}/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-dummy-processor/"
 )
 
 # This is to build with the console with the dummy engine.
