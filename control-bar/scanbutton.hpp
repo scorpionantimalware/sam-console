@@ -14,9 +14,6 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-
-private:
-    QPointF rotate_point(const QPointF& point, const QPointF& center, float angle);
 };
 
 #endif // SCAN_BUTTON_H

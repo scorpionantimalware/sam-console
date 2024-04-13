@@ -20,13 +20,14 @@ void StopButton::paintEvent(QPaintEvent *event)
 
     float min_side {(float)qMin(width(), height())};
 
-    QPointF center {QPointF(width() * 0.5f, height() * 0.5f)};
+    QPointF center {width() * 0.5f, height() * 0.5f};
 
-    float side {min_side * 0.4f}; // Side length of the square
+    float square_side_length {min_side * 0.4f}; // Side length of the square
 
     // Draw the square
     painter.setBrush(Qt::red);
     painter.setPen(Qt::NoPen); // Set the pen to Qt::NoPen to remove the stroke
     
-    painter.drawRect(center.x() - side * 0.5f, center.y() - side * 0.5f, side, side);
+    QRectF square {center - QPointF(square_side_length * 0.5f, square_side_length * 0.5f), QSizeF(square_side_length, square_side_length)};
+    painter.drawRect(square);
 }

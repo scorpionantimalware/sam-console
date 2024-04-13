@@ -22,8 +22,9 @@ void PauseButton::paintEvent(QPaintEvent *event)
     float min_side {(float)qMin(width(), height())};
 
     // Use Multiplication instead of Division as it is faster
-    QPointF center {QPointF(width() * 0.5f, height() * 0.5f)};
+    QPointF center {width() * 0.5f, height() * 0.5f};
 
+    float max_height {min_side * 0.18f}; // Max height of the pause symbol from the center.
     float separation {min_side * 0.15f};
     float pen_width {separation};
 
@@ -31,6 +32,13 @@ void PauseButton::paintEvent(QPaintEvent *event)
     pen.setWidth(pen_width);
     painter.setPen(pen);
 
-    painter.drawLine(QPointF(center.x() - separation, center.y() - separation), QPointF(center.x() - separation, center.y() + separation));
-    painter.drawLine(QPointF(center.x() + separation, center.y() - separation), QPointF(center.x() + separation, center.y() + separation));
+    /*
+        From top to bottom, draw the left part.
+    */
+    painter.drawLine(center - QPointF(separation, max_height), center - QPointF(separation, -max_height));
+
+    /*
+        From top to bottom, draw the right part.
+    */
+    painter.drawLine(center + QPointF(separation, -max_height), center + QPointF(separation, max_height));
 }
