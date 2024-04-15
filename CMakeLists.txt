@@ -119,6 +119,14 @@ foreach(file ${SAM_CONSOLE_SRC_FILES})
     endif()
 endforeach()
 
+set(${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/sam-dummy-engine/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/" 
+)
+
 if (NOT SAM_LINK_CONSOLE)
     # If the engine did not request to link the console, use the dummy engine.
 
@@ -143,13 +151,6 @@ if (NOT SAM_LINK_CONSOLE)
         Qt${SAM_CONSOLE_QT_VERSION}::Widgets 
     )
 
-    set(${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES 
-        "${CMAKE_CURRENT_SOURCE_DIR}/" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/sam-dummy-engine/" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/" 
-    )
     target_include_directories(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 
         ${${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES} 
     )
@@ -206,7 +207,9 @@ else()
     set(SAM_CONSOLE_MAIN_ENTRY ${SAM_CONSOLE_MAIN_ENTRY} CACHE INTERNAL "Sam Console Main Entry" FORCE)
     set(SAM_CONSOLE_SRC_FILES ${SAM_CONSOLE_SRC_FILES} CACHE INTERNAL "Sam Console Source Files" FORCE)
 
-    set(${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES ${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES CACHE INTERNAL "Sam Console Include Directories" FORCE)
+    set(${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES 
+        ${${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES} CACHE INTERNAL "Sam Console Include Directories" FORCE
+    )
 
 endif()
 
