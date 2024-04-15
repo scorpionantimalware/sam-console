@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * status-viewer/resultsstreamviewer.hpp
+ * results-stream-viewer/resultsstreamviewer.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 

@@ -49,10 +49,10 @@ signals:
     /**
      * @brief Signal emitted when the scan button is clicked.
      * 
-     * @note This is used inside the @c StatusViewer class.
+     * @note This is used inside the @c ResultsStreamViewer class.
      * 
-     * @see @c status-viewer/statusviewer.hpp
-     * @see @c StatusViewer::on_scan_button_clicked
+     * @see @c results-stream-viewer/resultsstreamviewer.hpp
+     * @see @c ResultsStreamViewer::on_scan_button_clicked
     */
     void scan_button_clicked();
 
