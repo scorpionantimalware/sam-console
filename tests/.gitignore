@@ -2,5 +2,5 @@
 
 !/.gitignore
 
-!/testsmain.hpp
-!/testsmain.cpp
+!/consoletestsmain.hpp
+!/consoletestsmain.cpp

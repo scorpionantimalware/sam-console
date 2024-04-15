@@ -26,8 +26,8 @@
  * 
  */
 
-#ifndef CONTROL_BAR_H
-#define CONTROL_BAR_H
+#ifndef SAM_CONTROL_BAR_HPP
+#define SAM_CONTROL_BAR_HPP
 
 #include <QWidget>
 #include <QHBoxLayout>
@@ -109,4 +109,4 @@ private:
     
 };
 
-#endif // CONTROL_BAR_H
+#endif // SAM_CONTROL_BAR_HPP

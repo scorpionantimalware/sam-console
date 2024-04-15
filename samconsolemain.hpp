@@ -1,5 +1,5 @@
-#ifndef SAM_CONSOLE_MAIN_H
-#define SAM_CONSOLE_MAIN_H
+#ifndef SAM_CONSOLE_MAIN_HPP
+#define SAM_CONSOLE_MAIN_HPP
 
 // If the real engine is active, include the real engine.
 #ifdef SAM_ENGINE_ACTIVE
@@ -18,9 +18,19 @@ typedef ScanAreasDummyProcessor ScanAreasProcessor;
 #error "No engine found"
 #endif // SAM_ENGINE_ACTIVE
 
-#include "mainwindow.hpp"
+#ifndef SAM_ORG_NAME
+#error "No organization name defined"
+#endif // SAM_ORG_NAME
 
-#include <QApplication>
+#ifndef SAM_CONSOLE_PROJECT_NAME
+#error "No project name defined"
+#endif // SAM_CONSOLE_PROJECT_NAME
+
+#ifndef SAM_CONSOLE_PROJECT_VERSION
+#error "No project version defined"
+#endif // SAM_CONSOLE_PROJECT_VERSION
+
+#include "mainwindow.hpp"
 
 extern SAMEngine *engine;
 
@@ -34,4 +44,4 @@ int new_file_callback(const std::string& filename);
 
 void status_callback(const int& row_index, const float& prediction);
 
-#endif // SAM_CONSOLE_MAIN_H
+#endif // SAM_CONSOLE_MAIN_HPP

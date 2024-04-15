@@ -26,8 +26,8 @@
  * 
  */
 
-#ifndef SCAN_AREAS_CONTROLLER_H
-#define SCAN_AREAS_CONTROLLER_H
+#ifndef SAM_SCAN_AREAS_CONTROLLER_HPP
+#define SAM_SCAN_AREAS_CONTROLLER_HPP
 
 #include <QWidget>
 #include <QHBoxLayout>
@@ -107,4 +107,4 @@ private:
     QPushButton *delete_area_button;
 };
 
-#endif // SCAN_AREAS_CONTROLLER_H
+#endif // SAM_SCAN_AREAS_CONTROLLER_HPP

@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * summary.hpp
+ * status-viewer/resultsstreamviewer.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,30 +26,39 @@
  * 
  */
 
-#ifndef SUMMARY_H
-#define SUMMARY_H
+#ifndef SAM_RESULTS_STREAM_VIEWER_HPP
+#define SAM_RESULTS_STREAM_VIEWER_HPP
 
 #include <QTableWidget>
 
-class Summary : public QTableWidget
+class ResultsStreamViewer : public QTableWidget
 {
 public:
-    Summary();
-    ~Summary();
+    ResultsStreamViewer();
+    ~ResultsStreamViewer();
+
+    void init();
 
     int add_row(const std::string& filename);
 
     void set_status_for_row(const int& row_index, const std::string& status, const float& prediction);
 
+    void on_scan_fire();
+    void on_scan_complete();
+    int on_new_file(const std::string& filename);
+    void on_status(const int& row_index, const float& prediction);
+
+public slots:
+    void on_scan_button_clicked();
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-/**
- * @brief Update the column widths based on the table's width
-*/
+    /**
+     * @brief Update the column widths based on the table's width
+    */
     void update_column_widths();
-
 };
 
-#endif // SUMMARY_H
+#endif // SAM_RESULTS_STREAM_VIEWER_HPP

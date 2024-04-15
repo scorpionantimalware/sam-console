@@ -34,11 +34,9 @@
 !/control-bar/scanareascontrollerbutton.hpp
 !/control-bar/scanareascontrollerbutton.cpp
 
-!/status-viewer/
-!/status-viewer/statusviewer.hpp
-!/status-viewer/statusviewer.cpp
-!/status-viewer/summary.hpp
-!/status-viewer/summary.cpp
+!/results-stream-viewer/
+!/results-stream-viewer/resultsstreamviewer.hpp
+!/results-stream-viewer/resultsstreamviewer.cpp
 
 !/tests/
 !/tests/**/*

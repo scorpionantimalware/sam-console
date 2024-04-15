@@ -12,12 +12,16 @@ if(NOT CMAKE_BUILD_TYPE)
     FORCE)
 endif()
 
-set(SAM_CONSOLE_PROJECT_NAME "sam-console")
+set(SAM_ORG_NAME "Scorpion Anti-malware")
+
+set(SAM_CONSOLE_PROJECT_NAME "Scorpion Anti-malware Console")
 
 set(SAM_CONSOLE_PROJECT_VERSION "1.0.0")
 set(SAM_CONSOLE_PROJECT_DESCRIPTION "Scorpion Anti-malware Console.")
 
-project(${SAM_CONSOLE_PROJECT_NAME} VERSION ${SAM_CONSOLE_PROJECT_VERSION} LANGUAGES CXX)
+set(SAM_CONSOLE_EXECUTABLE_NAME "sam-console")
+
+project(${SAM_CONSOLE_EXECUTABLE_NAME} VERSION ${SAM_CONSOLE_PROJECT_VERSION} LANGUAGES CXX)
 
 if (WIN32)
     string(APPEND CMAKE_CXX_FLAGS " /W4")
@@ -100,10 +104,8 @@ file(GLOB SAM_CONSOLE_SRC_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanareascontrollerbutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanareascontrollerbutton.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/statusviewer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/statusviewer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/summary.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/summary.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/resultsstreamviewer.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/resultsstreamviewer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascontroller.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascolumn.hpp
@@ -127,22 +129,29 @@ if (NOT SAM_LINK_CONSOLE)
     # TODO: Move this find package outside the if statement.
     find_package(Qt${SAM_CONSOLE_QT_VERSION} CONFIG REQUIRED COMPONENTS Core Widgets)
 
-    add_executable(${SAM_CONSOLE_PROJECT_NAME} WIN32 
+    add_executable(${SAM_CONSOLE_EXECUTABLE_NAME} WIN32 
         ${SAM_CONSOLE_MAIN_ENTRY} 
         ${SAM_CONSOLE_SRC_FILES} 
     )
 
+    target_compile_definitions(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 
+        SAM_CONSOLE_NO_EXCEPTIONS 
+    )
+
     message(STATUS "Linking Qt${SAM_CONSOLE_QT_VERSION} to the console...")
-    target_link_libraries(${SAM_CONSOLE_PROJECT_NAME} PRIVATE 
+    target_link_libraries(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 
         Qt${SAM_CONSOLE_QT_VERSION}::Widgets 
     )
 
-    target_include_directories(${SAM_CONSOLE_PROJECT_NAME} PRIVATE 
+    set(${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES 
         "${CMAKE_CURRENT_SOURCE_DIR}/" 
         "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/status-viewer/" 
+        "${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/" 
         "${CMAKE_CURRENT_SOURCE_DIR}/sam-dummy-engine/" 
         "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/" 
+    )
+    target_include_directories(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 
+        ${${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES} 
     )
 
     # Link the dummy engine.
@@ -150,8 +159,14 @@ if (NOT SAM_LINK_CONSOLE)
     set(SAM_DUMMY_ENGINE_ROOTDIR "${SAM_CONSOLE_ROOTDIR}/sam-dummy-engine")
     add_subdirectory(${SAM_DUMMY_ENGINE_ROOTDIR})
 
-    target_link_libraries(${SAM_CONSOLE_PROJECT_NAME} PRIVATE 
+    target_link_libraries(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 
         ${SAM_DUMMY_ENGINE}
+    )
+
+    target_compile_definitions(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 
+        SAM_ORG_NAME="${SAM_ORG_NAME}"
+        SAM_CONSOLE_PROJECT_NAME="${SAM_CONSOLE_PROJECT_NAME}"
+        SAM_CONSOLE_PROJECT_VERSION="${SAM_CONSOLE_PROJECT_VERSION}"
     )
 
     # Specify the directory containing the shared libraries.
@@ -171,8 +186,8 @@ if (NOT SAM_LINK_CONSOLE)
     endforeach()
 
     foreach(SAM_DUMMY_ENGINE_DLL ${SAM_DUMMY_ENGINE_DLLS})
-        add_custom_command(TARGET ${SAM_CONSOLE_PROJECT_NAME} POST_BUILD
-                        COMMAND ${CMAKE_COMMAND} -E copy ${SAM_DUMMY_ENGINE_DLL} $<TARGET_FILE_DIR:${SAM_CONSOLE_PROJECT_NAME}>
+        add_custom_command(TARGET ${SAM_CONSOLE_EXECUTABLE_NAME} POST_BUILD
+                        COMMAND ${CMAKE_COMMAND} -E copy ${SAM_DUMMY_ENGINE_DLL} $<TARGET_FILE_DIR:${SAM_CONSOLE_EXECUTABLE_NAME}>
                         COMMENT "Copying ${SAM_DUMMY_ENGINE_DLL} to the executable directory."
         )
     endforeach()
@@ -180,11 +195,18 @@ if (NOT SAM_LINK_CONSOLE)
 else()
     # If the engine requested to link the console.
 
+    set(SAM_CONSOLE_PROJECT_NAME ${SAM_CONSOLE_PROJECT_NAME} CACHE INTERNAL "Sam Console Project Name" FORCE)
+    set(SAM_CONSOLE_PROJECT_VERSION ${SAM_CONSOLE_PROJECT_VERSION} CACHE INTERNAL "Sam Console Project Version" FORCE)
+
+    set(SAM_CONSOLE_EXECUTABLE_NAME ${SAM_CONSOLE_EXECUTABLE_NAME} CACHE INTERNAL "Sam Console Executable Name" FORCE)
+
     set(SAM_CONSOLE_QT_VERSION ${SAM_CONSOLE_QT_VERSION} CACHE INTERNAL "Sam Console Qt Version" FORCE) 
 
     # Cache the main entry files to be used in parent CMakeLists.txt file.
     set(SAM_CONSOLE_MAIN_ENTRY ${SAM_CONSOLE_MAIN_ENTRY} CACHE INTERNAL "Sam Console Main Entry" FORCE)
     set(SAM_CONSOLE_SRC_FILES ${SAM_CONSOLE_SRC_FILES} CACHE INTERNAL "Sam Console Source Files" FORCE)
+
+    set(${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES ${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES CACHE INTERNAL "Sam Console Include Directories" FORCE)
 
 endif()
 

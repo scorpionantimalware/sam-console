@@ -26,8 +26,8 @@
  * 
  */
 
-#ifndef SAM_DUMMY_ENGINE_H
-#define SAM_DUMMY_ENGINE_H
+#ifndef SAM_DUMMY_ENGINE_HPP
+#define SAM_DUMMY_ENGINE_HPP
 
 #include <thread>
 #include <mutex>
@@ -80,4 +80,4 @@ class SAMDummyEngine {
     float generate_dummy_prediction();
 }; // class SAMDummyEngine
 
-#endif // SAM_DUMMY_ENGINE_H
+#endif // SAM_DUMMY_ENGINE_HPP

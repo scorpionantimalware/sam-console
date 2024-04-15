@@ -2,27 +2,27 @@
 
 #include <iostream>
 
-MainWindow::MainWindow(QWidget *parent) : QWidget(parent), main_layout(nullptr), control_bar(nullptr), status_viewer(nullptr), scan_areas_controller(nullptr) {
+MainWindow::MainWindow(QWidget *parent) : QWidget(parent), main_layout(nullptr), control_bar(nullptr), results_stream_viewer(nullptr), scan_areas_controller(nullptr) {
     MainWindow::main_layout = new QVBoxLayout(this);
 
     MainWindow::main_layout->setSpacing(20);
 
     MainWindow::control_bar = new ControlBar();
-    MainWindow::status_viewer = new StatusViewer();
+    MainWindow::results_stream_viewer = new ResultsStreamViewer();
 
     MainWindow::main_layout->addWidget(MainWindow::control_bar, 1);
-    MainWindow::main_layout->addWidget(MainWindow::status_viewer, 3); // The viewer will take up 3/4 of the space.
+    MainWindow::main_layout->addWidget(MainWindow::results_stream_viewer, 3); // The viewer will take up 3/4 of the space.
 
-    this->connect(MainWindow::control_bar, &ControlBar::scan_button_clicked, MainWindow::status_viewer, &StatusViewer::on_scan_button_clicked);
+    this->connect(MainWindow::control_bar, &ControlBar::scan_button_clicked, MainWindow::results_stream_viewer, &ResultsStreamViewer::on_scan_button_clicked);
     this->connect(MainWindow::control_bar, &ControlBar::scan_areas_controller_button_clicked, this, &MainWindow::on_scan_areas_controller_button_clicked);
 }
 
 MainWindow::~MainWindow()
 {
-    if (MainWindow::status_viewer)
+    if (MainWindow::results_stream_viewer)
     {
-        delete MainWindow::status_viewer;
-        MainWindow::status_viewer = nullptr;
+        delete MainWindow::results_stream_viewer;
+        MainWindow::results_stream_viewer = nullptr;
     }
 
     if (MainWindow::control_bar)
@@ -49,9 +49,9 @@ ControlBar* MainWindow::get_control_bar()
     return MainWindow::control_bar;
 }
 
-StatusViewer* MainWindow::get_status_viewer()
+ResultsStreamViewer* MainWindow::get_results_stream_viewer()
 {
-    return MainWindow::status_viewer;
+    return MainWindow::results_stream_viewer;
 }
 
 void MainWindow::on_scan_areas_controller_button_clicked()

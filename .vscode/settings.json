@@ -2,5 +2,9 @@
     // Exclude external projects from search results.
     "search.exclude": {},
     "editor.formatOnSave": false,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    "files.associations": {
+        "xiosbase": "cpp",
+        "filesystem": "cpp"
+    }
 }

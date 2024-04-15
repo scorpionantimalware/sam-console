@@ -26,8 +26,8 @@
  * 
  */
 
-#ifndef SCAN_BUTTON_H
-#define SCAN_BUTTON_H
+#ifndef SAM_SCAN_BUTTON_HPP
+#define SAM_SCAN_BUTTON_HPP
 
 #include <QPushButton>
 #include <QPainter>
@@ -44,4 +44,4 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 };
 
-#endif // SCAN_BUTTON_H
+#endif // SAM_SCAN_BUTTON_HPP

@@ -26,8 +26,8 @@
  * 
  */
 
-#ifndef SAM_SCAN_AREAS_DUMMY_PROCESSOR_H
-#define SAM_SCAN_AREAS_DUMMY_PROCESSOR_H
+#ifndef SAM_SCAN_AREAS_DUMMY_PROCESSOR_HPP
+#define SAM_SCAN_AREAS_DUMMY_PROCESSOR_HPP
 
 #include <string>
 #include <vector>
@@ -46,4 +46,4 @@ public:
     bool add_area([[maybe_unused]] const std::string& area);
 };
 
-#endif // SAM_SCAN_AREAS_DUMMY_PROCESSOR_H
+#endif // SAM_SCAN_AREAS_DUMMY_PROCESSOR_HPP

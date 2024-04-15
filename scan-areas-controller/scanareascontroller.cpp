@@ -30,6 +30,8 @@
 
 ScanAreasController::ScanAreasController(QWidget *parent) : QWidget(parent), main_layout(nullptr), scan_areas_column(nullptr)
 {
+    this->setWindowTitle("Scan Areas Controller");
+
     ScanAreasController::main_layout = new QHBoxLayout(this);
 
     ScanAreasController::scan_areas_column = new ScanAreasColumn();

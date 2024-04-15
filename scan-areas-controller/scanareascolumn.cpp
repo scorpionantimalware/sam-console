@@ -37,11 +37,7 @@
 
 ScanAreasColumn::ScanAreasColumn() : scan_areas()
 {
-    this->setColumnCount(1); // Set the number of columns
-    this->setRowCount(0); // Set the number of rows
-
-    this->horizontalHeader()->setVisible(false);
-    this->verticalHeader()->setVisible(false);
+    ScanAreasColumn::init();
 
     ScanAreasProcessor processor;
     if (!processor.load_or_init(ScanAreasColumn::scan_areas)) {
@@ -56,6 +52,15 @@ ScanAreasColumn::ScanAreasColumn() : scan_areas()
 ScanAreasColumn::~ScanAreasColumn()
 {
     
+}
+
+void ScanAreasColumn::init()
+{
+    this->setColumnCount(1); // Set the number of columns
+    this->setRowCount(0); // Set the number of rows
+
+    this->horizontalHeader()->setVisible(false);
+    this->verticalHeader()->setVisible(false);
 }
 
 void ScanAreasColumn::resizeEvent(QResizeEvent *event)

@@ -26,8 +26,8 @@
  * 
  */
 
-#ifndef PAUSE_BUTTON_H
-#define PAUSE_BUTTON_H
+#ifndef SAM_PAUSE_BUTTON_HPP
+#define SAM_PAUSE_BUTTON_HPP
 
 #include <QPushButton>
 #include <QPainter>
@@ -47,4 +47,4 @@ private:
 
 };
 
-#endif // PAUSE_BUTTON_H
+#endif // SAM_PAUSE_BUTTON_HPP

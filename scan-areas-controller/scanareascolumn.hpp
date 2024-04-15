@@ -26,8 +26,8 @@
  * 
  */
 
-#ifndef SCAN_AREAS_COLUMN_H
-#define SCAN_AREAS_COLUMN_H
+#ifndef SAM_SCAN_AREAS_COLUMN_HPP
+#define SAM_SCAN_AREAS_COLUMN_HPP
 
 #include <QTableWidget>
 #include <vector>
@@ -38,6 +38,8 @@ class ScanAreasColumn : public QTableWidget
 public:
     ScanAreasColumn();
     ~ScanAreasColumn();
+
+    void init();
 
     int add_row(const std::string& area);
 
@@ -57,4 +59,4 @@ private:
 
 };
 
-#endif // SCAN_AREAS_COLUMN_H
+#endif // SAM_SCAN_AREAS_COLUMN_HPP

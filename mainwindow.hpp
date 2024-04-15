@@ -1,5 +1,5 @@
-#ifndef MAIN_WINDOW_H
-#define MAIN_WINDOW_H
+#ifndef SAM_MAIN_WINDOW_HPP
+#define SAM_MAIN_WINDOW_HPP
 
 #include <QWidget>
 #include <QVBoxLayout>
@@ -7,7 +7,7 @@
 #include "samconsolemain.hpp"
 
 #include "controlbar.hpp"
-#include "statusviewer.hpp"
+#include "resultsstreamviewer.hpp"
 #include "scanareascontroller.hpp"
 
 class MainWindow : public QWidget
@@ -19,7 +19,7 @@ public:
     ~MainWindow();
 
     ControlBar* get_control_bar();
-    StatusViewer* get_status_viewer();
+    ResultsStreamViewer* get_results_stream_viewer();
 
 private slots:
     void on_scan_areas_controller_button_clicked();
@@ -28,9 +28,9 @@ private:
     QVBoxLayout *main_layout;
 
     ControlBar* control_bar;
-    StatusViewer* status_viewer;
+    ResultsStreamViewer* results_stream_viewer;
 
     ScanAreasController *scan_areas_controller;
 };
 
-#endif // MAIN_WINDOW_H
+#endif // SAM_MAIN_WINDOW_HPP
