@@ -4,7 +4,7 @@ An independent frontend for [Scorpion Anti-malware's engine](https://github.com/
 
 ## Compiling from source
 
-See []() for compilation instructions.
+See [Compiling Console For Windows](https://scorpionantimalware.github.io/sam-docs/contributing/development/compiling/compiling_console_for_windows.html) for compilation instructions.
 
 > [!NOTE]  
 > Ignore all commits before 050c8c2e0618700240a958a8c2a0da20f04f661e (inclusive) as they have no meaningful messages besides huge changes.
