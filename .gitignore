@@ -7,8 +7,15 @@
 !/samconsolemain.hpp
 !/mainwindow.cpp
 !/mainwindow.hpp
+!/samconsolesplash.hpp
+!/samconsolesplash.cpp
 
 !/README.md
+!/configure_build.sh
+!/icon.png
+!/icon.svg
+!/logo.png
+!/logo.svg
 
 !/.github/
 !/.github/CODEOWNERS
@@ -41,6 +48,9 @@
 !/resources/
 !/resources/asu_logo.png
 !/resources/asu_eng_logo.png
+!/resources/platforms/
+!/resources/platforms/windows/
+!/resources/platforms/windows/favicon.ico
 
 !/tests/
 !/tests/**/*

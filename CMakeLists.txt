@@ -55,6 +55,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Disable compiler-specific extensions for cross-platform compatibility.
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 set(SAM_CONSOLE_ROOTDIR ${PROJECT_SOURCE_DIR})
 
 if(MSVC)
@@ -84,36 +87,32 @@ file(GLOB SAM_CONSOLE_MAIN_ENTRY
     ${CMAKE_CURRENT_SOURCE_DIR}/samconsolemain.cpp
 )
 
-# Safety check: Ensure that all the files exist.
-foreach(file ${SAM_CONSOLE_MAIN_ENTRY})
-if(NOT EXISTS "${file}")
-    message(FATAL_ERROR "File '${file}' does not exist!")
-endif()
-endforeach()
-
-file(GLOB SAM_CONSOLE_SRC_FILES 
+file(GLOB SAM_CONSOLE_HPP_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.hpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanareascontrollerbutton.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanareascontrollerbutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/resultsstreamviewer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/resultsstreamviewer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascontroller.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascolumn.hpp
+)
+
+file(GLOB SAM_CONSOLE_CPP_FILES 
+    ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanareascontrollerbutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/resultsstreamviewer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascolumn.cpp
 )
 
 # Safety check: Ensure that all the files exist.
-foreach(file ${SAM_CONSOLE_SRC_FILES})
+foreach(file ${SAM_CONSOLE_CPP_FILES} ${SAM_CONSOLE_HPP_FILES} ${SAM_CONSOLE_MAIN_ENTRY})
     if(NOT EXISTS "${file}")
         message(FATAL_ERROR "File '${file}' does not exist!")
     endif()
@@ -139,7 +138,7 @@ if (NOT SAM_LINK_CONSOLE)
 
     add_executable(${SAM_CONSOLE_EXECUTABLE_NAME} WIN32 
         ${SAM_CONSOLE_MAIN_ENTRY} 
-        ${SAM_CONSOLE_SRC_FILES} 
+        ${SAM_CONSOLE_CPP_FILES} 
     )
 
     target_compile_definitions(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 
@@ -205,7 +204,8 @@ else()
 
     # Cache the main entry files to be used in parent CMakeLists.txt file.
     set(SAM_CONSOLE_MAIN_ENTRY ${SAM_CONSOLE_MAIN_ENTRY} CACHE INTERNAL "Sam Console Main Entry" FORCE)
-    set(SAM_CONSOLE_SRC_FILES ${SAM_CONSOLE_SRC_FILES} CACHE INTERNAL "Sam Console Source Files" FORCE)
+    set(SAM_CONSOLE_CPP_FILES ${SAM_CONSOLE_CPP_FILES} CACHE INTERNAL "Sam Console Source Files" FORCE)
+    set(SAM_CONSOLE_HPP_FILES ${SAM_CONSOLE_HPP_FILES} CACHE INTERNAL "Sam Console Header Files" FORCE)
 
     set(${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES 
         ${${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES} CACHE INTERNAL "Sam Console Include Directories" FORCE

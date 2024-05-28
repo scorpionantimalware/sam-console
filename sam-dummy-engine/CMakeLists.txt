@@ -1,22 +1,25 @@
 # Caching the library name to be used in the parent scope.
 set(SAM_DUMMY_ENGINE "sam_dummy_engine" CACHE STRING "Dummy SAM engine library name.")
 
-file(GLOB SAM_DUMMY_ENGINE_SRC_FILES
+file(GLOB SAM_DUMMY_ENGINE_HPP_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/samdummyengine.hpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-dummy-processor/scanareasdummyprocessor.hpp 
+)
+
+file(GLOB SAM_DUMMY_ENGINE_CPP_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/samdummyengine.cpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-dummy-processor/scanareasdummyprocessor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-dummy-processor/scanareasdummyprocessor.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-dummy-processor/scanareasdummyprocessor.cpp 
 )
 
 # Safety check: Ensure that all the files exist.
-foreach(file ${SAM_DUMMY_ENGINE_SRC_FILES})
+foreach(file ${SAM_DUMMY_ENGINE_CPP_FILES} ${SAM_DUMMY_ENGINE_HPP_FILES})
     if(NOT EXISTS "${file}")
         message(FATAL_ERROR "File '${file}' does not exist!")
     endif()
 endforeach()
 
 add_library(${SAM_DUMMY_ENGINE} SHARED  
-    ${SAM_DUMMY_ENGINE_SRC_FILES} 
+    ${SAM_DUMMY_ENGINE_CPP_FILES} 
 )
 
 set_target_properties(${SAM_DUMMY_ENGINE} PROPERTIES VERSION ${SAM_CONSOLE_PROJECT_VERSION})
