@@ -39,8 +39,8 @@
 !/results-stream-viewer/resultsstreamviewer.cpp
 
 !/resources/
-!/resources/asu-logo.png
-!/resources/asu-eng-logo.png
+!/resources/asu_logo.png
+!/resources/asu_eng_logo.png
 
 !/tests/
 !/tests/**/*
