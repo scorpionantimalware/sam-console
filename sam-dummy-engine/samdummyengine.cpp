@@ -31,51 +31,80 @@
 #include <iostream>
 #include <random>
 
-SAMDummyEngine::SAMDummyEngine() : engine_thread(nullptr), mtx(nullptr), scan_fire_callback(nullptr), scan_complete_callback(nullptr), new_file_callback(nullptr), status_callback(nullptr) {}
+std::thread* engine_thread {nullptr};
 
-SAMDummyEngine::~SAMDummyEngine() {
-    if (SAMDummyEngine::mtx) {
-        delete SAMDummyEngine::mtx;
-    }
+ScanFireCallback_t scan_fire_callback {nullptr};
+ScanCompleteCallback_t scan_complete_callback {nullptr};
+NewFileCallback_t new_file_callback {nullptr};
+StatusCallback_t status_callback {nullptr};
 
-    if (SAMDummyEngine::engine_thread) {
-        if (SAMDummyEngine::engine_thread->joinable()) {
-          SAMDummyEngine::engine_thread->join();
-        }
-        delete SAMDummyEngine::engine_thread;
-    }
-}
+/**
+ * @brief Start the scan process
+ * 
+ * @note This function is the entry point for the scan process. This 
+ *       function is Multi-threaded.
+ * 
+ * @note This function is a wrapper for the fire_scan() function to be
+ *      called in a separate thread.
+ * 
+ * @todo This function raises the below error:
+ *       HEAP CORRUPTION DETECTED: after Normal block (#208) at 
+ *       0X000001A468C07620. CRT detected that the application wrote to
+ *       memory after the end of the heap buffer.
+*/
+void fire_scan_thread_wrapper();
 
-bool SAMDummyEngine::scan() {
+bool fire_scan();
+
+float generate_dummy_prediction();
+
+bool sam_dummy_engine_scan() {
   bool status {false};
 
-  if (SAMDummyEngine::engine_thread) {
-    status = SAMDummyEngine::engine_thread->joinable();
+  std::cout << "Info: Running the engine in a separate thread" << std::endl;
+  if (engine_thread) {
+    status = engine_thread->joinable();
     if (status) {
       std::cout << "Error: Engine thread is already running" << std::endl;
       status = false;
       return status;
     }
-    delete SAMDummyEngine::engine_thread;
+    delete engine_thread;
   }
 
-  SAMDummyEngine::engine_thread = new std::thread(&SAMDummyEngine::fire_scan, this);
+  engine_thread = new std::thread(&fire_scan_thread_wrapper);
 
   /*
     Detach the thread so that it can run independently of the main thread.
 
     Here in each scan, we will create a new thread so we do not need the current one.
   */
-  SAMDummyEngine::engine_thread->detach();
+  engine_thread->detach();
+
+  if (engine_thread) {
+      if (engine_thread->joinable()) {
+        engine_thread->join();
+      }
+      delete engine_thread;
+  }
 
   status = true;
 
   return status;
 }
 
-bool SAMDummyEngine::fire_scan() {
-  if (SAMDummyEngine::scan_fire_callback) {
-    SAMDummyEngine::scan_fire_callback();
+void fire_scan_thread_wrapper() {
+  bool status {false};
+
+  status = fire_scan();
+  if (!status) {
+    std::cout << "Error: Something went wrong while scanning" << std::endl;
+  }
+}
+
+bool fire_scan() {
+  if (scan_fire_callback) {
+    scan_fire_callback();
   }
 
   bool status {false};
@@ -84,23 +113,23 @@ bool SAMDummyEngine::fire_scan() {
 
   while (dummy_file_count--) {
     int new_file_id {-1};
-    if (SAMDummyEngine::new_file_callback) {
-      new_file_id = SAMDummyEngine::new_file_callback("dummy_file_" + std::to_string(dummy_file_count));
+    if (new_file_callback) {
+      new_file_id = new_file_callback("dummy_file_" + std::to_string(dummy_file_count));
     }
 
-    float dummy_prediction {SAMDummyEngine::generate_dummy_prediction()};
+    float dummy_prediction {generate_dummy_prediction()};
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-    if (SAMDummyEngine::status_callback) {
-      SAMDummyEngine::status_callback(new_file_id, dummy_prediction);
+    if (status_callback) {
+      status_callback(new_file_id, dummy_prediction);
     }
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 
-  if (SAMDummyEngine::scan_complete_callback) {
-    SAMDummyEngine::scan_complete_callback();
+  if (scan_complete_callback) {
+    scan_complete_callback();
   }
 
   status = true;
@@ -108,7 +137,7 @@ bool SAMDummyEngine::fire_scan() {
   return status;
 }
 
-float SAMDummyEngine::generate_dummy_prediction() {
+float generate_dummy_prediction() {
     // Create a random number generator engine
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -120,18 +149,18 @@ float SAMDummyEngine::generate_dummy_prediction() {
     return dist(gen);
 }
 
-void SAMDummyEngine::hook_scan_fire_callback(ScanFireCallback_t callback) {
-  SAMDummyEngine::scan_fire_callback = callback;
+void hook_scan_fire_callback(ScanFireCallback_t callback) {
+  scan_fire_callback = callback;
 }
 
-void SAMDummyEngine::hook_scan_complete_callback(ScanCompleteCallback_t callback) {
-  SAMDummyEngine::scan_complete_callback = callback;
+void hook_scan_complete_callback(ScanCompleteCallback_t callback) {
+  scan_complete_callback = callback;
 }
 
-void SAMDummyEngine::hook_new_file_callback(NewFileCallback_t callback) {
-  SAMDummyEngine::new_file_callback = callback;
+void hook_new_file_callback(NewFileCallback_t callback) {
+  new_file_callback = callback;
 }
 
-void SAMDummyEngine::hook_status_callback(StatusCallback_t callback) {
-  SAMDummyEngine::status_callback = callback;
+void hook_status_callback(StatusCallback_t callback) {
+  status_callback = callback;
 }

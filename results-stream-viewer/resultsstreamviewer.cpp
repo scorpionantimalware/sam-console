@@ -131,13 +131,6 @@ void ResultsStreamViewer::on_status(const int& row_index, const float& predictio
 void ResultsStreamViewer::on_scan_button_clicked()
 {
     // this->setEnabled(true);
-
-    if (!engine)
-    { 
-        std::cout << "Error: Engine not found" << std::endl;
-        return;
-    }
-
     std::cout << "Scanning..." << std::endl;
-    engine->scan();
+    sam_engine_scan();
 }

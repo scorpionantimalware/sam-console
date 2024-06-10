@@ -32,8 +32,6 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
-SAMEngine* engine {nullptr};
-
 /**
  * @brief Global accessors.
 */
@@ -45,11 +43,10 @@ int main(int argc, char **argv)
     /*
         Initialize the engine and register callbacks.
     */
-    engine = new SAMEngine();
-    engine->hook_scan_fire_callback(&scan_fire_callback);
-    engine->hook_scan_complete_callback(&scan_complete_callback);
-    engine->hook_new_file_callback(&new_file_callback);
-    engine->hook_status_callback(&status_callback);
+    hook_scan_fire_callback(&scan_fire_callback);
+    hook_scan_complete_callback(&scan_complete_callback);
+    hook_new_file_callback(&new_file_callback);
+    hook_status_callback(&status_callback);
 
     QApplication sam_console_app(argc, argv);
     QCoreApplication::setOrganizationName(SAM_ORG_NAME);
@@ -66,9 +63,7 @@ int main(int argc, char **argv)
     g_results_stream_viewer = w.get_results_stream_viewer();
     w.resize(1440, 720);
     w.show();
-    int result {sam_console_app.exec()};
-    delete engine;
-    return result;
+    return sam_console_app.exec();
 }
 
 void scan_fire_callback()

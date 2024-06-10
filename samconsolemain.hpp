@@ -40,7 +40,7 @@
 #elif SAM_DUMMY_ENGINE_ACTIVE // If the dummy engine is active, include the dummy engine.
 #include "samdummyengine.hpp"
 #include "scanareasdummyprocessor.hpp"
-typedef SAMDummyEngine SAMEngine;
+#define sam_engine_scan sam_dummy_engine_scan
 typedef ScanAreasDummyProcessor ScanAreasProcessor;
 #else // If no engine is active, throw an error.
 #error "No engine found"
@@ -59,8 +59,6 @@ typedef ScanAreasDummyProcessor ScanAreasProcessor;
 #endif // SAM_CONSOLE_PROJECT_VERSION
 
 #include "mainwindow.hpp"
-
-extern SAMEngine *engine;
 
 int main(int argc, char **argv);
 
