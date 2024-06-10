@@ -1,4 +1,4 @@
-# Scorpion Antimalware Console
+# Scorpion Anti-malware Console
 
 An independent frontend for [Scorpion Anti-malware's engine](https://github.com/scorpionantimalware/scorpion-antimalware).
 
@@ -9,7 +9,7 @@ An independent frontend for [Scorpion Anti-malware's engine](https://github.com/
 
 See [Compiling Console For Windows](https://scorpionantimalware.github.io/sam-docs/contributing/development/compiling/compiling_console_for_windows.html) for compilation instructions.
 
-# Actnowledgement
+# Acknowledgement
 
 <p align="center" style="font-size: 48px; margin: 0 10px;"><strong>WE ARE AN AIN SHAMS UNIVERSITY GRADUATE PROJECT</strong></p>
 
