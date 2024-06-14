@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * mainwindow.hpp
+ * statusbuiltinterminal.cpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,46 +26,30 @@
  * 
  */
 
-#ifndef SAM_MAIN_WINDOW_HPP
-#define SAM_MAIN_WINDOW_HPP
-
-#include <QWidget>
-#include <QVBoxLayout>
-
-#include "samconsolemain.hpp"
-
-#include "samconsolesplash.hpp"
-#include "controlbar.hpp"
 #include "statusbuiltinterminal.hpp"
-#include "resultsstreamviewer.hpp"
-#include "scanareascontroller.hpp"
+#include <QScrollBar>
 
-class MainWindow : public QWidget
+StatusBuiltinTerminal::StatusBuiltinTerminal(QWidget *parent) : QTextEdit(parent)
 {
-    Q_OBJECT
+    this->setReadOnly(true);
 
-public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    // Set black background
+    QPalette p = palette();
+    p.setColor(QPalette::Base, Qt::black);
+    p.setColor(QPalette::Text, Qt::white);
+    this->setPalette(p);
+}
 
-    ControlBar* get_control_bar();
-    ResultsStreamViewer* get_results_stream_viewer();
+void StatusBuiltinTerminal::append_message(const QString &message, const QColor &color)
+{
+    // Append message to the text edit with the specified color
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::End);
+    cursor.insertHtml(QString("<font color=\"%1\">%2</font><br>").arg(color.name(), message));
+    this->setTextCursor(cursor);
 
-private slots:
-    void on_scan_areas_controller_button_clicked();
+    // Scroll to the bottom
+    QScrollBar *scrollBar = verticalScrollBar();
+    scrollBar->setValue(scrollBar->maximum());
+}
 
-private:
-    SAMConsoleSplash *splash_screen;
-
-    QVBoxLayout *main_layout;
-
-    ControlBar* control_bar;
-    StatusBuiltinTerminal* status_builtin_terminal;
-    ResultsStreamViewer* results_stream_viewer;
-
-    ScanAreasController *scan_areas_controller;
-
-    void show_main_ui();
-};
-
-#endif // SAM_MAIN_WINDOW_HPP

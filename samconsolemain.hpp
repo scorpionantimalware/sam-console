@@ -29,15 +29,21 @@
 #ifndef SAM_CONSOLE_MAIN_HPP
 #define SAM_CONSOLE_MAIN_HPP
 
+#include "mainwindow.hpp"
+
 // If the real engine is active, include the real engine.
-#ifdef SAM_ENGINE_ACTIVE
+#ifdef SAM_ENGINE_ACTIVE /*     Scorpion Anti-malware Engine Configuration     */
+
 #ifdef SAM_DUMMY_ENGINE_ACTIVE // If both engines are active, throw an error.
 #error "Both real and dummy engines are active"
 #else // If only the real engine is active, include the real engine.
 #include "samengine.hpp"
 #include "scanareasprocessor.hpp"
 #endif // SAM_DUMMY_ENGINE_ACTIVE
-#elif SAM_DUMMY_ENGINE_ACTIVE // If the dummy engine is active, include the dummy engine.
+
+// If the dummy engine is active, include the dummy engine.
+#elif SAM_DUMMY_ENGINE_ACTIVE /*     Scorpion Anti-malware Dummy Engine Configuration     */
+
 #include "samdummyengine.hpp"
 #include "scanareasdummyprocessor.hpp"
 
@@ -56,7 +62,9 @@
 #define sam_engine sam_dummy_engine 
 
 typedef ScanAreasDummyProcessor ScanAreasProcessor;
-#else // If no engine is active, throw an error.
+
+// If no engine is active, throw an error.
+#else /*     No Engine Configuration     */
 #error "No engine found"
 #endif // SAM_ENGINE_ACTIVE
 
@@ -72,7 +80,9 @@ typedef ScanAreasDummyProcessor ScanAreasProcessor;
 #error "No project version defined"
 #endif // SAM_CONSOLE_PROJECT_VERSION
 
-#include "mainwindow.hpp"
+#ifndef SAM_CONSOLE_ROOTDIR
+#error "No root directory defined"
+#endif // SAM_CONSOLE_ROOTDIR
 
 int main(int argc, char **argv);
 

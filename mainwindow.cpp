@@ -29,20 +29,27 @@
 #include "mainwindow.hpp"
 
 #include <iostream>
+#include <QTimer>
 
-MainWindow::MainWindow(QWidget *parent) : QWidget(parent), main_layout(nullptr), control_bar(nullptr), results_stream_viewer(nullptr), scan_areas_controller(nullptr) {
+#define SPLASH_SCREEN_DELAY 2000
+
+MainWindow::MainWindow(QWidget *parent) : QWidget(parent), splash_screen(nullptr), main_layout(nullptr), control_bar(nullptr), status_builtin_terminal(nullptr), results_stream_viewer(nullptr), scan_areas_controller(nullptr) {
+    // Initialize the main layout
     MainWindow::main_layout = new QVBoxLayout(this);
-
     MainWindow::main_layout->setSpacing(20);
 
-    MainWindow::control_bar = new ControlBar();
-    MainWindow::results_stream_viewer = new ResultsStreamViewer();
+    // TODO: This splash screen works fine but it crashes when pressing the 
+    // scan button. I will need to investigate this further.
 
-    MainWindow::main_layout->addWidget(MainWindow::control_bar, 1);
-    MainWindow::main_layout->addWidget(MainWindow::results_stream_viewer, 3); // The viewer will take up 3/4 of the space.
+    // MainWindow::splash_screen = new SAMConsoleSplash();
 
-    this->connect(MainWindow::control_bar, &ControlBar::scan_button_clicked, MainWindow::results_stream_viewer, &ResultsStreamViewer::on_scan_button_clicked);
-    this->connect(MainWindow::control_bar, &ControlBar::scan_areas_controller_button_clicked, this, &MainWindow::on_scan_areas_controller_button_clicked);
+    // Add splash screen to the main layout
+    // MainWindow::main_layout->addWidget(MainWindow::splash_screen);
+
+    // Use QTimer to remove splash screen and show main items after a delay
+    // QTimer::singleShot(SPLASH_SCREEN_DELAY, this, &MainWindow::show_main_ui);
+
+    MainWindow::show_main_ui();
 }
 
 MainWindow::~MainWindow()
@@ -70,6 +77,32 @@ MainWindow::~MainWindow()
         delete MainWindow::main_layout;
         MainWindow::main_layout = nullptr;
     }
+}
+
+void MainWindow::show_main_ui() {
+    // Remove splash screen
+    MainWindow::main_layout->removeWidget(MainWindow::splash_screen);
+
+    // Delete the splash screen
+    if (MainWindow::splash_screen)
+    {
+        delete MainWindow::splash_screen;
+        MainWindow::splash_screen = nullptr;
+    }
+
+    // Initialize main items
+    MainWindow::control_bar = new ControlBar();
+    MainWindow::status_builtin_terminal = new StatusBuiltinTerminal();
+    MainWindow::results_stream_viewer = new ResultsStreamViewer();
+
+    // Add main items to the layout
+    MainWindow::main_layout->addWidget(MainWindow::control_bar, 1); // The control bar will take up 1/8 of the space.
+    MainWindow::main_layout->addWidget(MainWindow::status_builtin_terminal, 2); // The terminal will take up 2/8 of the space.
+    MainWindow::main_layout->addWidget(MainWindow::results_stream_viewer, 5); // The viewer will take up 5/8 of the space.
+
+    // Connect signals and slots
+    connect(MainWindow::control_bar, &ControlBar::scan_button_clicked, MainWindow::results_stream_viewer, &ResultsStreamViewer::on_scan_button_clicked);
+    connect(MainWindow::control_bar, &ControlBar::scan_areas_controller_button_clicked, this, &MainWindow::on_scan_areas_controller_button_clicked);
 }
 
 ControlBar* MainWindow::get_control_bar()

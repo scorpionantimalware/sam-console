@@ -29,19 +29,19 @@
 #ifndef SAM_CONSOLE_SPLASH_HPP
 #define SAM_CONSOLE_SPLASH_HPP
 
-#include <QSplashScreen>
-#include <QSvgRenderer>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QSvgWidget>
 
-class SAMConsoleSplash : public QSplashScreen
+class SAMConsoleSplash : public QWidget
 {
 public:
-    SAMConsoleSplash(const QString &fileName);
-
-protected:
-    void paintEvent(QPaintEvent *event) override;
+    SAMConsoleSplash(QWidget *parent = nullptr);
+    ~SAMConsoleSplash();
 
 private:
-    QSvgRenderer m_renderer;
+    QVBoxLayout *splash_layout;
+    QSvgWidget *svg_widget;
 };
 
 #endif // SAM_CONSOLE_SPLASH_HPP

@@ -31,6 +31,10 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
+#include <filesystem>
+#include <iostream>
+
+namespace fs = std::filesystem;
 
 /**
  * @brief Global accessors.
@@ -40,6 +44,13 @@ ResultsStreamViewer *g_results_stream_viewer {nullptr};
 
 int main(int argc, char **argv)
 {
+    // Make sure the MACRO has a valid directory path.
+    if(!fs::exists(SAM_CONSOLE_ROOTDIR) || 
+       !fs::is_directory(SAM_CONSOLE_ROOTDIR) || 
+       ((fs::status(SAM_CONSOLE_ROOTDIR).permissions() & fs::perms::owner_read) == fs::perms::none)) {
+        std::cerr << SAM_CONSOLE_ROOTDIR << " does not exist" << std::endl;
+    }
+
     /*
         Initialize the engine and register callbacks.
     */
@@ -57,6 +68,24 @@ int main(int argc, char **argv)
     parser.addHelpOption();
     parser.addVersionOption();
     parser.process(sam_console_app);
+
+    // Set the application style to Fusion (Under consideration)
+    // sam_console_app.setStyle("fusion");
+    // QPalette darkPalette;
+    // darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
+    // darkPalette.setColor(QPalette::WindowText, Qt::white);
+    // darkPalette.setColor(QPalette::Base, QColor(25, 25, 25));
+    // darkPalette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
+    // darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+    // darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+    // darkPalette.setColor(QPalette::Text, Qt::white);
+    // darkPalette.setColor(QPalette::Button, QColor(53, 53, 53));
+    // darkPalette.setColor(QPalette::ButtonText, Qt::white);
+    // darkPalette.setColor(QPalette::BrightText, Qt::red);
+    // darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+    // darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    // darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+    // sam_console_app.setPalette(darkPalette);
 
     MainWindow w;
     g_control_bar = w.get_control_bar();

@@ -9,6 +9,7 @@
 !/mainwindow.hpp
 !/samconsolesplash.hpp
 !/samconsolesplash.cpp
+!/sam-console.pro
 
 !/README.md
 !/configure_build.sh
@@ -28,6 +29,9 @@
 
 !/scan-areas-controller/
 !/scan-areas-controller/**/*
+
+!/status-builtin-terminal/
+!/status-builtin-terminal/**/*
 
 !/control-bar/
 !/control-bar/controlbar.hpp

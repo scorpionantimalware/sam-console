@@ -89,6 +89,7 @@ file(GLOB SAM_CONSOLE_MAIN_ENTRY
 
 file(GLOB SAM_CONSOLE_HPP_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/samconsolesplash.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.hpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.hpp
@@ -97,10 +98,12 @@ file(GLOB SAM_CONSOLE_HPP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/resultsstreamviewer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascontroller.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascolumn.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/status-builtin-terminal/statusbuiltinterminal.hpp
 )
 
 file(GLOB SAM_CONSOLE_CPP_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/samconsolesplash.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.cpp
@@ -109,6 +112,7 @@ file(GLOB SAM_CONSOLE_CPP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/resultsstreamviewer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascolumn.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/status-builtin-terminal/statusbuiltinterminal.cpp
 )
 
 # Safety check: Ensure that all the files exist.
@@ -124,6 +128,7 @@ set(${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES
     "${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/" 
     "${CMAKE_CURRENT_SOURCE_DIR}/sam-dummy-engine/" 
     "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/status-builtin-terminal/" 
 )
 
 if (NOT SAM_LINK_CONSOLE)
@@ -134,7 +139,7 @@ if (NOT SAM_LINK_CONSOLE)
 
     # Find Qt
     # TODO: Move this find package outside the if statement.
-    find_package(Qt${SAM_CONSOLE_QT_VERSION} CONFIG REQUIRED COMPONENTS Core Widgets)
+    find_package(Qt${SAM_CONSOLE_QT_VERSION} CONFIG REQUIRED COMPONENTS Widgets SvgWidgets)
 
     add_executable(${SAM_CONSOLE_EXECUTABLE_NAME} WIN32 
         ${SAM_CONSOLE_MAIN_ENTRY} 
@@ -143,11 +148,13 @@ if (NOT SAM_LINK_CONSOLE)
 
     target_compile_definitions(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 
         SAM_CONSOLE_NO_EXCEPTIONS 
+        SAM_CONSOLE_ROOTDIR="${SAM_CONSOLE_ROOTDIR}" 
     )
 
     message(STATUS "Linking Qt${SAM_CONSOLE_QT_VERSION} to the console...")
     target_link_libraries(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 
         Qt${SAM_CONSOLE_QT_VERSION}::Widgets 
+        Qt${SAM_CONSOLE_QT_VERSION}::SvgWidgets 
     )
 
     target_include_directories(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 

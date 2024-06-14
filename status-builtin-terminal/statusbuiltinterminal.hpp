@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * mainwindow.hpp
+ * statusbuiltinterminal.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,46 +26,18 @@
  * 
  */
 
-#ifndef SAM_MAIN_WINDOW_HPP
-#define SAM_MAIN_WINDOW_HPP
+#ifndef SAM_STATUS_BUILTIN_TERMINAL_HPP
+#define SAM_STATUS_BUILTIN_TERMINAL_HPP
 
-#include <QWidget>
-#include <QVBoxLayout>
+#include <QTextEdit>
 
-#include "samconsolemain.hpp"
-
-#include "samconsolesplash.hpp"
-#include "controlbar.hpp"
-#include "statusbuiltinterminal.hpp"
-#include "resultsstreamviewer.hpp"
-#include "scanareascontroller.hpp"
-
-class MainWindow : public QWidget
+class StatusBuiltinTerminal : public QTextEdit
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
-
-    ControlBar* get_control_bar();
-    ResultsStreamViewer* get_results_stream_viewer();
-
-private slots:
-    void on_scan_areas_controller_button_clicked();
-
-private:
-    SAMConsoleSplash *splash_screen;
-
-    QVBoxLayout *main_layout;
-
-    ControlBar* control_bar;
-    StatusBuiltinTerminal* status_builtin_terminal;
-    ResultsStreamViewer* results_stream_viewer;
-
-    ScanAreasController *scan_areas_controller;
-
-    void show_main_ui();
+    explicit StatusBuiltinTerminal(QWidget *parent = nullptr);
+    void append_message(const QString& message, const QColor& color = Qt::white);
 };
 
-#endif // SAM_MAIN_WINDOW_HPP
+#endif // SAM_STATUS_BUILTIN_TERMINAL_HPP
