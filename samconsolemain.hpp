@@ -40,7 +40,21 @@
 #elif SAM_DUMMY_ENGINE_ACTIVE // If the dummy engine is active, include the dummy engine.
 #include "samdummyengine.hpp"
 #include "scanareasdummyprocessor.hpp"
+
+/**
+ * @brief The main funtion to scan is different accross the dummy and real 
+ *        engines. This is the dummy engine's main function.
+ * 
+ */
 #define sam_engine_scan sam_dummy_engine_scan
+
+/**
+ * @brief The namespace is different accross the dummy and real engines. This
+ *        is the dummy engine's namespace.
+ * 
+ */
+#define sam_engine sam_dummy_engine 
+
 typedef ScanAreasDummyProcessor ScanAreasProcessor;
 #else // If no engine is active, throw an error.
 #error "No engine found"

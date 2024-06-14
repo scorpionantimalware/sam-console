@@ -132,5 +132,5 @@ void ResultsStreamViewer::on_scan_button_clicked()
 {
     // this->setEnabled(true);
     std::cout << "Scanning..." << std::endl;
-    sam_engine_scan();
+    sam_engine::sam_engine_scan();
 }

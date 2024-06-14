@@ -43,10 +43,10 @@ int main(int argc, char **argv)
     /*
         Initialize the engine and register callbacks.
     */
-    hook_scan_fire_callback(&scan_fire_callback);
-    hook_scan_complete_callback(&scan_complete_callback);
-    hook_new_file_callback(&new_file_callback);
-    hook_status_callback(&status_callback);
+    sam_engine::hook_scan_fire_callback(&scan_fire_callback);
+    sam_engine::hook_scan_complete_callback(&scan_complete_callback);
+    sam_engine::hook_new_file_callback(&new_file_callback);
+    sam_engine::hook_status_callback(&status_callback);
 
     QApplication sam_console_app(argc, argv);
     QCoreApplication::setOrganizationName(SAM_ORG_NAME);

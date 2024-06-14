@@ -31,136 +31,138 @@
 #include <iostream>
 #include <random>
 
-std::thread* engine_thread {nullptr};
+namespace sam_dummy_engine {
+  std::thread* engine_thread {nullptr};
 
-ScanFireCallback_t scan_fire_callback {nullptr};
-ScanCompleteCallback_t scan_complete_callback {nullptr};
-NewFileCallback_t new_file_callback {nullptr};
-StatusCallback_t status_callback {nullptr};
+  ScanFireCallback_t scan_fire_callback {nullptr};
+  ScanCompleteCallback_t scan_complete_callback {nullptr};
+  NewFileCallback_t new_file_callback {nullptr};
+  StatusCallback_t status_callback {nullptr};
 
-/**
- * @brief Start the scan process
- * 
- * @note This function is the entry point for the scan process. This 
- *       function is Multi-threaded.
- * 
- * @note This function is a wrapper for the fire_scan() function to be
- *      called in a separate thread.
- * 
- * @todo This function raises the below error:
- *       HEAP CORRUPTION DETECTED: after Normal block (#208) at 
- *       0X000001A468C07620. CRT detected that the application wrote to
- *       memory after the end of the heap buffer.
-*/
-void fire_scan_thread_wrapper();
-
-bool fire_scan();
-
-float generate_dummy_prediction();
-
-bool sam_dummy_engine_scan() {
-  bool status {false};
-
-  std::cout << "Info: Running the engine in a separate thread" << std::endl;
-  if (engine_thread) {
-    status = engine_thread->joinable();
-    if (status) {
-      std::cout << "Error: Engine thread is already running" << std::endl;
-      status = false;
-      return status;
-    }
-    delete engine_thread;
-  }
-
-  engine_thread = new std::thread(&fire_scan_thread_wrapper);
-
-  /*
-    Detach the thread so that it can run independently of the main thread.
-
-    Here in each scan, we will create a new thread so we do not need the current one.
+  /**
+   * @brief Start the scan process
+   * 
+   * @note This function is the entry point for the scan process. This 
+   *       function is Multi-threaded.
+   * 
+   * @note This function is a wrapper for the fire_scan() function to be
+   *      called in a separate thread.
+   * 
+   * @todo This function raises the below error:
+   *       HEAP CORRUPTION DETECTED: after Normal block (#208) at 
+   *       0X000001A468C07620. CRT detected that the application wrote to
+   *       memory after the end of the heap buffer.
   */
-  engine_thread->detach();
+  void fire_scan_thread_wrapper();
 
-  if (engine_thread) {
-      if (engine_thread->joinable()) {
-        engine_thread->join();
+  bool fire_scan();
+
+  float generate_dummy_prediction();
+
+  bool sam_dummy_engine_scan() {
+    bool status {false};
+
+    std::cout << "Info: Running the engine in a separate thread" << std::endl;
+    if (engine_thread) {
+      status = engine_thread->joinable();
+      if (status) {
+        std::cout << "Error: Engine thread is already running" << std::endl;
+        status = false;
+        return status;
       }
       delete engine_thread;
-  }
-
-  status = true;
-
-  return status;
-}
-
-void fire_scan_thread_wrapper() {
-  bool status {false};
-
-  status = fire_scan();
-  if (!status) {
-    std::cout << "Error: Something went wrong while scanning" << std::endl;
-  }
-}
-
-bool fire_scan() {
-  if (scan_fire_callback) {
-    scan_fire_callback();
-  }
-
-  bool status {false};
-
-  int dummy_file_count {10};
-
-  while (dummy_file_count--) {
-    int new_file_id {-1};
-    if (new_file_callback) {
-      new_file_id = new_file_callback("dummy_file_" + std::to_string(dummy_file_count));
     }
 
-    float dummy_prediction {generate_dummy_prediction()};
+    engine_thread = new std::thread(&fire_scan_thread_wrapper);
 
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    /*
+      Detach the thread so that it can run independently of the main thread.
 
-    if (status_callback) {
-      status_callback(new_file_id, dummy_prediction);
+      Here in each scan, we will create a new thread so we do not need the current one.
+    */
+    engine_thread->detach();
+
+    if (engine_thread) {
+        if (engine_thread->joinable()) {
+          engine_thread->join();
+        }
+        delete engine_thread;
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-  }
+    status = true;
 
-  if (scan_complete_callback) {
-    scan_complete_callback();
-  }
+    return status;
+  } // function sam_dummy_engine_scan
 
-  status = true;
+  void fire_scan_thread_wrapper() {
+    bool status {false};
 
-  return status;
-}
+    status = fire_scan();
+    if (!status) {
+      std::cout << "Error: Something went wrong while scanning" << std::endl;
+    }
+  } // function fire_scan_thread_wrapper
 
-float generate_dummy_prediction() {
-    // Create a random number generator engine
-    std::random_device rd;
-    std::mt19937 gen(rd());
+  bool fire_scan() {
+    if (scan_fire_callback) {
+      scan_fire_callback();
+    }
 
-    // Create a uniform real distribution between 0 and 1
-    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+    bool status {false};
 
-    // Generate a random number between 0 and 1
-    return dist(gen);
-}
+    int dummy_file_count {10};
 
-void hook_scan_fire_callback(ScanFireCallback_t callback) {
-  scan_fire_callback = callback;
-}
+    while (dummy_file_count--) {
+      int new_file_id {-1};
+      if (new_file_callback) {
+        new_file_id = new_file_callback("dummy_file_" + std::to_string(dummy_file_count));
+      }
 
-void hook_scan_complete_callback(ScanCompleteCallback_t callback) {
-  scan_complete_callback = callback;
-}
+      float dummy_prediction {generate_dummy_prediction()};
 
-void hook_new_file_callback(NewFileCallback_t callback) {
-  new_file_callback = callback;
-}
+      std::this_thread::sleep_for(std::chrono::seconds(1));
 
-void hook_status_callback(StatusCallback_t callback) {
-  status_callback = callback;
-}
+      if (status_callback) {
+        status_callback(new_file_id, dummy_prediction);
+      }
+
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+
+    if (scan_complete_callback) {
+      scan_complete_callback();
+    }
+
+    status = true;
+
+    return status;
+  } // function fire_scan
+
+  float generate_dummy_prediction() {
+      // Create a random number generator engine
+      std::random_device rd;
+      std::mt19937 gen(rd());
+
+      // Create a uniform real distribution between 0 and 1
+      std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+
+      // Generate a random number between 0 and 1
+      return dist(gen);
+  } // function generate_dummy_prediction
+
+  void hook_scan_fire_callback(ScanFireCallback_t callback) {
+    scan_fire_callback = callback;
+  } // function hook_scan_fire_callback
+
+  void hook_scan_complete_callback(ScanCompleteCallback_t callback) {
+    scan_complete_callback = callback;
+  } // function hook_scan_complete_callback
+
+  void hook_new_file_callback(NewFileCallback_t callback) {
+    new_file_callback = callback;
+  } // function hook_new_file_callback
+
+  void hook_status_callback(StatusCallback_t callback) {
+    status_callback = callback;
+  } // function hook_status_callback
+} // namespace sam_dummy_engine

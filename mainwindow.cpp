@@ -90,7 +90,6 @@ void MainWindow::on_scan_areas_controller_button_clicked()
     {
         // TODO: Make the controller block the main window.
         MainWindow::scan_areas_controller = new ScanAreasController();
-        MainWindow::scan_areas_controller->show();
     }
     
     MainWindow::scan_areas_controller->show();
