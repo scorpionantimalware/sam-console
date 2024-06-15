@@ -209,6 +209,8 @@ else()
 
     set(SAM_CONSOLE_QT_VERSION ${SAM_CONSOLE_QT_VERSION} CACHE INTERNAL "Sam Console Qt Version" FORCE) 
 
+    set(SAM_CONSOLE_ROOTDIR ${SAM_CONSOLE_ROOTDIR} CACHE INTERNAL "Sam Console Root Directory" FORCE) 
+
     # Cache the main entry files to be used in parent CMakeLists.txt file.
     set(SAM_CONSOLE_MAIN_ENTRY ${SAM_CONSOLE_MAIN_ENTRY} CACHE INTERNAL "Sam Console Main Entry" FORCE)
     set(SAM_CONSOLE_CPP_FILES ${SAM_CONSOLE_CPP_FILES} CACHE INTERNAL "Sam Console Source Files" FORCE)
