@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * samdummyengine.hpp
+ * samengine.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,13 +26,13 @@
  * 
  */
 
-#ifndef SAM_DUMMY_ENGINE_HPP
-#define SAM_DUMMY_ENGINE_HPP
+#ifndef SAM_STUB_ENGINE_HPP
+#define SAM_STUB_ENGINE_HPP
 
 #include <thread>
 #include <mutex>
 
-namespace sam_dummy_engine {
+namespace sam_engine {
   /*
     When the engine starts scanning, it will call this callback to notify the GUI.
   */
@@ -47,20 +47,43 @@ namespace sam_dummy_engine {
     When the engine start scanning a new file, it will call this callback
     with the new file's name to notify the GUI.
   */
-  typedef int (*NewFileCallback_t)(const std::string&);
+  typedef int (*AddNewFileCallback_t)(const std::string&);
 
   /*
     When the engine finishes scanning a file, it will call this callback
     with the file's ID and the prediction to notify the GUI.
   */
-  typedef void (*StatusCallback_t)(const int&, const float&);
+  typedef void (*SetStatusForFileCallback_t)(const int&, const float&);
 
-  void hook_scan_fire_callback(ScanFireCallback_t callback);
-  void hook_scan_complete_callback(ScanCompleteCallback_t callback);
-  void hook_new_file_callback(NewFileCallback_t callback);
-  void hook_status_callback(StatusCallback_t callback);
+  class SAMEngineState {
+    public:
+      enum class State {
+        IDLE,
+        SCANNING,
+        PAUSED,
+        STOPPED,
+        COMPLETE,
+        ERROR
+      };
 
-  bool sam_dummy_engine_scan();
-}
+      SAMEngineState();
 
-#endif // SAM_DUMMY_ENGINE_HPP
+      void set_state(const State& new_state);
+      State get_state();
+
+    private:
+      State state;
+  }; // class SAMEngineState
+
+  typedef void (*EngineStateChangeCallback_t)(const SAMEngineState::State&);
+
+  void hook_scan_fire_callback(const ScanFireCallback_t& callback);
+  void hook_scan_complete_callback(const ScanCompleteCallback_t& callback);
+  void hook_add_new_file_callback(const AddNewFileCallback_t& callback);
+  void hook_set_status_for_file_callback(const SetStatusForFileCallback_t& callback);
+  void hook_engine_state_change_callback(const EngineStateChangeCallback_t& callback);
+
+  bool sam_engine_scan();
+} // namespace sam_engine
+
+#endif // SAM_STUB_ENGINE_HPP

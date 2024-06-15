@@ -38,7 +38,6 @@ class ScanAreasControllerButton : public QPushButton
 
 public:
     explicit ScanAreasControllerButton();
-    ~ScanAreasControllerButton();
 
 protected:
     void paintEvent(QPaintEvent *event) override;

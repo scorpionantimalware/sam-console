@@ -30,8 +30,6 @@
 
 #include <iostream>
 
-#include "samconsolemain.hpp"
-
 ResultsStreamViewer::ResultsStreamViewer()
 {
     ResultsStreamViewer::init();
@@ -126,11 +124,4 @@ void ResultsStreamViewer::on_status(const int& row_index, const float& predictio
     */
     std::string status {prediction == -1.0f ? "Failed" : prediction > 0.5f ? "Malware" : "Benign"};
     ResultsStreamViewer::set_status_for_row(row_index, status, prediction);
-}
-
-void ResultsStreamViewer::on_scan_button_clicked()
-{
-    // this->setEnabled(true);
-    std::cout << "Scanning..." << std::endl;
-    sam_engine::sam_engine_scan();
 }

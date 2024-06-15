@@ -36,11 +36,6 @@ ScanAreasControllerButton::ScanAreasControllerButton()
     this->setFixedSize(150, 100);
 }
 
-ScanAreasControllerButton::~ScanAreasControllerButton()
-{
-    
-}
-
 void ScanAreasControllerButton::paintEvent(QPaintEvent *event)
 {
     QPushButton::paintEvent(event);

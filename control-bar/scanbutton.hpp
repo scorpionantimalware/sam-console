@@ -31,17 +31,40 @@
 
 #include <QPushButton>
 #include <QPainter>
+#include <QPropertyAnimation>
 
 class ScanButton : public QPushButton
 {
     Q_OBJECT
+    // Q_PROPERTY(int loading_arc_angle READ loading_arc_angle WRITE set_loading_arc_angle NOTIFY loading_arc_angle_changed)
 
 public:
     explicit ScanButton();
     ~ScanButton();
 
+    enum class TextureState
+    {
+        IDLE,
+        SCANNING,
+        ERROR
+    };
+
+    void set_state(const ScanButton::TextureState& new_state);
+
+    int loading_arc_angle() const;
+    void set_loading_arc_angle(const int& angle);
+
+signals:
+    void loading_arc_angle_changed();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
+
+private:
+    TextureState state;
+    int current_loading_arc_angle;
+    
+    QPropertyAnimation* loading_arc_animator;
 };
 
 #endif // SAM_SCAN_BUTTON_HPP

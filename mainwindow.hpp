@@ -32,7 +32,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 
-#include "samconsolemain.hpp"
+#include "samengine.hpp"
 
 #include "samconsolesplash.hpp"
 #include "controlbar.hpp"
@@ -52,6 +52,9 @@ public:
     ResultsStreamViewer* get_results_stream_viewer();
 
 private slots:
+    void on_scan_button_clicked();
+    void on_stop_button_clicked();
+    void on_pause_button_clicked();
     void on_scan_areas_controller_button_clicked();
 
 private:

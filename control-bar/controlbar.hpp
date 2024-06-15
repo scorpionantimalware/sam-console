@@ -37,6 +37,8 @@
 #include "pausebutton.hpp"
 #include "scanareascontrollerbutton.hpp"
 
+#include "samengine.hpp"
+
 class ControlBar : public QWidget
 {
     Q_OBJECT
@@ -45,14 +47,16 @@ public:
     ControlBar();
     ~ControlBar();
 
+    void update_state(const sam_engine::SAMEngineState::State& state);
+
 signals:
     /**
      * @brief Signal emitted when the scan button is clicked.
      * 
      * @note This is used inside the @c ResultsStreamViewer class.
      * 
-     * @see @c results-stream-viewer/resultsstreamviewer.hpp
-     * @see @c ResultsStreamViewer::on_scan_button_clicked
+     * @see @c mainwindow.hpp
+     * @see @c MainWindow::on_scan_button_clicked()
     */
     void scan_button_clicked();
 
@@ -106,7 +110,6 @@ private:
     StopButton *stop_button;
     PauseButton *pause_button;
     ScanAreasControllerButton *scan_areas_controller_button;
-    
 };
 
 #endif // SAM_CONTROL_BAR_HPP

@@ -56,8 +56,9 @@ int main(int argc, char **argv)
     */
     sam_engine::hook_scan_fire_callback(&scan_fire_callback);
     sam_engine::hook_scan_complete_callback(&scan_complete_callback);
-    sam_engine::hook_new_file_callback(&new_file_callback);
-    sam_engine::hook_status_callback(&status_callback);
+    sam_engine::hook_add_new_file_callback(&add_new_file_callback);
+    sam_engine::hook_set_status_for_file_callback(&set_status_for_file_callback);
+    // sam_engine::hook_engine_state_change_callback(&engine_state_change_callback);
 
     QApplication sam_console_app(argc, argv);
     QCoreApplication::setOrganizationName(SAM_ORG_NAME);
@@ -105,12 +106,17 @@ void scan_complete_callback()
     g_results_stream_viewer->on_scan_complete();
 }
 
-int new_file_callback(const std::string& filename)
+int add_new_file_callback(const std::string& filename)
 {
     return g_results_stream_viewer->on_new_file(filename);
 }
 
-void status_callback(const int& row_index, const float& prediction)
+void set_status_for_file_callback(const int& row_index, const float& prediction)
 {
     g_results_stream_viewer->on_status(row_index, prediction);
+}
+
+void engine_state_change_callback(const sam_engine::SAMEngineState::State& state)
+{
+    g_control_bar->update_state(state);
 }

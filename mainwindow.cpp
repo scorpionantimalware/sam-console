@@ -101,7 +101,9 @@ void MainWindow::show_main_ui() {
     MainWindow::main_layout->addWidget(MainWindow::results_stream_viewer, 5); // The viewer will take up 5/8 of the space.
 
     // Connect signals and slots
-    connect(MainWindow::control_bar, &ControlBar::scan_button_clicked, MainWindow::results_stream_viewer, &ResultsStreamViewer::on_scan_button_clicked);
+    connect(MainWindow::control_bar, &ControlBar::scan_button_clicked, this, &MainWindow::on_scan_button_clicked);
+    connect(MainWindow::control_bar, &ControlBar::stop_button_clicked, this, &MainWindow::on_stop_button_clicked);
+    connect(MainWindow::control_bar, &ControlBar::pause_button_clicked, this, &MainWindow::on_pause_button_clicked);
     connect(MainWindow::control_bar, &ControlBar::scan_areas_controller_button_clicked, this, &MainWindow::on_scan_areas_controller_button_clicked);
 }
 
@@ -113,6 +115,24 @@ ControlBar* MainWindow::get_control_bar()
 ResultsStreamViewer* MainWindow::get_results_stream_viewer()
 {
     return MainWindow::results_stream_viewer;
+}
+
+void MainWindow::on_scan_button_clicked()
+{
+    std::cout << "Scanning..." << std::endl;
+    sam_engine::sam_engine_scan();
+}
+
+void MainWindow::on_stop_button_clicked()
+{
+    std::cout << "Stopping..." << std::endl;
+    // sam_engine::sam_engine_stop();
+}
+
+void MainWindow::on_pause_button_clicked()
+{
+    std::cout << "Pausing..." << std::endl;
+    // sam_engine::sam_engine_pause();
 }
 
 void MainWindow::on_scan_areas_controller_button_clicked()

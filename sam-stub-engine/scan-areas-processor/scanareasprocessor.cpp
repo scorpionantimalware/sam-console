@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * scanaresdummyprocessor.cpp
+ * scanareasprocessor.cpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,9 +26,9 @@
  * 
  */
 
-#include "scanareasdummyprocessor.hpp"
+#include "scanareasprocessor.hpp"
 
-bool ScanAreasDummyProcessor::load_or_init(pathls& scan_areas) {
+bool ScanAreasProcessor::load_or_init(pathls& scan_areas) {
     bool status {false};
 
     scan_areas.push_back("C:/pesamples1");
@@ -40,7 +40,7 @@ bool ScanAreasDummyProcessor::load_or_init(pathls& scan_areas) {
     return status;
 }
 
-bool ScanAreasDummyProcessor::add_area([[maybe_unused]] const std::string& area) {
+bool ScanAreasProcessor::add_area([[maybe_unused]] const std::string& area) {
     bool status {false};
 
     status = true;

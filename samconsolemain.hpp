@@ -34,34 +34,22 @@
 // If the real engine is active, include the real engine.
 #ifdef SAM_ENGINE_ACTIVE /*     Scorpion Anti-malware Engine Configuration     */
 
-#ifdef SAM_DUMMY_ENGINE_ACTIVE // If both engines are active, throw an error.
-#error "Both real and dummy engines are active"
+#ifdef SAM_STUB_ENGINE_ACTIVE // If both engines are active, throw an error.
+#error "Both real and stub engines are active"
 #else // If only the real engine is active, include the real engine.
 #include "samengine.hpp"
 #include "scanareasprocessor.hpp"
-#endif // SAM_DUMMY_ENGINE_ACTIVE
+#endif // SAM_STUB_ENGINE_ACTIVE
 
-// If the dummy engine is active, include the dummy engine.
-#elif SAM_DUMMY_ENGINE_ACTIVE /*     Scorpion Anti-malware Dummy Engine Configuration     */
+// If the stub engine is active, include the stub engine.
+#elif SAM_STUB_ENGINE_ACTIVE /*     Scorpion Anti-malware Stub Engine Configuration     */
 
-#include "samdummyengine.hpp"
-#include "scanareasdummyprocessor.hpp"
-
-/**
- * @brief The main funtion to scan is different accross the dummy and real 
- *        engines. This is the dummy engine's main function.
- * 
- */
-#define sam_engine_scan sam_dummy_engine_scan
-
-/**
- * @brief The namespace is different accross the dummy and real engines. This
- *        is the dummy engine's namespace.
- * 
- */
-#define sam_engine sam_dummy_engine 
-
-typedef ScanAreasDummyProcessor ScanAreasProcessor;
+#ifdef SAM_ENGINE_ACTIVE // If both engines are active, throw an error.
+#error "Both real and stub engines are active"
+#else // If only the real engine is active, include the real engine.
+#include "samengine.hpp"
+#include "scanareasprocessor.hpp"
+#endif // SAM_STUB_ENGINE_ACTIVE
 
 // If no engine is active, throw an error.
 #else /*     No Engine Configuration     */
@@ -87,11 +75,9 @@ typedef ScanAreasDummyProcessor ScanAreasProcessor;
 int main(int argc, char **argv);
 
 void scan_fire_callback();
-
 void scan_complete_callback();
-
-int new_file_callback(const std::string& filename);
-
-void status_callback(const int& row_index, const float& prediction);
+int add_new_file_callback(const std::string& filename);
+void set_status_for_file_callback(const int& row_index, const float& prediction);
+void engine_state_change_callback(const sam_engine::SAMEngineState::State& state);
 
 #endif // SAM_CONSOLE_MAIN_HPP

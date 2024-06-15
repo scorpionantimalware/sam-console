@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * scanareasdummyprocessor.hpp - A class that represents the scan areas dummy processor.
+ * scanareasprocessor.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,8 +26,8 @@
  * 
  */
 
-#ifndef SAM_SCAN_AREAS_DUMMY_PROCESSOR_HPP
-#define SAM_SCAN_AREAS_DUMMY_PROCESSOR_HPP
+#ifndef SAM_SCAN_AREAS_STUB_PROCESSOR_HPP
+#define SAM_SCAN_AREAS_STUB_PROCESSOR_HPP
 
 #include <string>
 #include <vector>
@@ -36,14 +36,14 @@ typedef std::vector<std::string> pathls; // path lines are vector of strings.
 
 const std::string SCAN_AREAS_FILENAME {"scanareasprocessor_output.pathl"};
 
-class ScanAreasDummyProcessor {
+class ScanAreasProcessor {
 public:
-    ScanAreasDummyProcessor() = default;
-    ~ScanAreasDummyProcessor() = default;
+    ScanAreasProcessor() = default;
+    ~ScanAreasProcessor() = default;
 
     bool load_or_init(pathls& scan_areas);
 
     bool add_area([[maybe_unused]] const std::string& area);
 };
 
-#endif // SAM_SCAN_AREAS_DUMMY_PROCESSOR_HPP
+#endif // SAM_SCAN_AREAS_STUB_PROCESSOR_HPP

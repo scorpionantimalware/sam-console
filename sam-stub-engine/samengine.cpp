@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * samdummyengine.cpp - A dummy engine for Scorpion Anti-malware.
+ * samengine.cpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,18 +26,19 @@
  * 
  */
 
-#include "samdummyengine.hpp"
+#include "samengine.hpp"
 
 #include <iostream>
 #include <random>
 
-namespace sam_dummy_engine {
+namespace sam_engine {
   std::thread* engine_thread {nullptr};
 
   ScanFireCallback_t scan_fire_callback {nullptr};
   ScanCompleteCallback_t scan_complete_callback {nullptr};
-  NewFileCallback_t new_file_callback {nullptr};
-  StatusCallback_t status_callback {nullptr};
+  AddNewFileCallback_t add_new_file_callback {nullptr};
+  SetStatusForFileCallback_t set_status_for_file_callback {nullptr};
+  EngineStateChangeCallback_t engine_state_change_callback {nullptr};
 
   /**
    * @brief Start the scan process
@@ -59,7 +60,7 @@ namespace sam_dummy_engine {
 
   float generate_dummy_prediction();
 
-  bool sam_dummy_engine_scan() {
+  bool sam_engine_scan() {
     bool status {false};
 
     std::cout << "Info: Running the engine in a separate thread" << std::endl;
@@ -92,7 +93,7 @@ namespace sam_dummy_engine {
     status = true;
 
     return status;
-  } // function sam_dummy_engine_scan
+  } // function sam_engine_scan
 
   void fire_scan_thread_wrapper() {
     bool status {false};
@@ -114,16 +115,16 @@ namespace sam_dummy_engine {
 
     while (dummy_file_count--) {
       int new_file_id {-1};
-      if (new_file_callback) {
-        new_file_id = new_file_callback("dummy_file_" + std::to_string(dummy_file_count));
+      if (add_new_file_callback) {
+        new_file_id = add_new_file_callback("dummy_file_" + std::to_string(dummy_file_count));
       }
 
       float dummy_prediction {generate_dummy_prediction()};
 
       std::this_thread::sleep_for(std::chrono::seconds(1));
 
-      if (status_callback) {
-        status_callback(new_file_id, dummy_prediction);
+      if (set_status_for_file_callback) {
+        set_status_for_file_callback(new_file_id, dummy_prediction);
       }
 
       std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -138,6 +139,17 @@ namespace sam_dummy_engine {
     return status;
   } // function fire_scan
 
+  SAMEngineState::SAMEngineState() : state(SAMEngineState::State::IDLE) {
+  } // constructor SAMEngineState
+
+  void SAMEngineState::set_state(const State& new_state) {
+    SAMEngineState::state = new_state;
+  } // function set_state
+
+  SAMEngineState::State SAMEngineState::get_state() {
+    return SAMEngineState::state;
+  } // function get_state
+
   float generate_dummy_prediction() {
       // Create a random number generator engine
       std::random_device rd;
@@ -150,19 +162,23 @@ namespace sam_dummy_engine {
       return dist(gen);
   } // function generate_dummy_prediction
 
-  void hook_scan_fire_callback(ScanFireCallback_t callback) {
+  void hook_scan_fire_callback(const ScanFireCallback_t& callback) {
     scan_fire_callback = callback;
   } // function hook_scan_fire_callback
 
-  void hook_scan_complete_callback(ScanCompleteCallback_t callback) {
+  void hook_scan_complete_callback(const ScanCompleteCallback_t& callback) {
     scan_complete_callback = callback;
   } // function hook_scan_complete_callback
 
-  void hook_new_file_callback(NewFileCallback_t callback) {
-    new_file_callback = callback;
+  void hook_add_new_file_callback(const AddNewFileCallback_t& callback) {
+    add_new_file_callback = callback;
   } // function hook_new_file_callback
 
-  void hook_status_callback(StatusCallback_t callback) {
-    status_callback = callback;
+  void hook_set_status_for_file_callback(const SetStatusForFileCallback_t& callback) {
+    set_status_for_file_callback = callback;
   } // function hook_status_callback
-} // namespace sam_dummy_engine
+
+  void hook_engine_state_change_callback(const EngineStateChangeCallback_t& callback) {
+    engine_state_change_callback = callback;
+  } // function hook_engine_state_change_callback
+} // namespace sam_engine

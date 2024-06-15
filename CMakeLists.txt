@@ -126,13 +126,13 @@ set(${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES
     "${CMAKE_CURRENT_SOURCE_DIR}/" 
     "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/" 
     "${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/sam-dummy-engine/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/sam-stub-engine/" 
     "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/" 
     "${CMAKE_CURRENT_SOURCE_DIR}/status-builtin-terminal/" 
 )
 
 if (NOT SAM_LINK_CONSOLE)
-    # If the engine did not request to link the console, use the dummy engine.
+    # If the engine did not request to link the console, use the stub engine.
 
     message(STATUS "Building the console without an engine...")
     # TODO: Is this Windows specific?
@@ -161,13 +161,13 @@ if (NOT SAM_LINK_CONSOLE)
         ${${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES} 
     )
 
-    # Link the dummy engine.
-    message(STATUS "Linking the dummy engine to the console...")
-    set(SAM_DUMMY_ENGINE_ROOTDIR "${SAM_CONSOLE_ROOTDIR}/sam-dummy-engine")
-    add_subdirectory(${SAM_DUMMY_ENGINE_ROOTDIR})
+    # Link the stub engine.
+    message(STATUS "Linking the stub engine to the console...")
+    set(SAM_STUB_ENGINE_ROOTDIR "${SAM_CONSOLE_ROOTDIR}/sam-stub-engine")
+    add_subdirectory(${SAM_STUB_ENGINE_ROOTDIR})
 
     target_link_libraries(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 
-        ${SAM_DUMMY_ENGINE}
+        ${SAM_STUB_ENGINE}
     )
 
     target_compile_definitions(${SAM_CONSOLE_EXECUTABLE_NAME} PRIVATE 
@@ -177,25 +177,25 @@ if (NOT SAM_LINK_CONSOLE)
     )
 
     # Specify the directory containing the shared libraries.
-    set(SAM_DUMMY_ENGINE_BUILD_ROOTDIR "${PROJECT_BINARY_DIR}/sam-dummy-engine")
+    set(SAM_STUB_ENGINE_BUILD_ROOTDIR "${PROJECT_BINARY_DIR}/sam-stub-engine")
     
     # TODO: Why copy_if_different isn't working?
     # Copy the shared libraries to the executable directory.
-    file(GLOB SAM_DUMMY_ENGINE_DLLS 
-        "${SAM_DUMMY_ENGINE_BUILD_ROOTDIR}/Debug/${SAM_DUMMY_ENGINE}.dll"
+    file(GLOB SAM_STUB_ENGINE_DLLS 
+        "${SAM_STUB_ENGINE_BUILD_ROOTDIR}/Debug/${SAM_STUB_ENGINE}.dll"
     )
 
     # Safety check: Ensure that all the files exist.
-    foreach(file ${SAM_DUMMY_ENGINE_DLLS})
+    foreach(file ${SAM_STUB_ENGINE_DLLS})
         if(NOT EXISTS "${file}")
             message(FATAL_ERROR "File '${file}' does not exist!")
         endif()
     endforeach()
 
-    foreach(SAM_DUMMY_ENGINE_DLL ${SAM_DUMMY_ENGINE_DLLS})
+    foreach(SAM_STUB_ENGINE_DLL ${SAM_STUB_ENGINE_DLLS})
         add_custom_command(TARGET ${SAM_CONSOLE_EXECUTABLE_NAME} POST_BUILD
-                        COMMAND ${CMAKE_COMMAND} -E copy ${SAM_DUMMY_ENGINE_DLL} $<TARGET_FILE_DIR:${SAM_CONSOLE_EXECUTABLE_NAME}>
-                        COMMENT "Copying ${SAM_DUMMY_ENGINE_DLL} to the executable directory."
+                        COMMAND ${CMAKE_COMMAND} -E copy ${SAM_STUB_ENGINE_DLL} $<TARGET_FILE_DIR:${SAM_CONSOLE_EXECUTABLE_NAME}>
+                        COMMENT "Copying ${SAM_STUB_ENGINE_DLL} to the executable directory."
         )
     endforeach()
 

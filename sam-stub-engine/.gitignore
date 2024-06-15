@@ -1,0 +1,11 @@
+/**/*
+
+!/.gitignore
+
+!/CMakeLists.txt
+!/samengine.cpp
+!/samengine.hpp
+
+!/scan-areas-processor/
+!/scan-areas-processor/scanareasprocessor.cpp
+!/scan-areas-processor/scanareasprocessor.hpp

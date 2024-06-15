@@ -48,9 +48,6 @@ public:
     int on_new_file(const std::string& filename);
     void on_status(const int& row_index, const float& prediction);
 
-public slots:
-    void on_scan_button_clicked();
-
 protected:
     void resizeEvent(QResizeEvent *event) override;
 

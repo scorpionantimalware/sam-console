@@ -24,8 +24,8 @@
 !/.vscode/
 !/.vscode/settings.json
 
-!/sam-dummy-engine/
-!/sam-dummy-engine/**/*
+!/sam-stub-engine/
+!/sam-stub-engine/**/*
 
 !/scan-areas-controller/
 !/scan-areas-controller/**/*
