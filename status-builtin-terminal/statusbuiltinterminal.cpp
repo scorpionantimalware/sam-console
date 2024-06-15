@@ -40,12 +40,27 @@ StatusBuiltinTerminal::StatusBuiltinTerminal(QWidget *parent) : QTextEdit(parent
     this->setPalette(p);
 }
 
-void StatusBuiltinTerminal::append_message(const QString &message, const QColor &color)
+void StatusBuiltinTerminal::append_message(const std::string& status, const sam_engine::SAMEngineStatusMessage& message_type)
 {
+    QColor color;
+
+    switch (message_type) {
+        case sam_engine::SAMEngineStatusMessage::INFO:
+            color = Qt::white;
+            break;
+        case sam_engine::SAMEngineStatusMessage::CLEAN_FILE:
+            color = Qt::green;
+            break;
+        case sam_engine::SAMEngineStatusMessage::SUSPICIOUS_FILE:
+        case sam_engine::SAMEngineStatusMessage::ERROR:
+            color = Qt::red;
+            break;
+    }
+
     // Append message to the text edit with the specified color
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::End);
-    cursor.insertHtml(QString("<font color=\"%1\">%2</font><br>").arg(color.name(), message));
+    cursor.insertHtml(QString("<font color=\"%1\">%2</font><br>").arg(color.name(), QString::fromStdString(status)));
     this->setTextCursor(cursor);
 
     // Scroll to the bottom

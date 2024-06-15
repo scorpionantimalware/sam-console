@@ -49,6 +49,7 @@ public:
     ~MainWindow();
 
     ControlBar* get_control_bar();
+    StatusBuiltinTerminal* get_status_builtin_terminal();
     ResultsStreamViewer* get_results_stream_viewer();
 
 private slots:

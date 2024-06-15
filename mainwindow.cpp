@@ -112,6 +112,11 @@ ControlBar* MainWindow::get_control_bar()
     return MainWindow::control_bar;
 }
 
+StatusBuiltinTerminal* MainWindow::get_status_builtin_terminal()
+{
+    return MainWindow::status_builtin_terminal;
+}
+
 ResultsStreamViewer* MainWindow::get_results_stream_viewer()
 {
     return MainWindow::results_stream_viewer;
@@ -126,7 +131,7 @@ void MainWindow::on_scan_button_clicked()
 void MainWindow::on_stop_button_clicked()
 {
     std::cout << "Stopping..." << std::endl;
-    // sam_engine::sam_engine_stop();
+    sam_engine::sam_engine_stop();
 }
 
 void MainWindow::on_pause_button_clicked()

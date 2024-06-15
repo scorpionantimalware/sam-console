@@ -36,7 +36,7 @@
 class ScanButton : public QPushButton
 {
     Q_OBJECT
-    // Q_PROPERTY(int loading_arc_angle READ loading_arc_angle WRITE set_loading_arc_angle NOTIFY loading_arc_angle_changed)
+    Q_PROPERTY(int loading_arc_angle READ loading_arc_angle WRITE set_loading_arc_angle NOTIFY loading_arc_angle_changed)
 
 public:
     explicit ScanButton();

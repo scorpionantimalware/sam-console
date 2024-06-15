@@ -30,11 +30,13 @@
 
 #include <QWidget>
 
+#define LOADING_ARC_CYCLE_DURATION 1500 // Duration of one full rotation
+
 ScanButton::ScanButton() : state(ScanButton::TextureState::IDLE), current_loading_arc_angle(0), loading_arc_animator(nullptr)
 {
     this->setFixedSize(100, 100);
     ScanButton::loading_arc_animator = new QPropertyAnimation(this, "loading_arc_angle");
-    ScanButton::loading_arc_animator->setDuration(2000); // Duration of one full rotation
+    ScanButton::loading_arc_animator->setDuration(LOADING_ARC_CYCLE_DURATION); // Duration of one full rotation
     ScanButton::loading_arc_animator->setStartValue(0);
     ScanButton::loading_arc_animator->setEndValue(360 * 16);
     ScanButton::loading_arc_animator->setLoopCount(-1); // Loop indefinitely
@@ -111,30 +113,38 @@ void ScanButton::paintEvent(QPaintEvent *event)
             break;
         }
         case ScanButton::TextureState::SCANNING: {
+            QRectF rect(center.x() - min_side * 0.25, center.y() - min_side * 0.25, min_side * 0.5, min_side * 0.5);
+            const int span_angle {60 * 16}; // Span angle (in 1/16th of a degree)
+
             QPen pen(Qt::SolidLine); // Set pen style to SolidLine
             pen.setColor(Qt::black); // Set pen color
             pen.setWidth(min_side * 0.08f); // Set pen width to control stroke thickness
             painter.setPen(pen);
 
-            // Example of a rotating arc for the scanning state
-            QRectF rect(center.x() - min_side * 0.25, center.y() - min_side * 0.25, min_side * 0.5, min_side * 0.5);
-            const int span_angle {90 * 16}; // Span angle (in 1/16th of a degree)
-
-            painter.drawArc(rect, ScanButton::current_loading_arc_angle, span_angle);
+            painter.drawArc(rect, -1 * ScanButton::current_loading_arc_angle, span_angle);
             break;
         }
         case ScanButton::TextureState::ERROR: {
-            // Draw the error icon (e.g., a red cross or a warning symbol)
-            painter.setBrush(Qt::red);
-            painter.setPen(Qt::NoPen);
-
-            // Example of a red cross for the error state
-            float crossSize = min_side * 0.2f;
+            /**
+             *     *               *
+             *       *           *
+             *         *       *
+             *           *   *
+             *             *    
+             *           *   *            
+             *         *       *
+             *       *           *
+             *     *               *
+             */
+            float crossSize {min_side * 0.2f};
             QLineF line1(center - QPointF(crossSize, crossSize), center + QPointF(crossSize, crossSize));
             QLineF line2(center - QPointF(crossSize, -crossSize), center + QPointF(crossSize, -crossSize));
 
-            QPen pen(Qt::red, 4);
+            QPen pen(Qt::SolidLine); // Set pen style to SolidLine
+            pen.setColor(Qt::red); // Set pen color
+            pen.setWidth(min_side * 0.08f); // Set pen width to control stroke thickness
             painter.setPen(pen);
+
             painter.drawLine(line1);
             painter.drawLine(line2);
             break;

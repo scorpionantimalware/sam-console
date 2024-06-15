@@ -32,13 +32,30 @@
 #include <random>
 
 namespace sam_engine {
-  std::thread* engine_thread {nullptr};
-
   ScanFireCallback_t scan_fire_callback {nullptr};
   ScanCompleteCallback_t scan_complete_callback {nullptr};
   AddNewFileCallback_t add_new_file_callback {nullptr};
   SetStatusForFileCallback_t set_status_for_file_callback {nullptr};
   EngineStateChangeCallback_t engine_state_change_callback {nullptr};
+  UpdateBuiltinStatusTerminalCallback_t update_builtin_status_terminal_callback {nullptr};
+
+  std::thread* engine_thread {nullptr};
+
+  SAMEngineState* engine_state {nullptr};
+
+  SAMEngineState::SAMEngineState() : state(SAMEngineState::State::IDLE) {
+  } // constructor SAMEngineState
+
+  void SAMEngineState::set_state(const State& new_state) {
+    SAMEngineState::state = new_state;
+    if (engine_state_change_callback) {
+      engine_state_change_callback(SAMEngineState::state);
+    }
+  } // function set_state
+
+  SAMEngineState::State SAMEngineState::get_state() {
+    return SAMEngineState::state;
+  } // function get_state
 
   /**
    * @brief Start the scan process
@@ -48,11 +65,6 @@ namespace sam_engine {
    * 
    * @note This function is a wrapper for the fire_scan() function to be
    *      called in a separate thread.
-   * 
-   * @todo This function raises the below error:
-   *       HEAP CORRUPTION DETECTED: after Normal block (#208) at 
-   *       0X000001A468C07620. CRT detected that the application wrote to
-   *       memory after the end of the heap buffer.
   */
   void fire_scan_thread_wrapper();
 
@@ -63,11 +75,24 @@ namespace sam_engine {
   bool sam_engine_scan() {
     bool status {false};
 
+    if (!engine_state) {
+      engine_state = new SAMEngineState();
+    }
+
+    engine_state->set_state(SAMEngineState::State::SCANNING);
+
     std::cout << "Info: Running the engine in a separate thread" << std::endl;
+    if (update_builtin_status_terminal_callback) {
+      update_builtin_status_terminal_callback("Running the engine in a separate thread", SAMEngineStatusMessage::INFO);
+    }
     if (engine_thread) {
       status = engine_thread->joinable();
       if (status) {
         std::cout << "Error: Engine thread is already running" << std::endl;
+        if (update_builtin_status_terminal_callback) {
+          update_builtin_status_terminal_callback("Error: Engine thread is already running", SAMEngineStatusMessage::INFO);
+        }
+        engine_state->set_state(SAMEngineState::State::STOPPED);
         status = false;
         return status;
       }
@@ -101,6 +126,9 @@ namespace sam_engine {
     status = fire_scan();
     if (!status) {
       std::cout << "Error: Something went wrong while scanning" << std::endl;
+      if (update_builtin_status_terminal_callback) {
+        update_builtin_status_terminal_callback("Error: Something went wrong while scanning", SAMEngineStatusMessage::INFO);
+      }
     }
   } // function fire_scan_thread_wrapper
 
@@ -125,6 +153,9 @@ namespace sam_engine {
 
       if (set_status_for_file_callback) {
         set_status_for_file_callback(new_file_id, dummy_prediction);
+        if (update_builtin_status_terminal_callback && dummy_prediction > 0.5) {
+          update_builtin_status_terminal_callback("Suspicious file: dummy_file_" + std::to_string(dummy_file_count), SAMEngineStatusMessage::SUSPICIOUS_FILE);
+        }
       }
 
       std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -134,21 +165,35 @@ namespace sam_engine {
       scan_complete_callback();
     }
 
+    engine_state->set_state(SAMEngineState::State::COMPLETE);
+
     status = true;
 
     return status;
   } // function fire_scan
 
-  SAMEngineState::SAMEngineState() : state(SAMEngineState::State::IDLE) {
-  } // constructor SAMEngineState
+  void sam_engine_stop() {
+    // if (engine_thread) {
+    //   if (engine_thread->joinable()) {
+    //     engine_thread->join();
+    //   }
+    //   delete engine_thread;
+    // }
 
-  void SAMEngineState::set_state(const State& new_state) {
-    SAMEngineState::state = new_state;
-  } // function set_state
+    engine_state->set_state(SAMEngineState::State::STOPPED);
 
-  SAMEngineState::State SAMEngineState::get_state() {
-    return SAMEngineState::state;
-  } // function get_state
+    // if (engine_state) {
+    //   delete engine_state;
+    // }
+  } // function sam_engine_stop
+
+  void sam_engine_pause() {
+    
+  } // function sam_engine_pause
+
+  void sam_engine_resume() {
+    
+  } // function sam_engine_resume
 
   float generate_dummy_prediction() {
       // Create a random number generator engine
@@ -181,4 +226,8 @@ namespace sam_engine {
   void hook_engine_state_change_callback(const EngineStateChangeCallback_t& callback) {
     engine_state_change_callback = callback;
   } // function hook_engine_state_change_callback
+
+  void hook_update_builtin_status_terminal_callback(const UpdateBuiltinStatusTerminalCallback_t& callback) {
+    update_builtin_status_terminal_callback = callback;
+  } // function hook_update_builtin_status_terminal_callback
 } // namespace sam_engine

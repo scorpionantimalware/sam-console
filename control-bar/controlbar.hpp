@@ -99,6 +99,11 @@ private slots:
     void pause_scan();
 
     /**
+     * @brief Slot to resume the scan.
+    */
+    void resume_scan();
+
+    /**
      * @brief Slot to show the scan areas controller.
     */
     void show_scan_areas_controller();

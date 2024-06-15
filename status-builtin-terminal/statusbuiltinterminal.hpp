@@ -31,13 +31,15 @@
 
 #include <QTextEdit>
 
+#include "samengine.hpp"
+
 class StatusBuiltinTerminal : public QTextEdit
 {
     Q_OBJECT
 
 public:
     explicit StatusBuiltinTerminal(QWidget *parent = nullptr);
-    void append_message(const QString& message, const QColor& color = Qt::white);
+    void append_message(const std::string& status, const sam_engine::SAMEngineStatusMessage& message_type = sam_engine::SAMEngineStatusMessage::INFO);
 };
 
 #endif // SAM_STATUS_BUILTIN_TERMINAL_HPP

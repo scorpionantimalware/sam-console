@@ -40,6 +40,7 @@ namespace fs = std::filesystem;
  * @brief Global accessors.
 */
 ControlBar *g_control_bar {nullptr};
+StatusBuiltinTerminal *g_status_builtin_terminal {nullptr};
 ResultsStreamViewer *g_results_stream_viewer {nullptr};
 
 int main(int argc, char **argv)
@@ -58,7 +59,8 @@ int main(int argc, char **argv)
     sam_engine::hook_scan_complete_callback(&scan_complete_callback);
     sam_engine::hook_add_new_file_callback(&add_new_file_callback);
     sam_engine::hook_set_status_for_file_callback(&set_status_for_file_callback);
-    // sam_engine::hook_engine_state_change_callback(&engine_state_change_callback);
+    sam_engine::hook_engine_state_change_callback(&engine_state_change_callback);
+    sam_engine::hook_update_builtin_status_terminal_callback(&update_builtin_status_terminal_callback);
 
     QApplication sam_console_app(argc, argv);
     QCoreApplication::setOrganizationName(SAM_ORG_NAME);
@@ -90,6 +92,7 @@ int main(int argc, char **argv)
 
     MainWindow w;
     g_control_bar = w.get_control_bar();
+    g_status_builtin_terminal = w.get_status_builtin_terminal();
     g_results_stream_viewer = w.get_results_stream_viewer();
     w.resize(1440, 720);
     w.show();
@@ -119,4 +122,9 @@ void set_status_for_file_callback(const int& row_index, const float& prediction)
 void engine_state_change_callback(const sam_engine::SAMEngineState::State& state)
 {
     g_control_bar->update_state(state);
+}
+
+void update_builtin_status_terminal_callback(const std::string& status, const sam_engine::SAMEngineStatusMessage& message_type)
+{
+    g_status_builtin_terminal->append_message(status, message_type);
 }
