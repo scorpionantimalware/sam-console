@@ -29,8 +29,8 @@ target_include_directories(${SAM_STUB_ENGINE} PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-processor/"
 )
 
-# This is to build with the console with the  engine.
+# This is to build with the console with the engine.
 # There is another definition for the real engine.
 target_compile_definitions(${SAM_STUB_ENGINE} PUBLIC 
-    SAM_STUB_ENGINE_ACTIVE
+    SAM_STUB_ENGINE_ACTIVE 
 )
