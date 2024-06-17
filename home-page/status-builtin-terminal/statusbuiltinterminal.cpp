@@ -26,10 +26,10 @@
  * 
  */
 
-#include "statusbuiltinterminal.hpp"
+#include "status-builtin-terminal/statusbuiltinterminal.hpp"
 #include <QScrollBar>
 
-StatusBuiltinTerminal::StatusBuiltinTerminal(QWidget *parent) : QTextEdit(parent)
+StatusBuiltinTerminal::StatusBuiltinTerminal()
 {
     this->setReadOnly(true);
 

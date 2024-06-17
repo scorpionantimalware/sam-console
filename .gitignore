@@ -27,27 +27,35 @@
 !/sam-stub-engine/
 !/sam-stub-engine/**/*
 
-!/scan-areas-controller/
-!/scan-areas-controller/**/*
+!/page-switcher-bar/
+!/page-switcher-bar/pageswitcherbar.hpp
+!/page-switcher-bar/pageswitcherbar.cpp
 
-!/status-builtin-terminal/
-!/status-builtin-terminal/**/*
+!/home-page/
+!/home-page/homepage.hpp
+!/home-page/homepage.cpp
+!/home-page/scan-areas-controller/
+!/home-page/scan-areas-controller/**/*
+!/home-page/status-builtin-terminal/
+!/home-page/status-builtin-terminal/**/*
+!/home-page/control-bar/
+!/home-page/control-bar/controlbar.hpp
+!/home-page/control-bar/controlbar.cpp
+!/home-page/control-bar/pausebutton.hpp
+!/home-page/control-bar/pausebutton.cpp
+!/home-page/control-bar/scanbutton.hpp
+!/home-page/control-bar/scanbutton.cpp
+!/home-page/control-bar/stopbutton.hpp
+!/home-page/control-bar/stopbutton.cpp
+!/home-page/control-bar/scanareascontrollerbutton.hpp
+!/home-page/control-bar/scanareascontrollerbutton.cpp
+!/home-page/results-stream-viewer/
+!/home-page/results-stream-viewer/resultsstreamviewer.hpp
+!/home-page/results-stream-viewer/resultsstreamviewer.cpp
 
-!/control-bar/
-!/control-bar/controlbar.hpp
-!/control-bar/controlbar.cpp
-!/control-bar/pausebutton.hpp
-!/control-bar/pausebutton.cpp
-!/control-bar/scanbutton.hpp
-!/control-bar/scanbutton.cpp
-!/control-bar/stopbutton.hpp
-!/control-bar/stopbutton.cpp
-!/control-bar/scanareascontrollerbutton.hpp
-!/control-bar/scanareascontrollerbutton.cpp
-
-!/results-stream-viewer/
-!/results-stream-viewer/resultsstreamviewer.hpp
-!/results-stream-viewer/resultsstreamviewer.cpp
+!/FIM-page/
+!/FIM-page/fimpage.hpp
+!/FIM-page/fimpage.cpp
 
 !/resources/
 !/resources/asu_logo.png

@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * pausebutton.hpp
+ * pageswitcherbar.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,25 +26,41 @@
  * 
  */
 
-#ifndef SAM_PAUSE_BUTTON_HPP
-#define SAM_PAUSE_BUTTON_HPP
+#ifndef SAM_PAGE_SWITCHER_BAR_HPP
+#define SAM_PAGE_SWITCHER_BAR_HPP
 
+#include <QWidget>
+#include <QVBoxLayout>
 #include <QPushButton>
-#include <QPainter>
 
-class PauseButton : public QPushButton
+class PageSwitcherBar : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit PauseButton();
-    ~PauseButton();
-    
-protected:
-    void paintEvent(QPaintEvent *event) override;
+    explicit PageSwitcherBar(QWidget *parent = nullptr);
+    ~PageSwitcherBar();
+
+signals:
+    void home_page_switch_button_clicked();
+    void fim_page_switch_button_clicked();
+
+private slots:
+    void switch_to_home_page();
+
+    /**
+     * @brief File Integrity Manager or FIM is a feature that allows users to
+     *        monitor changes to files and directories. This function shows the
+     *        FIM page. 
+     * 
+     */
+    void switch_to_fim_page();
 
 private:
+    QVBoxLayout *main_layout;
 
+    QPushButton *home_page_button;
+    QPushButton *fim_page_button;
 };
 
-#endif // SAM_PAUSE_BUTTON_HPP
+#endif // SAM_PAGE_SWITCHER_BAR_HPP

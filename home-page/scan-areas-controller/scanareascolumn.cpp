@@ -25,7 +25,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
  */
-#include "scanareascolumn.hpp"
+#include "scan-areas-controller/scanareascolumn.hpp"
 
 #include <iostream>
 #include <QColor>
@@ -35,8 +35,7 @@
 
 #include "samconsolemain.hpp"
 
-ScanAreasColumn::ScanAreasColumn() : scan_areas()
-{
+ScanAreasColumn::ScanAreasColumn() {
     ScanAreasColumn::init();
 
     ScanAreasProcessor processor;
@@ -45,13 +44,8 @@ ScanAreasColumn::ScanAreasColumn() : scan_areas()
     }
 
     for (const std::string& area : ScanAreasColumn::scan_areas) {
-        ScanAreasColumn::add_row(area);
+        ScanAreasColumn::append_new_entry(area);
     }
-}
-
-ScanAreasColumn::~ScanAreasColumn()
-{
-    
 }
 
 void ScanAreasColumn::init()
@@ -69,7 +63,7 @@ void ScanAreasColumn::resizeEvent(QResizeEvent *event)
     ScanAreasColumn::update_column_widths();
 }
 
-void ScanAreasColumn::on_browse_area_button_clicked()
+void ScanAreasColumn::on_area_browse_button_clicked()
 {
     // Open the file explorer to select a directory
     std::string new_area { QFileDialog::getExistingDirectory(nullptr, "Select an area to scan", QDir::homePath()).toStdString() };
@@ -82,7 +76,7 @@ void ScanAreasColumn::on_browse_area_button_clicked()
     ScanAreasProcessor processor;
     processor.add_area(new_area);
     ScanAreasColumn::scan_areas.push_back(new_area);
-    ScanAreasColumn::add_row(new_area);
+    ScanAreasColumn::append_new_entry(new_area);
 }
 
 void ScanAreasColumn::update_column_widths()
@@ -91,7 +85,7 @@ void ScanAreasColumn::update_column_widths()
     this->setColumnWidth(0, table_width);
 }
 
-int ScanAreasColumn::add_row(const std::string& area) {
+int ScanAreasColumn::append_new_entry(const std::string& area) {
     int row_index {this->rowCount()}; // Get the current row count as the index for the new row
     this->insertRow(row_index);
     QTableWidgetItem *area_item = new QTableWidgetItem(QString::fromStdString(area));

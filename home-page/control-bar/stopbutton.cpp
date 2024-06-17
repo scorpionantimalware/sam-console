@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * mainwindow.hpp
+ * stopbutton.cpp - A class that represents the stop button in the control bar.
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,49 +26,35 @@
  * 
  */
 
-#ifndef SAM_MAIN_WINDOW_HPP
-#define SAM_MAIN_WINDOW_HPP
+#include "control-bar/stopbutton.hpp"
 
 #include <QWidget>
-#include <QHBoxLayout>
-#include <QStackedWidget>
 
-#include "samengine.hpp"
-
-#include "samconsolesplash.hpp"
-#include "pageswitcherbar.hpp"
-#include "homepage.hpp"
-#include "fimpage.hpp"
-
-class MainWindow : public QWidget
+StopButton::StopButton()
 {
-    Q_OBJECT
+    this->setFixedSize(100, 100);
+}
 
-public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+void StopButton::paintEvent(QPaintEvent *event)
+{
+    QPushButton::paintEvent(event);
 
-    HomePage* get_home_page_p() const;
-    FIMPage* get_fim_page_p() const;
+    QPainter painter = QPainter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
-private slots:
-    void on_home_page_switch_button_clicked();
-    void on_fim_page_switch_button_clicked();
+    int w {this->width()};
+    int h {this->height()};
 
-private:
-    SAMConsoleSplash *splash_screen;
+    float min_side {(float)qMin(w, h)};
 
-    QHBoxLayout *main_layout;
+    QPointF center {w * 0.5f, h * 0.5f};
 
-    PageSwitcherBar *page_switcher_bar;
+    float square_side_length {min_side * 0.4f}; // Side length of the square
+
+    // Draw the square
+    painter.setBrush(Qt::red);
+    painter.setPen(Qt::NoPen); // Set the pen to Qt::NoPen to remove the stroke
     
-    QStackedWidget *pages_stack;
-
-    HomePage *home_page;
-
-    FIMPage *fim_page;
-
-    void show_main_ui();
-};
-
-#endif // SAM_MAIN_WINDOW_HPP
+    QRectF square {center - QPointF(square_side_length * 0.5f, square_side_length * 0.5f), QSizeF(square_side_length, square_side_length)};
+    painter.drawRect(square);
+}

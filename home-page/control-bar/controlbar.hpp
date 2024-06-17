@@ -32,10 +32,10 @@
 #include <QWidget>
 #include <QHBoxLayout>
 
-#include "scanbutton.hpp"
-#include "stopbutton.hpp"
-#include "pausebutton.hpp"
-#include "scanareascontrollerbutton.hpp"
+#include "control-bar/scanbutton.hpp"
+#include "control-bar/stopbutton.hpp"
+#include "control-bar/pausebutton.hpp"
+#include "control-bar/scanareascontrollerbutton.hpp"
 
 #include "samengine.hpp"
 
@@ -44,10 +44,10 @@ class ControlBar : public QWidget
     Q_OBJECT
 
 public:
-    ControlBar();
+    ControlBar(QWidget *parent = nullptr);
     ~ControlBar();
 
-    void update_state(const sam_engine::SAMEngineState::State& state);
+    void update_state(const sam_engine::SAMEngineState& engine_state);
 
 signals:
     /**
@@ -106,7 +106,7 @@ private slots:
     /**
      * @brief Slot to show the scan areas controller.
     */
-    void show_scan_areas_controller();
+    void open_scan_areas_controller();
 
 private:
     QHBoxLayout *main_layout;

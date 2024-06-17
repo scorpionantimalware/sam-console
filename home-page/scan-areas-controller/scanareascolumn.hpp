@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * pausebutton.cpp - A class that represents the pause button in the control bar.
+ * scan-areas-controller/scanareascolumn.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,47 +26,36 @@
  * 
  */
 
-#include "pausebutton.hpp"
+#ifndef SAM_SCAN_AREAS_COLUMN_HPP
+#define SAM_SCAN_AREAS_COLUMN_HPP
 
-#include <QWidget>
+#include <QTableWidget>
+#include <vector>
+#include <string>
 
-PauseButton::PauseButton()
+class ScanAreasColumn : public QTableWidget
 {
-    this->setFixedSize(100, 100);
-}
+public:
+    ScanAreasColumn();
 
-PauseButton::~PauseButton()
-{
-    
-}
+    int append_new_entry(const std::string& area);
 
-void PauseButton::paintEvent(QPaintEvent *event)
-{
-    QPushButton::paintEvent(event);
+public slots:
+    void on_area_browse_button_clicked();
 
-    QPainter painter = QPainter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
-    float min_side {(float)qMin(width(), height())};
+private:
+    std::vector<std::string> scan_areas;
 
-    // Use Multiplication instead of Division as it is faster
-    QPointF center {width() * 0.5f, height() * 0.5f};
+    void init();
 
-    float max_height {min_side * 0.18f}; // Max height of the pause symbol from the center.
-    float separation {min_side * 0.15f};
-    float pen_width {separation};
+/**
+ * @brief Update the column widths based on the table's width
+*/    
+    void update_column_widths();
 
-    QPen pen(Qt::black);
-    pen.setWidth(pen_width);
-    painter.setPen(pen);
+};
 
-    /*
-        From top to bottom, draw the left part.
-    */
-    painter.drawLine(center - QPointF(separation, max_height), center - QPointF(separation, -max_height));
-
-    /*
-        From top to bottom, draw the right part.
-    */
-    painter.drawLine(center + QPointF(separation, -max_height), center + QPointF(separation, max_height));
-}
+#endif // SAM_SCAN_AREAS_COLUMN_HPP

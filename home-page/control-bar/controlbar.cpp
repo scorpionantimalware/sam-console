@@ -26,9 +26,9 @@
  * 
  */
 
-#include "controlbar.hpp"
+#include "control-bar/controlbar.hpp"
 
-ControlBar::ControlBar() : main_layout(nullptr), scan_button(nullptr), stop_button(nullptr), pause_button(nullptr), scan_areas_controller_button(nullptr) {
+ControlBar::ControlBar(QWidget *parent) : QWidget(parent), main_layout(nullptr), scan_button(nullptr), stop_button(nullptr), pause_button(nullptr), scan_areas_controller_button(nullptr) {
 
     ControlBar::main_layout = new QHBoxLayout(this);
     ControlBar::main_layout->setSpacing(20);
@@ -50,7 +50,7 @@ ControlBar::ControlBar() : main_layout(nullptr), scan_button(nullptr), stop_butt
     this->connect(ControlBar::scan_button, &QPushButton::released, this, &ControlBar::start_scan);
     this->connect(ControlBar::stop_button, &QPushButton::released, this, &ControlBar::stop_scan);
     this->connect(ControlBar::pause_button, &QPushButton::released, this, &ControlBar::pause_scan);
-    this->connect(ControlBar::scan_areas_controller_button, &QPushButton::released, this, &ControlBar::show_scan_areas_controller);
+    this->connect(ControlBar::scan_areas_controller_button, &QPushButton::released, this, &ControlBar::open_scan_areas_controller);
 }
 
 ControlBar::~ControlBar() {
@@ -80,8 +80,8 @@ ControlBar::~ControlBar() {
     }
 }
 
-void ControlBar::update_state(const sam_engine::SAMEngineState::State& state) {
-    switch (state) {
+void ControlBar::update_state(const sam_engine::SAMEngineState& engine_state) {
+    switch (engine_state.get_state()) {
         case sam_engine::SAMEngineState::State::IDLE:
             ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
             ControlBar::scan_button->setEnabled(true);
@@ -144,6 +144,6 @@ void ControlBar::pause_scan() {
 void ControlBar::resume_scan() {
 }
 
-void ControlBar::show_scan_areas_controller() {
+void ControlBar::open_scan_areas_controller() {
     emit scan_areas_controller_button_clicked();
 }

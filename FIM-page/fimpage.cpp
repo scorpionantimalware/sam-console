@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * results-stream-viewer/resultsstreamviewer.hpp
+ * fimpage.cpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,36 +26,19 @@
  * 
  */
 
-#ifndef SAM_RESULTS_STREAM_VIEWER_HPP
-#define SAM_RESULTS_STREAM_VIEWER_HPP
+#include "fimpage.hpp"
 
-#include <QTableWidget>
+#include <iostream>
+#include <QTimer>
 
-class ResultsStreamViewer : public QTableWidget
+FIMPage::FIMPage(QWidget *parent) : QWidget(parent), main_layout(nullptr) {
+    // Initialize the main layout
+    FIMPage::main_layout = new QVBoxLayout(this);
+    FIMPage::main_layout->setSpacing(20);
+}
+
+FIMPage::~FIMPage()
 {
-public:
-    ResultsStreamViewer();
-    ~ResultsStreamViewer();
+    
+}
 
-    void init();
-
-    int add_row(const std::string& filename);
-
-    void set_status_for_row(const int& row_index, const std::string& status, const float& prediction);
-
-    void on_scan_fire();
-    void on_scan_complete();
-    int on_new_file(const std::string& filename);
-    void on_status(const int& row_index, const float& prediction);
-
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-
-private:
-    /**
-     * @brief Update the column widths based on the table's width
-    */
-    void update_column_widths();
-};
-
-#endif // SAM_RESULTS_STREAM_VIEWER_HPP

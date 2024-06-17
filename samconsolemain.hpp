@@ -76,11 +76,9 @@ int main(int argc, char **argv);
 
 namespace sam_callbacks {
 
-void scan_fire_callback();
-void scan_complete_callback();
 int add_new_file_callback(const std::string& filename);
-void set_status_for_file_callback(const int& row_index, const float& prediction);
-void engine_state_change_callback(const sam_engine::SAMEngineState::State& state);
+void set_result_for_file_callback(const int& row_index, const float& prediction);
+void engine_state_change_callback(const sam_engine::SAMEngineState& state);
 void update_builtin_status_terminal_callback(const std::string& status, const sam_engine::SAMEngineStatusMessage& message_type);
 
 } // namespace sam_callbacks

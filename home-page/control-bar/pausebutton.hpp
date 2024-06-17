@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * statusbuiltinterminal.hpp
+ * pausebutton.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,20 +26,21 @@
  * 
  */
 
-#ifndef SAM_STATUS_BUILTIN_TERMINAL_HPP
-#define SAM_STATUS_BUILTIN_TERMINAL_HPP
+#ifndef SAM_PAUSE_BUTTON_HPP
+#define SAM_PAUSE_BUTTON_HPP
 
-#include <QTextEdit>
+#include <QPushButton>
+#include <QPainter>
 
-#include "samengine.hpp"
-
-class StatusBuiltinTerminal : public QTextEdit
+class PauseButton : public QPushButton
 {
     Q_OBJECT
 
 public:
-    explicit StatusBuiltinTerminal(QWidget *parent = nullptr);
-    void append_message(const std::string& status, const sam_engine::SAMEngineStatusMessage& message_type = sam_engine::SAMEngineStatusMessage::INFO);
+    explicit PauseButton();
+    
+protected:
+    void paintEvent(QPaintEvent *event) override;
 };
 
-#endif // SAM_STATUS_BUILTIN_TERMINAL_HPP
+#endif // SAM_PAUSE_BUTTON_HPP

@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * scan-areas-controller/scanareascolumn.hpp
+ * stopbutton.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,37 +26,21 @@
  * 
  */
 
-#ifndef SAM_SCAN_AREAS_COLUMN_HPP
-#define SAM_SCAN_AREAS_COLUMN_HPP
+#ifndef SAM_STOP_BUTTON_HPP
+#define SAM_STOP_BUTTON_HPP
 
-#include <QTableWidget>
-#include <vector>
-#include <string>
+#include <QPushButton>
+#include <QPainter>
 
-class ScanAreasColumn : public QTableWidget
+class StopButton : public QPushButton
 {
+    Q_OBJECT
+
 public:
-    ScanAreasColumn();
-    ~ScanAreasColumn();
-
-    void init();
-
-    int add_row(const std::string& area);
-
-public slots:
-    void on_browse_area_button_clicked();
+    explicit StopButton();
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
-
-private:
-    std::vector<std::string> scan_areas;
-
-/**
- * @brief Update the column widths based on the table's width
-*/
-    void update_column_widths();
-
+    void paintEvent(QPaintEvent *event) override;
 };
 
-#endif // SAM_SCAN_AREAS_COLUMN_HPP
+#endif // SAM_STOP_BUTTON_HPP

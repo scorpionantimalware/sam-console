@@ -34,14 +34,16 @@
 #include <filesystem>
 #include <iostream>
 
+#include "homepage.hpp"
+#include "fimpage.hpp"
+
 namespace fs = std::filesystem;
 
 /**
  * @brief Global accessors.
 */
-ControlBar *g_control_bar {nullptr};
-StatusBuiltinTerminal *g_status_builtin_terminal {nullptr};
-ResultsStreamViewer *g_results_stream_viewer {nullptr};
+HomePage *home_page {nullptr};
+FIMPage *fim_page {nullptr};
 
 int main(int argc, char **argv)
 {
@@ -55,10 +57,8 @@ int main(int argc, char **argv)
     /*
         Initialize the engine and register callbacks.
     */
-    sam_engine::hook_scan_fire_callback(&sam_callbacks::scan_fire_callback);
-    sam_engine::hook_scan_complete_callback(&sam_callbacks::scan_complete_callback);
     sam_engine::hook_add_new_file_callback(&sam_callbacks::add_new_file_callback);
-    sam_engine::hook_set_status_for_file_callback(&sam_callbacks::set_status_for_file_callback);
+    sam_engine::hook_set_result_for_file_callback(&sam_callbacks::set_result_for_file_callback);
     sam_engine::hook_engine_state_change_callback(&sam_callbacks::engine_state_change_callback);
     sam_engine::hook_update_builtin_status_terminal_callback(&sam_callbacks::update_builtin_status_terminal_callback);
 
@@ -91,44 +91,34 @@ int main(int argc, char **argv)
     // sam_console_app.setPalette(darkPalette);
 
     MainWindow w;
-    g_control_bar = w.get_control_bar();
-    g_status_builtin_terminal = w.get_status_builtin_terminal();
-    g_results_stream_viewer = w.get_results_stream_viewer();
+
+    home_page = w.get_home_page_p();
+    fim_page = w.get_fim_page_p();
+    
     w.resize(1440, 720);
     w.show();
     return sam_console_app.exec();
 }
 
-namespace sam_callbacks
-{
-    void scan_fire_callback()
-    {
-        g_results_stream_viewer->on_scan_fire();
-    }
-
-    void scan_complete_callback()
-    {
-        g_results_stream_viewer->on_scan_complete();
-    }
-
+namespace sam_callbacks {
     int add_new_file_callback(const std::string& filename)
     {
-        return g_results_stream_viewer->on_new_file(filename);
+        return home_page->get_results_stream_viewer_p()->append_new_entry(filename);
     }
 
-    void set_status_for_file_callback(const int& row_index, const float& prediction)
+    void set_result_for_file_callback(const int& row_index, const float& prediction)
     {
-        g_results_stream_viewer->on_status(row_index, prediction);
+        home_page->get_results_stream_viewer_p()->set_result_for_entry(row_index, prediction);
     }
 
-    void engine_state_change_callback(const sam_engine::SAMEngineState::State& state)
+    void engine_state_change_callback(const sam_engine::SAMEngineState& state)
     {
-        g_control_bar->update_state(state);
+        home_page->get_control_bar_p()->update_state(state);
     }
 
     void update_builtin_status_terminal_callback(const std::string& status, const sam_engine::SAMEngineStatusMessage& message_type)
     {
-        g_status_builtin_terminal->append_message(status, message_type);
+        home_page->get_status_builtin_terminal_p()->append_message(status, message_type);
     }
 } // namespace sam_callbacks
 

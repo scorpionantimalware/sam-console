@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * stopbutton.cpp - A class that represents the stop button in the control bar.
+ * homepage.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,36 +26,49 @@
  * 
  */
 
-#include "stopbutton.hpp"
+#ifndef SAM_HOME_PAGE_HPP
+#define SAM_HOME_PAGE_HPP
 
 #include <QWidget>
+#include <QVBoxLayout>
 
-StopButton::StopButton()
+#include "samengine.hpp"
+
+#include "control-bar/controlbar.hpp"
+#include "status-builtin-terminal/statusbuiltinterminal.hpp"
+#include "results-stream-viewer/resultsstreamviewer.hpp"
+#include "scan-areas-controller/scanareascontroller.hpp"
+
+#include "samconsolesplash.hpp"
+
+class HomePage : public QWidget
 {
-    this->setFixedSize(100, 100);
-}
+    Q_OBJECT
 
-StopButton::~StopButton()
-{
-}
+public:
+    explicit HomePage(QWidget *parent = nullptr);
+    ~HomePage();
 
-void StopButton::paintEvent(QPaintEvent *event)
-{
-    QPushButton::paintEvent(event);
+    ControlBar* get_control_bar_p() const;
+    StatusBuiltinTerminal* get_status_builtin_terminal_p() const;
+    ResultsStreamViewer* get_results_stream_viewer_p() const;
 
-    QPainter painter = QPainter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+private slots:
+    void on_scan_button_clicked();
+    void on_stop_button_clicked();
+    void on_pause_button_clicked();
+    void on_scan_areas_controller_button_clicked();
 
-    float min_side {(float)qMin(width(), height())};
+private:
+    SAMConsoleSplash *splash_screen;
 
-    QPointF center {width() * 0.5f, height() * 0.5f};
+    QVBoxLayout *main_layout;
 
-    float square_side_length {min_side * 0.4f}; // Side length of the square
+    ControlBar* control_bar;
+    StatusBuiltinTerminal* status_builtin_terminal;
+    ResultsStreamViewer* results_stream_viewer;
 
-    // Draw the square
-    painter.setBrush(Qt::red);
-    painter.setPen(Qt::NoPen); // Set the pen to Qt::NoPen to remove the stroke
-    
-    QRectF square {center - QPointF(square_side_length * 0.5f, square_side_length * 0.5f), QSizeF(square_side_length, square_side_length)};
-    painter.drawRect(square);
-}
+    ScanAreasController *scan_areas_controller;
+};
+
+#endif // SAM_HOME_PAGE_HPP

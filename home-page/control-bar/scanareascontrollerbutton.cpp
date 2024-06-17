@@ -26,7 +26,7 @@
  * 
  */
 
-#include "scanareascontrollerbutton.hpp"
+#include "control-bar/scanareascontrollerbutton.hpp"
 
 #include <QWidget>
 #include <cmath>
@@ -43,9 +43,12 @@ void ScanAreasControllerButton::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    float min_side {(float)qMin(width(), height())};
+    int w {this->width()};
+    int h {this->height()};
 
-    QPointF center {width() * 0.5f, height() * 0.5f};
+    float min_side {(float)qMin(w, h)};
+
+    QPointF center {w * 0.5f, h * 0.5f};
 
     QPen pen(Qt::SolidLine); // Set pen style to SolidLine
     pen.setColor(Qt::black); // Set pen color

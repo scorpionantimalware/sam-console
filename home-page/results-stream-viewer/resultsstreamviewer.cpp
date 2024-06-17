@@ -26,17 +26,13 @@
  * 
  */
 
-#include "resultsstreamviewer.hpp"
+#include "results-stream-viewer/resultsstreamviewer.hpp"
 
 #include <iostream>
 
 ResultsStreamViewer::ResultsStreamViewer()
 {
     ResultsStreamViewer::init();
-}
-
-ResultsStreamViewer::~ResultsStreamViewer()
-{
 }
 
 void ResultsStreamViewer::init()
@@ -66,7 +62,7 @@ void ResultsStreamViewer::update_column_widths()
     this->setColumnWidth(1, status_column_width);
 }
 
-int ResultsStreamViewer::add_row(const std::string& filename) {
+int ResultsStreamViewer::append_new_entry(const std::string& filename) {
     int row_index {this->rowCount()}; // Get the current row count as the index for the new row
     this->insertRow(row_index);
     QTableWidgetItem *filename_item = new QTableWidgetItem(QString::fromStdString(filename));
@@ -76,11 +72,19 @@ int ResultsStreamViewer::add_row(const std::string& filename) {
     return row_index;
 }
 
-void ResultsStreamViewer::set_status_for_row(const int& row_index, const std::string& status, const float& prediction) {
+void ResultsStreamViewer::set_result_for_entry(const int& row_index, const float& prediction) {
     if (row_index < 0 || row_index >= this->rowCount()) {
         std::cerr << "Invalid row index: " << row_index << std::endl;
         return; // Invalid row index
     }
+
+    std::cout << "Status for row " << row_index << ": " << prediction << std::endl;
+
+    /*
+        -1.0 is the default value for the buffer that is being sent to the model.
+        If the model is not able to predict the file, it will not fill the buffer.
+    */
+    std::string status {prediction == -1.0f ? "Failed" : prediction > 0.5f ? "Malware" : "Benign"};
 
     QTableWidgetItem *status_item {this->item(row_index, 1)}; // Get the item in the second column
 
@@ -96,32 +100,4 @@ void ResultsStreamViewer::set_status_for_row(const int& row_index, const std::st
 
     // Check https://doc.qt.io/qt-6/qtablewidgetitem.html#setBackground for set background documentation
     status_item->setBackground(brush);
-}
-
-void ResultsStreamViewer::on_scan_fire()
-{
-    std::cout << "Scan fired" << std::endl;
-}
-
-void ResultsStreamViewer::on_scan_complete()
-{
-    std::cout << "Scan complete" << std::endl;
-}
-
-int ResultsStreamViewer::on_new_file(const std::string& filename)
-{
-    std::cout << "New file: " << filename << std::endl;
-    return ResultsStreamViewer::add_row(filename);
-}
-
-void ResultsStreamViewer::on_status(const int& row_index, const float& prediction)
-{
-    std::cout << "Status for row " << row_index << ": " << prediction << std::endl;
-
-    /*
-        -1.0 is the default value for the buffer that is being sent to the model.
-        If the model is not able to predict the file, it will not fill the buffer.
-    */
-    std::string status {prediction == -1.0f ? "Failed" : prediction > 0.5f ? "Malware" : "Benign"};
-    ResultsStreamViewer::set_status_for_row(row_index, status, prediction);
 }

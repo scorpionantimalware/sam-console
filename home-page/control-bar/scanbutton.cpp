@@ -26,7 +26,7 @@
  * 
  */
 
-#include "scanbutton.hpp"
+#include "control-bar/scanbutton.hpp"
 
 #include <QWidget>
 
@@ -92,9 +92,12 @@ void ScanButton::paintEvent(QPaintEvent *event)
     QPainter painter = QPainter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    float min_side {(float)qMin(width(), height())};
+    int w {this->width()};
+    int h {this->height()};
+
+    float min_side {(float)qMin(w, h)};
     
-    QPointF center {width() * 0.5f, height() * 0.5f};
+    QPointF center {w * 0.5f, h * 0.5f};
 
     switch (ScanButton::state)
     {

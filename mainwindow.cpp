@@ -33,11 +33,7 @@
 
 #define SPLASH_SCREEN_DELAY 2000
 
-MainWindow::MainWindow(QWidget *parent) : QWidget(parent), splash_screen(nullptr), main_layout(nullptr), control_bar(nullptr), status_builtin_terminal(nullptr), results_stream_viewer(nullptr), scan_areas_controller(nullptr) {
-    // Initialize the main layout
-    MainWindow::main_layout = new QVBoxLayout(this);
-    MainWindow::main_layout->setSpacing(20);
-
+MainWindow::MainWindow(QWidget *parent) : QWidget(parent), splash_screen(nullptr), main_layout(nullptr), page_switcher_bar(nullptr), pages_stack(nullptr), home_page(nullptr), fim_page(nullptr) {
     // TODO: This splash screen works fine but it crashes when pressing the 
     // scan button. I will need to investigate this further.
 
@@ -54,22 +50,28 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent), splash_screen(nullptr
 
 MainWindow::~MainWindow()
 {
-    if (MainWindow::results_stream_viewer)
+    if (MainWindow::home_page)
     {
-        delete MainWindow::results_stream_viewer;
-        MainWindow::results_stream_viewer = nullptr;
+        delete MainWindow::home_page;
+        MainWindow::home_page = nullptr;
     }
 
-    if (MainWindow::control_bar)
+    if (MainWindow::fim_page)
     {
-        delete MainWindow::control_bar;
-        MainWindow::control_bar = nullptr;
+        delete MainWindow::fim_page;
+        MainWindow::fim_page = nullptr;
     }
 
-    if (MainWindow::scan_areas_controller)
+    if (MainWindow::pages_stack)
     {
-        delete MainWindow::scan_areas_controller;
-        MainWindow::scan_areas_controller = nullptr;
+        delete MainWindow::pages_stack;
+        MainWindow::pages_stack = nullptr;
+    }
+
+    if (MainWindow::page_switcher_bar)
+    {
+        delete MainWindow::page_switcher_bar;
+        MainWindow::page_switcher_bar = nullptr;
     }
 
     if (MainWindow::main_layout)
@@ -81,74 +83,65 @@ MainWindow::~MainWindow()
 
 void MainWindow::show_main_ui() {
     // Remove splash screen
-    MainWindow::main_layout->removeWidget(MainWindow::splash_screen);
+    // MainWindow::main_layout->removeWidget(MainWindow::splash_screen);
 
     // Delete the splash screen
-    if (MainWindow::splash_screen)
-    {
-        delete MainWindow::splash_screen;
-        MainWindow::splash_screen = nullptr;
-    }
+    // if (MainWindow::splash_screen)
+    // {
+    //     delete MainWindow::splash_screen;
+    //     MainWindow::splash_screen = nullptr;
+    // }
 
-    // Initialize main items
-    MainWindow::control_bar = new ControlBar();
-    MainWindow::status_builtin_terminal = new StatusBuiltinTerminal();
-    MainWindow::results_stream_viewer = new ResultsStreamViewer();
+    // Initialize the page switcher bar
+    MainWindow::page_switcher_bar = new PageSwitcherBar();
+
+    // Initialize the pages stack
+    MainWindow::pages_stack = new QStackedWidget();
+
+    // Initialize the home page
+    MainWindow::home_page = new HomePage();
+
+    // Initialize the FIM page
+    MainWindow::fim_page = new FIMPage();
+
+    // Add pages to the stack
+    MainWindow::pages_stack->addWidget(MainWindow::home_page); // Index 0
+    MainWindow::pages_stack->addWidget(MainWindow::fim_page); // Index 1
+
+    // Initialize the main layout
+    MainWindow::main_layout = new QHBoxLayout(this);
+    MainWindow::main_layout->setSpacing(20);
 
     // Add main items to the layout
-    MainWindow::main_layout->addWidget(MainWindow::control_bar, 1); // The control bar will take up 1/8 of the space.
-    MainWindow::main_layout->addWidget(MainWindow::status_builtin_terminal, 2); // The terminal will take up 2/8 of the space.
-    MainWindow::main_layout->addWidget(MainWindow::results_stream_viewer, 5); // The viewer will take up 5/8 of the space.
+    MainWindow::main_layout->addWidget(MainWindow::page_switcher_bar, 1); // Take up 1/10 of the space
+    MainWindow::main_layout->addWidget(MainWindow::pages_stack, 9); // Take up 9/10 of the space
+
+    // Set initial page
+    MainWindow::pages_stack->setCurrentIndex(0);
 
     // Connect signals and slots
-    connect(MainWindow::control_bar, &ControlBar::scan_button_clicked, this, &MainWindow::on_scan_button_clicked);
-    connect(MainWindow::control_bar, &ControlBar::stop_button_clicked, this, &MainWindow::on_stop_button_clicked);
-    connect(MainWindow::control_bar, &ControlBar::pause_button_clicked, this, &MainWindow::on_pause_button_clicked);
-    connect(MainWindow::control_bar, &ControlBar::scan_areas_controller_button_clicked, this, &MainWindow::on_scan_areas_controller_button_clicked);
+    this->connect(MainWindow::page_switcher_bar, &PageSwitcherBar::home_page_switch_button_clicked, this, &MainWindow::on_home_page_switch_button_clicked);
+    this->connect(MainWindow::page_switcher_bar, &PageSwitcherBar::fim_page_switch_button_clicked, this, &MainWindow::on_fim_page_switch_button_clicked);
 }
 
-ControlBar* MainWindow::get_control_bar()
+HomePage* MainWindow::get_home_page_p() const
 {
-    return MainWindow::control_bar;
+    return MainWindow::home_page;
 }
 
-StatusBuiltinTerminal* MainWindow::get_status_builtin_terminal()
+FIMPage* MainWindow::get_fim_page_p() const
 {
-    return MainWindow::status_builtin_terminal;
+    return MainWindow::fim_page;
 }
 
-ResultsStreamViewer* MainWindow::get_results_stream_viewer()
+void MainWindow::on_home_page_switch_button_clicked()
 {
-    return MainWindow::results_stream_viewer;
+    std::cout << "Showing home page" << std::endl;
+    MainWindow::pages_stack->setCurrentIndex(0); // Show the home page
 }
 
-void MainWindow::on_scan_button_clicked()
+void MainWindow::on_fim_page_switch_button_clicked()
 {
-    std::cout << "Scanning..." << std::endl;
-    sam_engine::sam_engine_scan();
-}
-
-void MainWindow::on_stop_button_clicked()
-{
-    std::cout << "Stopping..." << std::endl;
-    sam_engine::sam_engine_stop();
-}
-
-void MainWindow::on_pause_button_clicked()
-{
-    std::cout << "Pausing..." << std::endl;
-    // sam_engine::sam_engine_pause();
-}
-
-void MainWindow::on_scan_areas_controller_button_clicked()
-{
-    std::cout << "Scan areas controller clicked" << std::endl;
-
-    if (!MainWindow::scan_areas_controller)
-    {
-        // TODO: Make the controller block the main window.
-        MainWindow::scan_areas_controller = new ScanAreasController();
-    }
-    
-    MainWindow::scan_areas_controller->show();
+    std::cout << "Showing FIM page" << std::endl;
+    MainWindow::pages_stack->setCurrentIndex(1); // Show the FIM page
 }

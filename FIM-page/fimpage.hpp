@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * mainwindow.hpp
+ * fimpage.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,49 +26,22 @@
  * 
  */
 
-#ifndef SAM_MAIN_WINDOW_HPP
-#define SAM_MAIN_WINDOW_HPP
+#ifndef SAM_FIM_PAGE_HPP
+#define SAM_FIM_PAGE_HPP
 
 #include <QWidget>
-#include <QHBoxLayout>
-#include <QStackedWidget>
+#include <QVBoxLayout>
 
-#include "samengine.hpp"
-
-#include "samconsolesplash.hpp"
-#include "pageswitcherbar.hpp"
-#include "homepage.hpp"
-#include "fimpage.hpp"
-
-class MainWindow : public QWidget
+class FIMPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
-
-    HomePage* get_home_page_p() const;
-    FIMPage* get_fim_page_p() const;
-
-private slots:
-    void on_home_page_switch_button_clicked();
-    void on_fim_page_switch_button_clicked();
+    explicit FIMPage(QWidget *parent = nullptr);
+    ~FIMPage();
 
 private:
-    SAMConsoleSplash *splash_screen;
-
-    QHBoxLayout *main_layout;
-
-    PageSwitcherBar *page_switcher_bar;
-    
-    QStackedWidget *pages_stack;
-
-    HomePage *home_page;
-
-    FIMPage *fim_page;
-
-    void show_main_ui();
+    QVBoxLayout *main_layout;
 };
 
-#endif // SAM_MAIN_WINDOW_HPP
+#endif // SAM_FIM_PAGE_HPP

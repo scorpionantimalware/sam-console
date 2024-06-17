@@ -32,10 +32,8 @@
 #include <random>
 
 namespace sam_engine {
-  ScanFireCallback_t scan_fire_callback {nullptr};
-  ScanCompleteCallback_t scan_complete_callback {nullptr};
   AddNewFileCallback_t add_new_file_callback {nullptr};
-  SetStatusForFileCallback_t set_status_for_file_callback {nullptr};
+  SetResultForFileCallback_t set_result_for_file_callback {nullptr};
   EngineStateChangeCallback_t engine_state_change_callback {nullptr};
   UpdateBuiltinStatusTerminalCallback_t update_builtin_status_terminal_callback {nullptr};
 
@@ -49,11 +47,11 @@ namespace sam_engine {
   void SAMEngineState::set_state(const State& new_state) {
     SAMEngineState::state = new_state;
     if (engine_state_change_callback) {
-      engine_state_change_callback(SAMEngineState::state);
+      engine_state_change_callback(*this);
     }
   } // function set_state
 
-  SAMEngineState::State SAMEngineState::get_state() {
+  SAMEngineState::State SAMEngineState::get_state() const {
     return SAMEngineState::state;
   } // function get_state
 
@@ -133,10 +131,6 @@ namespace sam_engine {
   } // function fire_scan_thread_wrapper
 
   bool fire_scan() {
-    if (scan_fire_callback) {
-      scan_fire_callback();
-    }
-
     bool status {false};
 
     int dummy_file_count {10};
@@ -151,18 +145,14 @@ namespace sam_engine {
 
       std::this_thread::sleep_for(std::chrono::seconds(1));
 
-      if (set_status_for_file_callback) {
-        set_status_for_file_callback(new_file_id, dummy_prediction);
+      if (set_result_for_file_callback) {
+        set_result_for_file_callback(new_file_id, dummy_prediction);
         if (update_builtin_status_terminal_callback && dummy_prediction > 0.5) {
           update_builtin_status_terminal_callback("Suspicious file: dummy_file_" + std::to_string(dummy_file_count), SAMEngineStatusMessage::SUSPICIOUS_FILE);
         }
       }
 
       std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
-
-    if (scan_complete_callback) {
-      scan_complete_callback();
     }
 
     engine_state->set_state(SAMEngineState::State::COMPLETE);
@@ -207,20 +197,12 @@ namespace sam_engine {
       return dist(gen);
   } // function generate_dummy_prediction
 
-  void hook_scan_fire_callback(const ScanFireCallback_t& callback) {
-    scan_fire_callback = callback;
-  } // function hook_scan_fire_callback
-
-  void hook_scan_complete_callback(const ScanCompleteCallback_t& callback) {
-    scan_complete_callback = callback;
-  } // function hook_scan_complete_callback
-
   void hook_add_new_file_callback(const AddNewFileCallback_t& callback) {
     add_new_file_callback = callback;
   } // function hook_new_file_callback
 
-  void hook_set_status_for_file_callback(const SetStatusForFileCallback_t& callback) {
-    set_status_for_file_callback = callback;
+  void hook_set_result_for_file_callback(const SetResultForFileCallback_t& callback) {
+    set_result_for_file_callback = callback;
   } // function hook_status_callback
 
   void hook_engine_state_change_callback(const EngineStateChangeCallback_t& callback) {

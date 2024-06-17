@@ -34,7 +34,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 
-#include "scanareascolumn.hpp"
+#include "scan-areas-controller/scanareascolumn.hpp"
 
 class ScanAreasController : public QWidget
 {
@@ -48,12 +48,12 @@ signals:
     /**
      * @brief Signal emitted when the new area button is clicked.
     */
-    void new_area_button_clicked();
+    void new_area_add_button_clicked();
 
     /**
      * @brief Signal emitted when the edit area button is clicked.
     */
-    void edit_area_button_clicked();
+    void area_edit_button_clicked();
 
     /**
      * @brief Signal emitted when the browse area button is clicked.
@@ -66,12 +66,12 @@ signals:
      * @see @c scan-areas-processor/scanareasprocessor.hpp
      * @see @c ScanAreasColumn::on_browse_area_button_clicked
     */
-    void browse_area_button_clicked();
+    void area_browse_button_clicked();
 
     /**
      * @brief Signal emitted when the delete area button is clicked.
     */
-    void delete_area_button_clicked();
+    void area_delete_button_clicked();
 
 private slots:
     /**
@@ -82,29 +82,29 @@ private slots:
     /**
      * @brief Slot to edit an area.
     */
-    void edit_area();
+    void edit_existing_area();
 
     /**
      * @brief Slot to browse an area.
     */
-    void browse_area();
+    void browse_filesystem_for_area();
 
     /**
      * @brief Slot to delete an area.
     */
-    void delete_area();
+    void delete_existing_area();
 
 private:
     QHBoxLayout *main_layout;
 
     ScanAreasColumn *scan_areas_column;
 
-    QVBoxLayout *controller;
+    QVBoxLayout *buttons_layout;
 
-    QPushButton *new_area_button;
-    QPushButton *edit_area_button;
-    QPushButton *browse_area_button;
-    QPushButton *delete_area_button;
+    QPushButton *add_new_button;
+    QPushButton *edit_button;
+    QPushButton *browse_button;
+    QPushButton *delete_button;
 };
 
 #endif // SAM_SCAN_AREAS_CONTROLLER_HPP

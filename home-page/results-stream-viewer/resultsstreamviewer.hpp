@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * mainwindow.hpp
+ * results-stream-viewer/resultsstreamviewer.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,49 +26,30 @@
  * 
  */
 
-#ifndef SAM_MAIN_WINDOW_HPP
-#define SAM_MAIN_WINDOW_HPP
+#ifndef SAM_RESULTS_STREAM_VIEWER_HPP
+#define SAM_RESULTS_STREAM_VIEWER_HPP
 
-#include <QWidget>
-#include <QHBoxLayout>
-#include <QStackedWidget>
+#include <QTableWidget>
 
-#include "samengine.hpp"
-
-#include "samconsolesplash.hpp"
-#include "pageswitcherbar.hpp"
-#include "homepage.hpp"
-#include "fimpage.hpp"
-
-class MainWindow : public QWidget
+class ResultsStreamViewer : public QTableWidget
 {
-    Q_OBJECT
-
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ResultsStreamViewer();
 
-    HomePage* get_home_page_p() const;
-    FIMPage* get_fim_page_p() const;
+    int append_new_entry(const std::string& filename);
+    
+    void set_result_for_entry(const int& row_index, const float& prediction);
 
-private slots:
-    void on_home_page_switch_button_clicked();
-    void on_fim_page_switch_button_clicked();
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
-    SAMConsoleSplash *splash_screen;
+    void init();
 
-    QHBoxLayout *main_layout;
-
-    PageSwitcherBar *page_switcher_bar;
-    
-    QStackedWidget *pages_stack;
-
-    HomePage *home_page;
-
-    FIMPage *fim_page;
-
-    void show_main_ui();
+    /**
+     * @brief Update the column widths based on the table's width
+    */
+    void update_column_widths();
 };
 
-#endif // SAM_MAIN_WINDOW_HPP
+#endif // SAM_RESULTS_STREAM_VIEWER_HPP

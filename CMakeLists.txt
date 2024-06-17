@@ -90,29 +90,35 @@ file(GLOB SAM_CONSOLE_MAIN_ENTRY
 file(GLOB SAM_CONSOLE_HPP_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/samconsolesplash.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.hpp 
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanareascontrollerbutton.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/resultsstreamviewer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascontroller.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascolumn.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/status-builtin-terminal/statusbuiltinterminal.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/homepage.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/controlbar.hpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/scanbutton.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/stopbutton.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/pausebutton.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/scanareascontrollerbutton.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/results-stream-viewer/resultsstreamviewer.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-areas-controller/scanareascontroller.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-areas-controller/scanareascolumn.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/status-builtin-terminal/statusbuiltinterminal.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/page-switcher-bar/pageswitcherbar.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FIM-page/fimpage.hpp
 )
 
 file(GLOB SAM_CONSOLE_CPP_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/samconsolesplash.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/controlbar.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanbutton.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/stopbutton.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/pausebutton.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/control-bar/scanareascontrollerbutton.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/resultsstreamviewer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascontroller.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/scanareascolumn.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/status-builtin-terminal/statusbuiltinterminal.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/homepage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/controlbar.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/scanbutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/stopbutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/pausebutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/scanareascontrollerbutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/results-stream-viewer/resultsstreamviewer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-areas-controller/scanareascontroller.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-areas-controller/scanareascolumn.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/status-builtin-terminal/statusbuiltinterminal.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/page-switcher-bar/pageswitcherbar.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FIM-page/fimpage.cpp
 )
 
 # Safety check: Ensure that all the files exist.
@@ -124,11 +130,10 @@ endforeach()
 
 set(${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES 
     "${CMAKE_CURRENT_SOURCE_DIR}/" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/control-bar/" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/results-stream-viewer/" 
     "${CMAKE_CURRENT_SOURCE_DIR}/sam-stub-engine/" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-controller/" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/status-builtin-terminal/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/page-switcher-bar/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/home-page/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/FIM-page/" 
 )
 
 if (NOT SAM_LINK_CONSOLE)

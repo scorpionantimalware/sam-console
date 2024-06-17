@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * stopbutton.hpp
+ * pausebutton.cpp - A class that represents the pause button in the control bar.
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,25 +26,45 @@
  * 
  */
 
-#ifndef SAM_STOP_BUTTON_HPP
-#define SAM_STOP_BUTTON_HPP
+#include "control-bar/pausebutton.hpp"
 
-#include <QPushButton>
-#include <QPainter>
+#include <QWidget>
 
-class StopButton : public QPushButton
+PauseButton::PauseButton()
 {
-    Q_OBJECT
+    this->setFixedSize(100, 100);
+}
 
-public:
-    explicit StopButton();
-    ~StopButton();
+void PauseButton::paintEvent(QPaintEvent *event)
+{
+    QPushButton::paintEvent(event);
 
-protected:
-    void paintEvent(QPaintEvent *event) override;
-    
-private:
+    QPainter painter = QPainter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
-};
+    int w {this->width()};
+    int h {this->height()};
 
-#endif // SAM_STOP_BUTTON_HPP
+    float min_side {(float)qMin(w, h)};
+
+    // Use Multiplication instead of Division as it is faster
+    QPointF center {w * 0.5f, h * 0.5f};
+
+    float max_height {min_side * 0.18f}; // Max height of the pause symbol from the center.
+    float separation {min_side * 0.15f};
+    float pen_width {separation};
+
+    QPen pen(Qt::black);
+    pen.setWidth(pen_width);
+    painter.setPen(pen);
+
+    /*
+        From top to bottom, draw the left part.
+    */
+    painter.drawLine(center - QPointF(separation, max_height), center - QPointF(separation, -max_height));
+
+    /*
+        From top to bottom, draw the right part.
+    */
+    painter.drawLine(center + QPointF(separation, -max_height), center + QPointF(separation, max_height));
+}
