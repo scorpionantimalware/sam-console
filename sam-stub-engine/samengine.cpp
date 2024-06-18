@@ -129,7 +129,10 @@ namespace sam_engine {
           SAMEngine::scanner = new SAMScanner();
         }
 
-        SAMEngine::scanner->scan();
+        // Only scan if the scanner is idle.
+        if (SAMEngine::scanner->get_state() == SAMScanner::State::IDLE) {
+          SAMEngine::scanner->scan();
+        }
       }
 
       if (SAMEngine::stop_scan_requested) {
@@ -173,8 +176,10 @@ namespace sam_engine {
     }
   } // function clean
 
-  SAMScanner::SAMScanner() : scanner_thread(nullptr), termination_requested(false), 
-                              pause_requested(false) {
+  SAMScanner::SAMScanner() : scanner_thread(nullptr), 
+                              termination_requested(false), 
+                              pause_requested(false),
+                              current_state(SAMScanner::State::IDLE) {
     
   } // constructor SAMScanner
 
@@ -188,6 +193,9 @@ namespace sam_engine {
   } // destructor SAMScanner
 
   void SAMScanner::scan() {
+    // Set the current state to SCANNING.
+    SAMScanner::switch_state(SAMScanner::State::SCANNING);
+
     SAMScanner::termination_requested = false;
     SAMScanner::pause_requested = false;
 
@@ -210,21 +218,17 @@ namespace sam_engine {
     if (!status) {
       std::cout << "Error: Failed to load or initialize scan areas"
                 << std::endl;
-      if (update_builtin_status_terminal_callback) {
-        update_builtin_status_terminal_callback("Error: Failed to load or initialize scan areas", SAMEngine::StatusMessageType::ERROR);
-      }
       
-      // engine_state->set_state(SAMEngineState::State::STOPPED);
+      // Set the current state to IDLE.
+      SAMScanner::switch_state(SAMScanner::State::IDLE);
       return;
     }
 
     if (scan_areas.empty()) {
       std::cout << "Info: No scan areas found" << std::endl;
-      if (update_builtin_status_terminal_callback) {
-        update_builtin_status_terminal_callback("Info: No scan areas found", SAMEngine::StatusMessageType::INFO);
-      }
       
-      // engine_state->set_state(SAMEngineState::State::STOPPED);
+      // Set the current state to IDLE.
+      SAMScanner::switch_state(SAMScanner::State::IDLE);
       return;
     }
 
@@ -238,10 +242,9 @@ namespace sam_engine {
       status = generator.generate(scan_areas.at(i));
       if (!status) {
         std::cout << "Error: Failed to generate .pathl file" << std::endl;
-        if (update_builtin_status_terminal_callback) {
-          update_builtin_status_terminal_callback("Error: Failed to generate .pathl file", SAMEngine::StatusMessageType::ERROR);
-        }
-        // engine_state->set_state(SAMEngineState::State::STOPPED);
+        
+        // Set the current state to IDLE.
+        SAMScanner::switch_state(SAMScanner::State::IDLE);
         return;
       }
 
@@ -257,11 +260,9 @@ namespace sam_engine {
     std::ifstream pe_pathls_file(PE_PATHLS_FILENAME);
     if (!pe_pathls_file.is_open()) {
       std::cout << "Error: Failed to open .pathl file" << std::endl;
-      if (update_builtin_status_terminal_callback) {
-        update_builtin_status_terminal_callback("Error: Failed to open .pathl file", SAMEngine::StatusMessageType::ERROR);
-      }
       
-      // engine_state->set_state(SAMEngineState::State::STOPPED);
+      // Set the current state to IDLE.
+      SAMScanner::switch_state(SAMScanner::State::IDLE);
       return;
     }
 
@@ -289,6 +290,9 @@ namespace sam_engine {
         worker.join();
       }
     }
+
+    // Set the current state to IDLE.
+    SAMScanner::switch_state(SAMScanner::State::IDLE);
   }
 
   void SAMScanner::stop() {
@@ -313,6 +317,14 @@ namespace sam_engine {
     SAMScanner::cv.notify_all();
   }
 
+  SAMScanner::State SAMScanner::get_state() const {
+    return SAMScanner::current_state;
+  }
+
+  void SAMScanner::switch_state(const SAMScanner::State& new_state) {
+    SAMScanner::current_state = new_state;
+  }
+
   void SAMScanner::work(PEPathlsMonitor &monitor) {
     std::string pathl_buffer;
     while (!SAMScanner::termination_requested && monitor.get_pe_pathl(pathl_buffer)) {
@@ -331,6 +343,17 @@ namespace sam_engine {
       if (SAMScanner::termination_requested) {
         break;
       }
+
+      /**
+       * @brief We must unlock this for two main reasons:
+       *          1. To allow other threads to work concurrently.
+       *          2. When the @c scanner_thread is deleted, we must have
+       *             the lock unlocked.
+       * 
+       * @todo Solve Race Condition here.
+       * 
+       */
+      lock.unlock();
       
       std::cout << "Info: Scanning " << pathl_buffer << std::endl;
 
@@ -347,9 +370,6 @@ namespace sam_engine {
         }
         if (new_file_id == -1) {
           std::cout << "Error: Failed to get the new file ID" << std::endl;
-          if (update_builtin_status_terminal_callback) {
-            update_builtin_status_terminal_callback("Error: Failed to get the new file ID", SAMEngine::StatusMessageType::ERROR);
-          }
           continue;
         }
       }
@@ -359,6 +379,9 @@ namespace sam_engine {
 
       // Classify the PE file for CNN.
       float cnnoutput {generate_dummy_prediction()};
+
+      // Simulate the delay of the classification process.
+      // std::this_thread::sleep_for(std::chrono::seconds(1));
 
       /*
         This is the static voting mechanism.
@@ -371,9 +394,6 @@ namespace sam_engine {
         // TODO: Do we need to lock the mutex here?
         // std::lock_guard<std::mutex> set_result_for_file_callback_lock(SAMScanner::set_result_for_file_callback_mtx);
         set_result_for_file_callback(new_file_id, prediction);
-        if (update_builtin_status_terminal_callback && prediction > 0.5f) {
-          update_builtin_status_terminal_callback("Malware detected in " + pathl_buffer, SAMEngine::StatusMessageType::INFO);
-        }
       }
     } // while (!SAMScanner::termination_requested && monitor.get_pe_pathl(pathl_buffer))
   } // function work

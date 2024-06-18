@@ -42,102 +42,106 @@ namespace sam_engine {
   class SAMScanner;
 
   class SAMEngine {
-    public:
-      enum class StatusMessageType {
-        INFO,
-        WARNING,
-        ERROR
-      };
+      public:
+        enum class StatusMessageType {
+          INFO,
+          WARNING,
+          ERROR
+        };
 
-      SAMEngine();
-      ~SAMEngine();
+        SAMEngine();
+        ~SAMEngine();
 
+        /**
+         * @brief This function will start the engine and wait 
+         *        for any command to be issued.
+         * 
+         */
+        void engine_main();
+
+        void fulfill_engine_termination_request();
+
+        void fulfill_start_scan_request();
+        void fulfill_stop_scan_request();
+        void fulfill_pause_scan_request();
+        void fulfill_resume_scan_request();
+
+      private:
       /**
-       * @brief This function will start the engine and wait 
-       *        for any command to be issued.
+       * @brief The engine will be running in a separate thread.
        * 
        */
-      void engine_main();
+        std::thread* engine_thread;
 
-      void fulfill_engine_termination_request();
+        std::mutex mtx;
 
-      void fulfill_start_scan_request();
-      void fulfill_stop_scan_request();
-      void fulfill_pause_scan_request();
-      void fulfill_resume_scan_request();
+        std::condition_variable cv;
 
-    private:
-    /**
-     * @brief The engine will be running in a separate thread.
-     * 
-     */
-      std::thread* engine_thread;
+        std::atomic<bool> engine_termination_requested;
 
-      std::mutex mtx;
+        SAMScanner* scanner;
 
-      std::condition_variable cv;
+        bool start_scan_requested;
+        bool stop_scan_requested;
+        bool pause_scan_requested;
+        bool resume_scan_requested;
 
-      std::atomic<bool> engine_termination_requested;
+        void run();
 
-      SAMScanner* scanner;
-
-      bool start_scan_requested;
-      bool stop_scan_requested;
-      bool pause_scan_requested;
-      bool resume_scan_requested;
-
-      void run();
-
-      void clean();
-
-      void terminate_engine();
-
-  }; // class SAMEngine
+        void clean();
+    }; // class SAMEngine
 
   class SAMScanner {
-    public:
-      enum class State {
-        SCANNING,
-        PAUSED,
-        STOPPED,
-        COMPLETE,
-        ERROR
-      };
+      public:
+        enum class State {
+          IDLE,
+          SCANNING,
+          PAUSED,
+          STOPPED,
+          COMPLETE,
+          ERROR
+        };
 
-      SAMScanner();
-      ~SAMScanner();
+        SAMScanner();
+        ~SAMScanner();
 
-      void scan();
+        void scan();
 
-      void stop();
+        void stop();
 
-      void pause();
+        void pause();
 
-      void resume();
+        void resume();
 
-    private:
-      std::thread *scanner_thread;
+        SAMScanner::State get_state() const;
 
-      std::mutex mtx;
-      std::condition_variable cv;
-      std::atomic<bool> termination_requested;
-      std::atomic<bool> pause_requested;
+      private:
+        std::thread *scanner_thread;
 
-      /**
-       * @brief These two mutexes are used to protect the callback functions
-       *        from being called by multiple threads at the same time. This 
-       *        is important because the callback functions modify the GUI.
-       * 
-       */
-      std::mutex add_new_file_callback_mtx;
-      std::mutex set_result_for_file_callback_mtx;
+        std::mutex mtx;
+        std::condition_variable cv;
+        std::atomic<bool> termination_requested;
+        std::atomic<bool> pause_requested;
 
-      void work(PEPathlsMonitor &monitor);
+        SAMScanner::State current_state;
 
-      void run();
+        /**
+         * @brief These two mutexes are used to protect the callback functions
+         *        from being called by multiple threads at the same time. This 
+         *        is important because the callback functions modify the GUI.
+         * 
+         */
+        std::mutex add_new_file_callback_mtx;
+        std::mutex set_result_for_file_callback_mtx;
 
-      float generate_dummy_prediction();
-  }; // class SAMScanner
+        void work(PEPathlsMonitor &monitor);
+
+        void run();
+
+        float generate_dummy_prediction();
+
+        void switch_state(const SAMScanner::State& new_state);
+    }; // class SAMScanner
 
   /*
       When the engine start scanning a new file, it will call this callback
