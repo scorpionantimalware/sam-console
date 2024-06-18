@@ -82,6 +82,13 @@ ControlBar::~ControlBar() {
 
 void ControlBar::update_state(const sam_engine::SAMScanner::State& scanner_state) {
     switch (scanner_state) {
+        case sam_engine::SAMScanner::State::IDLE:
+            ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
+            ControlBar::scan_button->setEnabled(true);
+            ControlBar::stop_button->setEnabled(false);
+            ControlBar::pause_button->setEnabled(false);
+            ControlBar::scan_areas_controller_button->setEnabled(true);
+            break;
         case sam_engine::SAMScanner::State::SCANNING:
             ControlBar::scan_button->set_state(ScanButton::TextureState::SCANNING);
             ControlBar::scan_button->setEnabled(false);

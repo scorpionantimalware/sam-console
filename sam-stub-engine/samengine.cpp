@@ -323,6 +323,10 @@ namespace sam_engine {
 
   void SAMScanner::switch_state(const SAMScanner::State& new_state) {
     SAMScanner::current_state = new_state;
+    // TODO: Fix this.
+    // if (scanner_state_change_callback) {
+    //   scanner_state_change_callback(SAMScanner::current_state);
+    // }
   }
 
   void SAMScanner::work(PEPathlsMonitor &monitor) {
@@ -381,7 +385,7 @@ namespace sam_engine {
       float cnnoutput {generate_dummy_prediction()};
 
       // Simulate the delay of the classification process.
-      // std::this_thread::sleep_for(std::chrono::seconds(1));
+      std::this_thread::sleep_for(std::chrono::seconds(1));
 
       /*
         This is the static voting mechanism.
