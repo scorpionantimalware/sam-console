@@ -80,44 +80,37 @@ ControlBar::~ControlBar() {
     }
 }
 
-void ControlBar::update_state(const sam_engine::SAMEngineState& engine_state) {
-    switch (engine_state.get_state()) {
-        case sam_engine::SAMEngineState::State::IDLE:
-            ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
-            ControlBar::scan_button->setEnabled(true);
-            ControlBar::stop_button->setEnabled(false);
-            ControlBar::pause_button->setEnabled(false);
-            ControlBar::scan_areas_controller_button->setEnabled(true);
-            break;
-        case sam_engine::SAMEngineState::State::SCANNING:
+void ControlBar::update_state(const sam_engine::SAMScanner::State& scanner_state) {
+    switch (scanner_state) {
+        case sam_engine::SAMScanner::State::SCANNING:
             ControlBar::scan_button->set_state(ScanButton::TextureState::SCANNING);
             ControlBar::scan_button->setEnabled(false);
             ControlBar::stop_button->setEnabled(true);
             ControlBar::pause_button->setEnabled(true);
             ControlBar::scan_areas_controller_button->setEnabled(false);
             break;
-        case sam_engine::SAMEngineState::State::PAUSED:
+        case sam_engine::SAMScanner::State::PAUSED:
             ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
             ControlBar::scan_button->setEnabled(true);
             ControlBar::stop_button->setEnabled(true);
             ControlBar::pause_button->setEnabled(false);
             ControlBar::scan_areas_controller_button->setEnabled(false);
             break;
-        case sam_engine::SAMEngineState::State::STOPPED:
+        case sam_engine::SAMScanner::State::STOPPED:
             ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
             ControlBar::scan_button->setEnabled(true);
             ControlBar::stop_button->setEnabled(true);
             ControlBar::pause_button->setEnabled(true);
             ControlBar::scan_areas_controller_button->setEnabled(true);
             break;
-        case sam_engine::SAMEngineState::State::COMPLETE:
+        case sam_engine::SAMScanner::State::COMPLETE:
             ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
             ControlBar::scan_button->setEnabled(true);
             ControlBar::stop_button->setEnabled(true);
             ControlBar::pause_button->setEnabled(true);
             ControlBar::scan_areas_controller_button->setEnabled(true);
             break;
-        case sam_engine::SAMEngineState::State::ERROR:
+        case sam_engine::SAMScanner::State::ERROR:
             ControlBar::scan_button->set_state(ScanButton::TextureState::ERROR);
             ControlBar::scan_button->setEnabled(false);
             ControlBar::stop_button->setEnabled(false);
@@ -125,6 +118,11 @@ void ControlBar::update_state(const sam_engine::SAMEngineState& engine_state) {
             ControlBar::scan_areas_controller_button->setEnabled(false);
             break;
         default:
+            ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
+            ControlBar::scan_button->setEnabled(true);
+            ControlBar::stop_button->setEnabled(false);
+            ControlBar::pause_button->setEnabled(false);
+            ControlBar::scan_areas_controller_button->setEnabled(true);
             break;
     }
 }

@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * homepage.hpp
+ * pepathlsmonitor.cpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,47 +26,39 @@
  * 
  */
 
-#ifndef SAM_HOME_PAGE_HPP
-#define SAM_HOME_PAGE_HPP
+#include "pepathlsmonitor.hpp"
 
-#include <QWidget>
-#include <QVBoxLayout>
+PEPathlsMonitor::PEPathlsMonitor() : done(false) {}
 
-#include "control-bar/controlbar.hpp"
-#include "status-builtin-terminal/statusbuiltinterminal.hpp"
-#include "results-stream-viewer/resultsstreamviewer.hpp"
-#include "scan-areas-controller/scanareascontroller.hpp"
+void PEPathlsMonitor::add_pe_pathl(const std::string& pathl) {
+    std::unique_lock<std::mutex> lock(PEPathlsMonitor::mtx); // Ensure Mutual Exclusion
+    PEPathlsMonitor::pathls.push(pathl);
+    PEPathlsMonitor::cv.notify_one();
+}
 
-#include "samconsolesplash.hpp"
+bool PEPathlsMonitor::get_pe_pathl(std::string& pathl_buffer) {
+    std::unique_lock<std::mutex> lock(PEPathlsMonitor::mtx); // Ensure Mutual Exclusion
 
-class HomePage : public QWidget
-{
-    Q_OBJECT
+    bool status {false};
 
-public:
-    explicit HomePage(QWidget *parent = nullptr);
-    ~HomePage();
+    while (PEPathlsMonitor::pathls.empty() && !PEPathlsMonitor::done) {
+        PEPathlsMonitor::cv.wait(lock);
+    }
 
-    ControlBar* get_control_bar_p() const;
-    StatusBuiltinTerminal* get_status_builtin_terminal_p() const;
-    ResultsStreamViewer* get_results_stream_viewer_p() const;
+    if (PEPathlsMonitor::pathls.empty()) {
+        return status;
+    }
 
-private slots:
-    void on_scan_button_clicked();
-    void on_stop_button_clicked();
-    void on_pause_button_clicked();
-    void on_scan_areas_controller_button_clicked();
+    pathl_buffer = PEPathlsMonitor::pathls.front();
+    PEPathlsMonitor::pathls.pop();
 
-private:
-    SAMConsoleSplash *splash_screen;
+    status = true;
 
-    QVBoxLayout *main_layout;
+    return status;
+}
 
-    ControlBar* control_bar;
-    StatusBuiltinTerminal* status_builtin_terminal;
-    ResultsStreamViewer* results_stream_viewer;
-
-    ScanAreasController *scan_areas_controller;
-};
-
-#endif // SAM_HOME_PAGE_HPP
+void PEPathlsMonitor::set_done() {
+    std::unique_lock<std::mutex> lock(PEPathlsMonitor::mtx); // Ensure Mutual Exclusion
+    PEPathlsMonitor::done = true;
+    PEPathlsMonitor::cv.notify_all();
+}

@@ -31,7 +31,7 @@
 
 #include <QTextEdit>
 
-#include "samengine.hpp"
+#include "samconsolemain.hpp"
 
 class StatusBuiltinTerminal : public QTextEdit
 {
@@ -40,7 +40,7 @@ class StatusBuiltinTerminal : public QTextEdit
 public:
     explicit StatusBuiltinTerminal();
 
-    void append_message(const std::string& status, const sam_engine::SAMEngineStatusMessage& message_type = sam_engine::SAMEngineStatusMessage::INFO);
+    void append_message(const std::string& status, const sam_engine::SAMEngine::StatusMessageType& message_type = sam_engine::SAMEngine::StatusMessageType::INFO);
 };
 
 #endif // SAM_STATUS_BUILTIN_TERMINAL_HPP

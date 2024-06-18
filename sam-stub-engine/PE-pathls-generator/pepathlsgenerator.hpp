@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * homepage.hpp
+ * pepathlsgenerator.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,47 +26,22 @@
  * 
  */
 
-#ifndef SAM_HOME_PAGE_HPP
-#define SAM_HOME_PAGE_HPP
+#ifndef SAM_PE_PATHLS_STUB_GENERATOR_HPP
+#define SAM_PE_PATHLS_STUB_GENERATOR_HPP
 
-#include <QWidget>
-#include <QVBoxLayout>
+#include <string>
 
-#include "control-bar/controlbar.hpp"
-#include "status-builtin-terminal/statusbuiltinterminal.hpp"
-#include "results-stream-viewer/resultsstreamviewer.hpp"
-#include "scan-areas-controller/scanareascontroller.hpp"
+const std::string PE_PATHLS_FILENAME = "pepathlsgenerator_output.pathl";
 
-#include "samconsolesplash.hpp"
+class PEPathlsGenerator {
+ public:
+  PEPathlsGenerator() = default;
+  ~PEPathlsGenerator();
 
-class HomePage : public QWidget
-{
-    Q_OBJECT
-
-public:
-    explicit HomePage(QWidget *parent = nullptr);
-    ~HomePage();
-
-    ControlBar* get_control_bar_p() const;
-    StatusBuiltinTerminal* get_status_builtin_terminal_p() const;
-    ResultsStreamViewer* get_results_stream_viewer_p() const;
-
-private slots:
-    void on_scan_button_clicked();
-    void on_stop_button_clicked();
-    void on_pause_button_clicked();
-    void on_scan_areas_controller_button_clicked();
+  bool generate(const std::string& scan_area);
 
 private:
-    SAMConsoleSplash *splash_screen;
+  bool clean();
+}; // class PEPathlsGenerator
 
-    QVBoxLayout *main_layout;
-
-    ControlBar* control_bar;
-    StatusBuiltinTerminal* status_builtin_terminal;
-    ResultsStreamViewer* results_stream_viewer;
-
-    ScanAreasController *scan_areas_controller;
-};
-
-#endif // SAM_HOME_PAGE_HPP
+#endif // SAM_PE_PATHLS_STUB_GENERATOR_HPP

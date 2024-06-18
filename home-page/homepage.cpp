@@ -31,6 +31,8 @@
 #include <iostream>
 #include <QTimer>
 
+#include "samconsolemain.hpp"
+
 HomePage::HomePage(QWidget *parent) : QWidget(parent), main_layout(nullptr), control_bar(nullptr), status_builtin_terminal(nullptr), results_stream_viewer(nullptr), scan_areas_controller(nullptr) {
     // Initialize the main layout
     HomePage::main_layout = new QVBoxLayout(this);
@@ -95,19 +97,19 @@ ResultsStreamViewer* HomePage::get_results_stream_viewer_p() const {
 void HomePage::on_scan_button_clicked()
 {
     std::cout << "Scanning..." << std::endl;
-    sam_engine::sam_engine_scan();
+    engine->fulfill_start_scan_request();
 }
 
 void HomePage::on_stop_button_clicked()
 {
     std::cout << "Stopping..." << std::endl;
-    sam_engine::sam_engine_stop();
+    engine->fulfill_stop_scan_request();
 }
 
 void HomePage::on_pause_button_clicked()
 {
     std::cout << "Pausing..." << std::endl;
-    // sam_engine::sam_engine_pause();
+    engine->fulfill_pause_scan_request();
 }
 
 void HomePage::on_scan_areas_controller_button_clicked()

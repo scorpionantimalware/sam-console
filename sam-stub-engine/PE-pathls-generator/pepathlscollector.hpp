@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * homepage.hpp
+ * pepathlscollector.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,47 +26,25 @@
  * 
  */
 
-#ifndef SAM_HOME_PAGE_HPP
-#define SAM_HOME_PAGE_HPP
+#ifndef SAM_PE_PATHLS_STUB_COLLECTOR_HPP
+#define SAM_PE_PATHLS_STUB_COLLECTOR_HPP
 
-#include <QWidget>
-#include <QVBoxLayout>
+#include <vector>
+#include <string>
 
-#include "control-bar/controlbar.hpp"
-#include "status-builtin-terminal/statusbuiltinterminal.hpp"
-#include "results-stream-viewer/resultsstreamviewer.hpp"
-#include "scan-areas-controller/scanareascontroller.hpp"
+typedef std::vector<std::string> pathls; // path lines are vector of strings.
 
-#include "samconsolesplash.hpp"
+class PEPathlsCollector {
+    public:
+        PEPathlsCollector() = default;
+        ~PEPathlsCollector() = default;
 
-class HomePage : public QWidget
-{
-    Q_OBJECT
+        bool get_target_pathl_extensions(std::vector<std::string>& target_pathl_extensions_buffer);
 
-public:
-    explicit HomePage(QWidget *parent = nullptr);
-    ~HomePage();
+        bool collect(pathls& pathls_buffer, const std::string& scan_area);
 
-    ControlBar* get_control_bar_p() const;
-    StatusBuiltinTerminal* get_status_builtin_terminal_p() const;
-    ResultsStreamViewer* get_results_stream_viewer_p() const;
+    private:
+        bool collect_files(pathls& pathls_buffer, const std::string& scan_area, const std::vector<std::string>& target_pathl_extensions);
+}; // class PEPathlsCollector
 
-private slots:
-    void on_scan_button_clicked();
-    void on_stop_button_clicked();
-    void on_pause_button_clicked();
-    void on_scan_areas_controller_button_clicked();
-
-private:
-    SAMConsoleSplash *splash_screen;
-
-    QVBoxLayout *main_layout;
-
-    ControlBar* control_bar;
-    StatusBuiltinTerminal* status_builtin_terminal;
-    ResultsStreamViewer* results_stream_viewer;
-
-    ScanAreasController *scan_areas_controller;
-};
-
-#endif // SAM_HOME_PAGE_HPP
+#endif // SAM_PE_PATHLS_STUB_COLLECTOR_HPP

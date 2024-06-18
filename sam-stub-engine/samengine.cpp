@@ -30,162 +30,355 @@
 
 #include <iostream>
 #include <random>
+#include <fstream>
+
+#include "pepathlsgenerator.hpp"
+#include "scanareasprocessor.hpp"
+
+#define SAM_ENGINE_MAX_JOBS 4
 
 namespace sam_engine {
   AddNewFileCallback_t add_new_file_callback {nullptr};
   SetResultForFileCallback_t set_result_for_file_callback {nullptr};
-  EngineStateChangeCallback_t engine_state_change_callback {nullptr};
+  ScannerStateChangeCallback_t scanner_state_change_callback {nullptr};
   UpdateBuiltinStatusTerminalCallback_t update_builtin_status_terminal_callback {nullptr};
 
-  std::thread* engine_thread {nullptr};
+  SAMEngine::SAMEngine() : engine_thread(nullptr), 
+                            engine_termination_requested(false), 
+                            scanner(nullptr), 
+                            start_scan_requested(false), 
+                            stop_scan_requested(false), 
+                            pause_scan_requested(false), 
+                            resume_scan_requested(false) {} // constructor SAMEngine
 
-  SAMEngineState* engine_state {nullptr};
+  SAMEngine::~SAMEngine() {
+    SAMEngine::clean();
+  } // destructor SAMEngine
 
-  SAMEngineState::SAMEngineState() : state(SAMEngineState::State::IDLE) {
-  } // constructor SAMEngineState
-
-  void SAMEngineState::set_state(const State& new_state) {
-    SAMEngineState::state = new_state;
-    if (engine_state_change_callback) {
-      engine_state_change_callback(*this);
-    }
-  } // function set_state
-
-  SAMEngineState::State SAMEngineState::get_state() const {
-    return SAMEngineState::state;
-  } // function get_state
-
-  /**
-   * @brief Start the scan process
-   * 
-   * @note This function is the entry point for the scan process. This 
-   *       function is Multi-threaded.
-   * 
-   * @note This function is a wrapper for the fire_scan() function to be
-   *      called in a separate thread.
-  */
-  void fire_scan_thread_wrapper();
-
-  bool fire_scan();
-
-  float generate_dummy_prediction();
-
-  bool sam_engine_scan() {
-    bool status {false};
-
-    if (!engine_state) {
-      engine_state = new SAMEngineState();
-    }
-
-    engine_state->set_state(SAMEngineState::State::SCANNING);
-
-    std::cout << "Info: Running the engine in a separate thread" << std::endl;
-    if (update_builtin_status_terminal_callback) {
-      update_builtin_status_terminal_callback("Running the engine in a separate thread", SAMEngineStatusMessage::INFO);
-    }
-    if (engine_thread) {
-      status = engine_thread->joinable();
-      if (status) {
-        std::cout << "Error: Engine thread is already running" << std::endl;
-        if (update_builtin_status_terminal_callback) {
-          update_builtin_status_terminal_callback("Error: Engine thread is already running", SAMEngineStatusMessage::INFO);
-        }
-        engine_state->set_state(SAMEngineState::State::STOPPED);
-        status = false;
-        return status;
-      }
-      delete engine_thread;
-    }
-
-    engine_thread = new std::thread(&fire_scan_thread_wrapper);
+  void SAMEngine::engine_main() {
+    SAMEngine::engine_thread = new std::thread(&SAMEngine::run, this); 
 
     /*
       Detach the thread so that it can run independently of the main thread.
 
       Here in each scan, we will create a new thread so we do not need the current one.
     */
-    engine_thread->detach();
+    SAMEngine::engine_thread->detach();
+  } // function engine_main
 
-    if (engine_thread) {
-        if (engine_thread->joinable()) {
-          engine_thread->join();
+  void SAMEngine::fulfill_engine_termination_request() {
+    std::lock_guard<std::mutex> lock(SAMEngine::mtx);
+    SAMEngine::engine_termination_requested = true;
+    SAMEngine::cv.notify_all();
+  } // function fulfill_engine_termination_request
+
+  void SAMEngine::fulfill_start_scan_request() {
+    std::lock_guard<std::mutex> lock(SAMEngine::mtx);
+    SAMEngine::start_scan_requested = true;
+    SAMEngine::cv.notify_all();
+  } // function fulfill_start_scan_request
+
+  void SAMEngine::fulfill_stop_scan_request() {
+    std::lock_guard<std::mutex> lock(SAMEngine::mtx);
+    SAMEngine::stop_scan_requested = true;
+    SAMEngine::cv.notify_all();
+  } // function fulfill_stop_scan_request
+
+  void SAMEngine::fulfill_pause_scan_request() {
+    std::lock_guard<std::mutex> lock(SAMEngine::mtx);
+    SAMEngine::pause_scan_requested = true;
+    SAMEngine::cv.notify_all();
+  } // function fulfill_pause_scan_request
+
+  void SAMEngine::fulfill_resume_scan_request() {
+    std::lock_guard<std::mutex> lock(SAMEngine::mtx);
+    SAMEngine::resume_scan_requested = true;
+    SAMEngine::cv.notify_all();
+  } // function fulfill_resume_scan_request
+
+  void SAMEngine::run() {
+
+    std::cout << "Info: Engine made it" << std::endl;
+
+    ////////////////////////////////////////////////////
+    // 
+    // Main engine loop
+    //
+    ////////////////////////////////////////////////////
+    while (true) {
+      std::unique_lock<std::mutex> lock(SAMEngine::mtx);
+
+      cv.wait(lock, [&] { 
+        return SAMEngine::engine_termination_requested || 
+                SAMEngine::start_scan_requested ||
+                SAMEngine::stop_scan_requested ||
+                SAMEngine::pause_scan_requested ||
+                SAMEngine::resume_scan_requested;
+      });
+
+      if (SAMEngine::engine_termination_requested) {
+        break;
+      }
+
+      std::cout << "Info: Engine is running" << std::endl;
+
+      if (SAMEngine::start_scan_requested) {
+        SAMEngine::start_scan_requested = false;
+
+        if (!SAMEngine::scanner) {
+          SAMEngine::scanner = new SAMScanner();
         }
-        delete engine_thread;
+
+        SAMEngine::scanner->scan();
+      }
+
+      if (SAMEngine::stop_scan_requested) {
+        SAMEngine::stop_scan_requested = false;
+
+        if (SAMEngine::scanner) {
+          SAMEngine::scanner->stop();
+        }
+      }
+
+      if (SAMEngine::pause_scan_requested) {
+        SAMEngine::pause_scan_requested = false;
+
+        if (SAMEngine::scanner) {
+          SAMEngine::scanner->pause();
+        }
+      }
+
+      if (SAMEngine::resume_scan_requested) {
+        SAMEngine::resume_scan_requested = false;
+
+        if (SAMEngine::scanner) {
+          SAMEngine::scanner->resume();
+        }
+      }
+    } // while (true)
+
+    std::cout << "Info: Engine is stopped" << std::endl;
+  } // function run
+
+  void SAMEngine::clean() {
+    if (SAMEngine::scanner) {
+      delete SAMEngine::scanner;
     }
 
-    status = true;
+    if (SAMEngine::engine_thread) {
+      if (SAMEngine::engine_thread->joinable()) {
+        SAMEngine::engine_thread->join();
+      }
+      delete SAMEngine::engine_thread;
+    }
+  } // function clean
 
-    return status;
-  } // function sam_engine_scan
+  SAMScanner::SAMScanner() : scanner_thread(nullptr), termination_requested(false), 
+                              pause_requested(false) {
+    
+  } // constructor SAMScanner
 
-  void fire_scan_thread_wrapper() {
+  SAMScanner::~SAMScanner() {
+    if (SAMScanner::scanner_thread) {
+      if (SAMScanner::scanner_thread->joinable()) {
+        SAMScanner::scanner_thread->join();
+      }
+      delete SAMScanner::scanner_thread;
+    }
+  } // destructor SAMScanner
+
+  void SAMScanner::scan() {
+    SAMScanner::termination_requested = false;
+    SAMScanner::pause_requested = false;
+
+    SAMScanner::scanner_thread = new std::thread(&SAMScanner::run, this);
+
+    /*
+      Detach the thread so that it can run independently of the engine thread.
+
+      Here in each scan, we will create a new thread so we do not need the current one.
+    */
+    SAMScanner::scanner_thread->detach();
+  }
+
+  void SAMScanner::run() {
     bool status {false};
 
-    status = fire_scan();
+    ScanAreasProcessor scan_areas_processor;
+    std::vector<std::string> scan_areas;
+    status = scan_areas_processor.load_or_init(scan_areas);
     if (!status) {
-      std::cout << "Error: Something went wrong while scanning" << std::endl;
+      std::cout << "Error: Failed to load or initialize scan areas"
+                << std::endl;
       if (update_builtin_status_terminal_callback) {
-        update_builtin_status_terminal_callback("Error: Something went wrong while scanning", SAMEngineStatusMessage::INFO);
+        update_builtin_status_terminal_callback("Error: Failed to load or initialize scan areas", SAMEngine::StatusMessageType::ERROR);
+      }
+      
+      // engine_state->set_state(SAMEngineState::State::STOPPED);
+      return;
+    }
+
+    if (scan_areas.empty()) {
+      std::cout << "Info: No scan areas found" << std::endl;
+      if (update_builtin_status_terminal_callback) {
+        update_builtin_status_terminal_callback("Info: No scan areas found", SAMEngine::StatusMessageType::INFO);
+      }
+      
+      // engine_state->set_state(SAMEngineState::State::STOPPED);
+      return;
+    }
+
+    PEPathlsGenerator generator;
+
+    // Generate the .pathl file.
+    size_t i {0};
+    while (i < scan_areas.size()) {
+
+      // Generate paths for each scan area.
+      status = generator.generate(scan_areas.at(i));
+      if (!status) {
+        std::cout << "Error: Failed to generate .pathl file" << std::endl;
+        if (update_builtin_status_terminal_callback) {
+          update_builtin_status_terminal_callback("Error: Failed to generate .pathl file", SAMEngine::StatusMessageType::ERROR);
+        }
+        // engine_state->set_state(SAMEngineState::State::STOPPED);
+        return;
+      }
+
+      // Next scan area.
+      i++;
+    }
+
+    // Now the generator is released.
+    std::cout << "Info: .pathl file generated" << std::endl;
+    
+    // Collect the paths from the .pathl file.
+    // TODO: Don't open the full file at once. Load a batch and close the file.
+    std::ifstream pe_pathls_file(PE_PATHLS_FILENAME);
+    if (!pe_pathls_file.is_open()) {
+      std::cout << "Error: Failed to open .pathl file" << std::endl;
+      if (update_builtin_status_terminal_callback) {
+        update_builtin_status_terminal_callback("Error: Failed to open .pathl file", SAMEngine::StatusMessageType::ERROR);
+      }
+      
+      // engine_state->set_state(SAMEngineState::State::STOPPED);
+      return;
+    }
+
+    PEPathlsMonitor monitor;
+    
+    // Create our scanning workers
+    std::vector<std::thread> scanning_workers;
+    for (size_t j {0}; j < SAM_ENGINE_MAX_JOBS; j++) {
+      scanning_workers.emplace_back(&SAMScanner::work, this,
+        std::ref(monitor));
+    }
+
+    std::string pe_pathl_buffer;
+    while (std::getline(pe_pathls_file, pe_pathl_buffer)) {
+      monitor.add_pe_pathl(pe_pathl_buffer);
+    }
+
+    pe_pathls_file.close();
+
+    // Notify workers that no more files will be added
+    monitor.set_done();
+
+    for (auto& worker : scanning_workers) {
+      if (worker.joinable()) {
+        worker.join();
       }
     }
-  } // function fire_scan_thread_wrapper
+  }
 
-  bool fire_scan() {
-    bool status {false};
+  void SAMScanner::stop() {
+    {
+      std::lock_guard<std::mutex> lock(SAMScanner::mtx);
+      SAMScanner::termination_requested = true;
+      SAMScanner::pause_requested = false;
+    }
+    SAMScanner::cv.notify_all();
+  }
 
-    int dummy_file_count {10};
+  void SAMScanner::pause() {
+    std::lock_guard<std::mutex> lock(SAMScanner::mtx);
+    SAMScanner::pause_requested = true;
+  }
 
-    while (dummy_file_count--) {
+  void SAMScanner::resume() {
+    {
+      std::lock_guard<std::mutex> lock(SAMScanner::mtx);
+      SAMScanner::pause_requested = false;
+    }
+    SAMScanner::cv.notify_all();
+  }
+
+  void SAMScanner::work(PEPathlsMonitor &monitor) {
+    std::string pathl_buffer;
+    while (!SAMScanner::termination_requested && monitor.get_pe_pathl(pathl_buffer)) {
+      std::unique_lock<std::mutex> lock(SAMScanner::mtx);
+
+      /**
+       * @brief If the scanner is paused or stopped, wait for the condition.
+       *        If the scanner is stopped, break the loop.
+       * 
+       */
+      SAMScanner::cv.wait(lock, [&] { 
+        return !SAMScanner::pause_requested || 
+                SAMScanner::termination_requested; 
+      });
+
+      if (SAMScanner::termination_requested) {
+        break;
+      }
+      
+      std::cout << "Info: Scanning " << pathl_buffer << std::endl;
+
+      /*
+        This ID is used to get the file entry from the table inside the GUI.
+      */
       int new_file_id {-1};
       if (add_new_file_callback) {
-        new_file_id = add_new_file_callback("dummy_file_" + std::to_string(dummy_file_count));
-      }
-
-      float dummy_prediction {generate_dummy_prediction()};
-
-      std::this_thread::sleep_for(std::chrono::seconds(1));
-
-      if (set_result_for_file_callback) {
-        set_result_for_file_callback(new_file_id, dummy_prediction);
-        if (update_builtin_status_terminal_callback && dummy_prediction > 0.5) {
-          update_builtin_status_terminal_callback("Suspicious file: dummy_file_" + std::to_string(dummy_file_count), SAMEngineStatusMessage::SUSPICIOUS_FILE);
+        {
+          // The status callback modifies the GUI so we want to make sure that
+          // only one thread does it at a time.
+          std::lock_guard<std::mutex> add_new_file_callback_lock(SAMScanner::add_new_file_callback_mtx);
+          new_file_id = add_new_file_callback(pathl_buffer);
+        }
+        if (new_file_id == -1) {
+          std::cout << "Error: Failed to get the new file ID" << std::endl;
+          if (update_builtin_status_terminal_callback) {
+            update_builtin_status_terminal_callback("Error: Failed to get the new file ID", SAMEngine::StatusMessageType::ERROR);
+          }
+          continue;
         }
       }
 
-      std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
+      // Classify the PE file.
+      float annoutput {generate_dummy_prediction()};
 
-    engine_state->set_state(SAMEngineState::State::COMPLETE);
+      // Classify the PE file for CNN.
+      float cnnoutput {generate_dummy_prediction()};
 
-    status = true;
+      /*
+        This is the static voting mechanism.
+      */
+      float prediction {(annoutput + cnnoutput) * 0.5f};
 
-    return status;
-  } // function fire_scan
+      if (set_result_for_file_callback) {
+        // The status callback modifies the GUI so we want to make sure that 
+        // only one thread does it at a time.
+        // TODO: Do we need to lock the mutex here?
+        // std::lock_guard<std::mutex> set_result_for_file_callback_lock(SAMScanner::set_result_for_file_callback_mtx);
+        set_result_for_file_callback(new_file_id, prediction);
+        if (update_builtin_status_terminal_callback && prediction > 0.5f) {
+          update_builtin_status_terminal_callback("Malware detected in " + pathl_buffer, SAMEngine::StatusMessageType::INFO);
+        }
+      }
+    } // while (!SAMScanner::termination_requested && monitor.get_pe_pathl(pathl_buffer))
+  } // function work
 
-  void sam_engine_stop() {
-    // if (engine_thread) {
-    //   if (engine_thread->joinable()) {
-    //     engine_thread->join();
-    //   }
-    //   delete engine_thread;
-    // }
-
-    engine_state->set_state(SAMEngineState::State::STOPPED);
-
-    // if (engine_state) {
-    //   delete engine_state;
-    // }
-  } // function sam_engine_stop
-
-  void sam_engine_pause() {
-    
-  } // function sam_engine_pause
-
-  void sam_engine_resume() {
-    
-  } // function sam_engine_resume
-
-  float generate_dummy_prediction() {
+  float SAMScanner::generate_dummy_prediction() {
       // Create a random number generator engine
       std::random_device rd;
       std::mt19937 gen(rd());
@@ -205,9 +398,9 @@ namespace sam_engine {
     set_result_for_file_callback = callback;
   } // function hook_status_callback
 
-  void hook_engine_state_change_callback(const EngineStateChangeCallback_t& callback) {
-    engine_state_change_callback = callback;
-  } // function hook_engine_state_change_callback
+  void hook_scanner_state_change_callback(const ScannerStateChangeCallback_t& callback) {
+    scanner_state_change_callback = callback;
+  } // function hook_scanner_state_change_callback
 
   void hook_update_builtin_status_terminal_callback(const UpdateBuiltinStatusTerminalCallback_t& callback) {
     update_builtin_status_terminal_callback = callback;

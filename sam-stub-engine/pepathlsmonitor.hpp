@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * homepage.hpp
+ * pepathlsmonitor.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,47 +26,46 @@
  * 
  */
 
-#ifndef SAM_HOME_PAGE_HPP
-#define SAM_HOME_PAGE_HPP
+#ifndef SAM_PE_PATHLS_STUB_MONITOR_HPP
+#define SAM_PE_PATHLS_STUB_MONITOR_HPP
 
-#include <QWidget>
-#include <QVBoxLayout>
+#include <iostream>
+#include <mutex>
+#include <condition_variable>
+#include <thread>
+#include <queue>
+#include <string>
+#include <vector>
 
-#include "control-bar/controlbar.hpp"
-#include "status-builtin-terminal/statusbuiltinterminal.hpp"
-#include "results-stream-viewer/resultsstreamviewer.hpp"
-#include "scan-areas-controller/scanareascontroller.hpp"
+class PEPathlsMonitor {
+    public:
+        PEPathlsMonitor();
+        ~PEPathlsMonitor() = default;
 
-#include "samconsolesplash.hpp"
+        void add_pe_pathl(const std::string& pathl);
 
-class HomePage : public QWidget
-{
-    Q_OBJECT
+        bool get_pe_pathl(std::string& pathl_buffer);
 
-public:
-    explicit HomePage(QWidget *parent = nullptr);
-    ~HomePage();
+        void set_done();
 
-    ControlBar* get_control_bar_p() const;
-    StatusBuiltinTerminal* get_status_builtin_terminal_p() const;
-    ResultsStreamViewer* get_results_stream_viewer_p() const;
+    private:
+        std::queue<std::string> pathls;
 
-private slots:
-    void on_scan_button_clicked();
-    void on_stop_button_clicked();
-    void on_pause_button_clicked();
-    void on_scan_areas_controller_button_clicked();
+        /**
+         * @brief Each function inside a monitor should satisfy the Mutual Exclusion property which means
+         *        we need this mutex.
+         * 
+         */
+        std::mutex mtx;
 
-private:
-    SAMConsoleSplash *splash_screen;
+        /**
+         * @brief This condition is nessesary to notify the consumer thread that there is a new pathl to process
+         *        or to wait if there is no pathl to process.
+         * 
+         */
+        std::condition_variable cv;
+        bool done;
+}; // class PEPathlsMonitor
 
-    QVBoxLayout *main_layout;
+#endif // SAM_PE_PATHLS_STUB_MONITOR_HPP
 
-    ControlBar* control_bar;
-    StatusBuiltinTerminal* status_builtin_terminal;
-    ResultsStreamViewer* results_stream_viewer;
-
-    ScanAreasController *scan_areas_controller;
-};
-
-#endif // SAM_HOME_PAGE_HPP

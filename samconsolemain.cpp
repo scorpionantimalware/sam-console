@@ -34,16 +34,20 @@
 #include <filesystem>
 #include <iostream>
 
+#include "mainwindow.hpp"
+
 #include "homepage.hpp"
 #include "fimpage.hpp"
 
 namespace fs = std::filesystem;
 
+sam_engine::SAMEngine *engine {nullptr};
+
 /**
  * @brief Global accessors.
 */
-HomePage *home_page {nullptr};
-FIMPage *fim_page {nullptr};
+HomePage *g_home_page {nullptr};
+FIMPage *g_fim_page {nullptr};
 
 int main(int argc, char **argv)
 {
@@ -59,8 +63,14 @@ int main(int argc, char **argv)
     */
     sam_engine::hook_add_new_file_callback(&sam_callbacks::add_new_file_callback);
     sam_engine::hook_set_result_for_file_callback(&sam_callbacks::set_result_for_file_callback);
-    sam_engine::hook_engine_state_change_callback(&sam_callbacks::engine_state_change_callback);
+    sam_engine::hook_scanner_state_change_callback(&sam_callbacks::scanner_state_change_callback);
     sam_engine::hook_update_builtin_status_terminal_callback(&sam_callbacks::update_builtin_status_terminal_callback);
+
+    // Initialize the Engine.
+    engine = new sam_engine::SAMEngine();
+
+    // Run the engine.
+    engine->engine_main();
 
     QApplication sam_console_app(argc, argv);
     QCoreApplication::setOrganizationName(SAM_ORG_NAME);
@@ -92,33 +102,42 @@ int main(int argc, char **argv)
 
     MainWindow w;
 
-    home_page = w.get_home_page_p();
-    fim_page = w.get_fim_page_p();
+    g_home_page = w.get_home_page_p();
+    g_fim_page = w.get_fim_page_p();
     
     w.resize(1440, 720);
     w.show();
-    return sam_console_app.exec();
+
+    int ret {sam_console_app.exec()};
+
+    // Request engine termination
+    engine->fulfill_engine_termination_request();
+
+    // Clean up the engine.
+    delete engine;
+
+    return ret;
 }
 
 namespace sam_callbacks {
     int add_new_file_callback(const std::string& filename)
     {
-        return home_page->get_results_stream_viewer_p()->append_new_entry(filename);
+        return g_home_page->get_results_stream_viewer_p()->append_new_entry(filename);
     }
 
     void set_result_for_file_callback(const int& row_index, const float& prediction)
     {
-        home_page->get_results_stream_viewer_p()->set_result_for_entry(row_index, prediction);
+        g_home_page->get_results_stream_viewer_p()->set_result_for_entry(row_index, prediction);
     }
 
-    void engine_state_change_callback(const sam_engine::SAMEngineState& state)
+    void scanner_state_change_callback(const sam_engine::SAMScanner::State& state)
     {
-        home_page->get_control_bar_p()->update_state(state);
+        g_home_page->get_control_bar_p()->update_state(state);
     }
 
-    void update_builtin_status_terminal_callback(const std::string& status, const sam_engine::SAMEngineStatusMessage& message_type)
+    void update_builtin_status_terminal_callback(const std::string& status, const sam_engine::SAMEngine::StatusMessageType& message_type)
     {
-        home_page->get_status_builtin_terminal_p()->append_message(status, message_type);
+        g_home_page->get_status_builtin_terminal_p()->append_message(status, message_type);
     }
 } // namespace sam_callbacks
 

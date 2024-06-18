@@ -29,8 +29,6 @@
 #ifndef SAM_CONSOLE_MAIN_HPP
 #define SAM_CONSOLE_MAIN_HPP
 
-#include "mainwindow.hpp"
-
 // If the real engine is active, include the real engine.
 #ifdef SAM_ENGINE_ACTIVE /*     Scorpion Anti-malware Engine Configuration     */
 
@@ -72,14 +70,16 @@
 #error "No root directory defined"
 #endif // SAM_CONSOLE_ROOTDIR
 
+extern sam_engine::SAMEngine *engine;
+
 int main(int argc, char **argv);
 
 namespace sam_callbacks {
 
 int add_new_file_callback(const std::string& filename);
 void set_result_for_file_callback(const int& row_index, const float& prediction);
-void engine_state_change_callback(const sam_engine::SAMEngineState& state);
-void update_builtin_status_terminal_callback(const std::string& status, const sam_engine::SAMEngineStatusMessage& message_type);
+void scanner_state_change_callback(const sam_engine::SAMScanner::State& state);
+void update_builtin_status_terminal_callback(const std::string& status, const sam_engine::SAMEngine::StatusMessageType& message_type);
 
 } // namespace sam_callbacks
 

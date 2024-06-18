@@ -33,7 +33,7 @@
 #include <QHBoxLayout>
 #include <QStackedWidget>
 
-#include "samengine.hpp"
+#include "samconsolemain.hpp"
 
 #include "samconsolesplash.hpp"
 #include "pageswitcherbar.hpp"

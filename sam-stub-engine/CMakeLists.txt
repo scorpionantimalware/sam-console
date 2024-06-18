@@ -3,12 +3,18 @@ set(SAM_STUB_ENGINE "sam_stub_engine" CACHE STRING "Stub SAM engine library name
 
 file(GLOB SAM_STUB_ENGINE_HPP_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/samengine.hpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/pepathlsmonitor.hpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-processor/scanareasprocessor.hpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/PE-pathls-generator/pepathlsgenerator.hpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/PE-pathls-generator/pepathlscollector.hpp 
 )
 
 file(GLOB SAM_STUB_ENGINE_CPP_FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/samengine.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/pepathlsmonitor.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-processor/scanareasprocessor.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/PE-pathls-generator/pepathlsgenerator.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/PE-pathls-generator/pepathlscollector.cpp 
 )
 
 # Safety check: Ensure that all the files exist.
@@ -26,7 +32,8 @@ set_target_properties(${SAM_STUB_ENGINE} PROPERTIES VERSION ${SAM_CONSOLE_PROJEC
 
 target_include_directories(${SAM_STUB_ENGINE} PUBLIC 
     "${CMAKE_CURRENT_SOURCE_DIR}/" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-processor/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-processor/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/PE-pathls-generator/" 
 )
 
 # This is to build with the console with the engine.

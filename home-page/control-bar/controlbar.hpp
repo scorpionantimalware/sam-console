@@ -37,7 +37,7 @@
 #include "control-bar/pausebutton.hpp"
 #include "control-bar/scanareascontrollerbutton.hpp"
 
-#include "samengine.hpp"
+#include "samconsolemain.hpp"
 
 class ControlBar : public QWidget
 {
@@ -47,7 +47,7 @@ public:
     ControlBar(QWidget *parent = nullptr);
     ~ControlBar();
 
-    void update_state(const sam_engine::SAMEngineState& engine_state);
+    void update_state(const sam_engine::SAMScanner::State& scanner_state);
 
 signals:
     /**

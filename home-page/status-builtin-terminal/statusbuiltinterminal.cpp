@@ -40,20 +40,19 @@ StatusBuiltinTerminal::StatusBuiltinTerminal()
     this->setPalette(p);
 }
 
-void StatusBuiltinTerminal::append_message(const std::string& status, const sam_engine::SAMEngineStatusMessage& message_type)
+void StatusBuiltinTerminal::append_message(const std::string& status, const sam_engine::SAMEngine::StatusMessageType& message_type)
 {
     QColor color;
 
     switch (message_type) {
-        case sam_engine::SAMEngineStatusMessage::INFO:
+        case sam_engine::SAMEngine::StatusMessageType::INFO:
             color = Qt::white;
             break;
-        case sam_engine::SAMEngineStatusMessage::CLEAN_FILE:
-            color = Qt::green;
-            break;
-        case sam_engine::SAMEngineStatusMessage::SUSPICIOUS_FILE:
-        case sam_engine::SAMEngineStatusMessage::ERROR:
+        case sam_engine::SAMEngine::StatusMessageType::ERROR:
             color = Qt::red;
+            break;
+        default:
+            color = Qt::yellow;
             break;
     }
 

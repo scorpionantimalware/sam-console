@@ -5,7 +5,12 @@
 !/CMakeLists.txt
 !/samengine.cpp
 !/samengine.hpp
+!/pepathlsmonitor.hpp
+!/pepathlsmonitor.cpp
 
 !/scan-areas-processor/
 !/scan-areas-processor/scanareasprocessor.cpp
 !/scan-areas-processor/scanareasprocessor.hpp
+
+!/PE-pathls-generator/
+!/PE-pathls-generator/**/*
