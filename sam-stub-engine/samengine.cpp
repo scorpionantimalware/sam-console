@@ -386,7 +386,7 @@ namespace sam_engine {
       */
       float prediction {(annoutput + cnnoutput) * 0.5f};
 
-      std::string status {"Failed"};
+      std::string prediction_status {"Failed"};
 
       if (prediction == -1.0f || prediction < 0.0f || prediction > 1.0f) {
         if (update_new_file_callback) {
@@ -394,13 +394,13 @@ namespace sam_engine {
           // only one thread does it at a time.
           // TODO: Do we need to lock the mutex here?
           // std::lock_guard<std::mutex> set_file_status_callback_lock(SAMScanner::set_file_status_callback_mtx);
-          update_new_file_callback(new_file_id, 1, status, -1.0f); // 1 is the column index for the status
+          update_new_file_callback(new_file_id, 1, prediction_status, -1.0f); // 1 is the column index for the status
         }
         continue;
       }
 
       if (prediction > 0.5f) {
-        status = "Malware";
+        prediction_status = "Malware";
 
         if (update_engine_status_callback) {
           std::lock_guard<std::mutex> update_engine_status_callback_lock(SAMScanner::update_engine_status_callback_mtx);
@@ -409,7 +409,7 @@ namespace sam_engine {
         }
 
       } else {
-        status = "Benign";
+        prediction_status = "Benign";
       }
 
       if (update_new_file_callback) {
@@ -417,7 +417,7 @@ namespace sam_engine {
         // only one thread does it at a time.
         // TODO: Do we need to lock the mutex here?
         // std::lock_guard<std::mutex> set_file_status_callback_lock(SAMScanner::set_file_status_callback_mtx);
-        update_new_file_callback(new_file_id, 1, status, prediction); // 1 is the column index for the status
+        update_new_file_callback(new_file_id, 1, prediction_status, prediction); // 1 is the column index for the status
       }
     } // while (!SAMScanner::termination_requested && monitor.get_pe_pathl(pathl_buffer))
   } // function work
