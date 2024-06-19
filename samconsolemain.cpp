@@ -62,9 +62,9 @@ int main(int argc, char **argv)
         Initialize the engine and register callbacks.
     */
     sam_engine::hook_add_new_file_callback(&sam_callbacks::add_new_file_callback);
-    sam_engine::hook_set_result_for_file_callback(&sam_callbacks::set_result_for_file_callback);
+    sam_engine::hook_update_new_file_callback(&sam_callbacks::update_new_file_callback);
     sam_engine::hook_scanner_state_change_callback(&sam_callbacks::scanner_state_change_callback);
-    sam_engine::hook_update_builtin_status_terminal_callback(&sam_callbacks::update_builtin_status_terminal_callback);
+    sam_engine::hook_update_engine_status_callback(&sam_callbacks::update_engine_status_callback);
 
     // Initialize the Engine.
     engine = new sam_engine::SAMEngine();
@@ -115,29 +115,30 @@ int main(int argc, char **argv)
 
     // Clean up the engine.
     delete engine;
+    engine = nullptr;
 
     return ret;
 }
 
 namespace sam_callbacks {
-    int add_new_file_callback(const std::string& filename)
+    int add_new_file_callback()
     {
-        return g_home_page->get_results_stream_viewer_p()->append_new_entry(filename);
+        return g_home_page->get_scan_results_monitor_p()->append_new_entry();
     }
 
-    void set_result_for_file_callback(const int& row_index, const float& prediction)
+    void update_new_file_callback(const int& row_index, const int& col_index, const std::string& data_buffer, const float& status_prediction)
     {
-        g_home_page->get_results_stream_viewer_p()->set_result_for_entry(row_index, prediction);
+        g_home_page->get_scan_results_monitor_p()->update_entry(row_index, col_index, data_buffer, status_prediction);
     }
 
-    void scanner_state_change_callback([[maybe_unused]] const sam_engine::SAMScanner::State& state)
+    void scanner_state_change_callback([[maybe_unused]] const sam_engine::SAMScanner::State& scanner_state)
     {
 
     }
 
-    void update_builtin_status_terminal_callback(const std::string& status, const sam_engine::SAMEngine::StatusMessageType& message_type)
+    void update_engine_status_callback(const std::string& status_message, const sam_engine::SAMEngine::StatusMessageType& type)
     {
-        g_home_page->get_status_builtin_terminal_p()->append_message(status, message_type);
+        g_home_page->get_engine_status_monitor_p()->append_message(status_message, type);
     }
 } // namespace sam_callbacks
 

@@ -37,6 +37,7 @@
 #include <atomic>
 
 #include "pepathlsmonitor.hpp"
+#include "scananalyzer.hpp"
 
 namespace sam_engine {
   class SAMScanner;
@@ -82,7 +83,7 @@ namespace sam_engine {
 
         void run();
 
-        void clean_thread() const;
+        void clean_thread();
     }; // class SAMEngine
 
   class SAMScanner {
@@ -112,6 +113,8 @@ namespace sam_engine {
       private:
         std::thread *scanner_thread;
 
+        ScanAnalyzer *analyzer;
+
         SAMScanner::State current_state;
 
         /**
@@ -121,7 +124,8 @@ namespace sam_engine {
          * 
          */
         std::mutex add_new_file_callback_mtx;
-        std::mutex set_result_for_file_callback_mtx;
+        std::mutex update_new_file_callback_mtx;
+        std::mutex update_engine_status_callback_mtx;
 
         void work([[maybe_unused]] size_t id, PEPathlsMonitor &monitor);
 
@@ -131,29 +135,29 @@ namespace sam_engine {
 
         void switch_state(const SAMScanner::State& new_state);
 
-        void clean_thread() const;
+        void clean_thread();
     }; // class SAMScanner
 
   /*
       When the engine start scanning a new file, it will call this callback
       with the new file's name to notify the GUI.
     */
-    typedef int (*AddNewFileCallback_t)(const std::string&);
+    typedef int (*AddNewFileCallback_t)();
 
     /*
       When the engine finishes scanning a file, it will call this callback
       with the file's ID and the prediction to notify the GUI.
     */
-    typedef void (*SetResultForFileCallback_t)(const int&, const float&);
+    typedef void (*UpdateNewFileCallback_t)(const int&, const int&, const std::string&, const float&);
 
     typedef void (*ScannerStateChangeCallback_t)(const SAMScanner::State&);
 
-    typedef void (*UpdateBuiltinStatusTerminalCallback_t)(const std::string&, const SAMEngine::StatusMessageType&);
+    typedef void (*UpdateEngineStatusCallback_t)(const std::string&, const SAMEngine::StatusMessageType&);
 
     void hook_add_new_file_callback(const AddNewFileCallback_t& callback);
-    void hook_set_result_for_file_callback(const SetResultForFileCallback_t& callback);
+    void hook_update_new_file_callback(const UpdateNewFileCallback_t& callback);
     void hook_scanner_state_change_callback(const ScannerStateChangeCallback_t& callback);
-    void hook_update_builtin_status_terminal_callback(const UpdateBuiltinStatusTerminalCallback_t& callback);
+    void hook_update_engine_status_callback(const UpdateEngineStatusCallback_t& callback);
 } // namespace sam_engine
 
 #endif // SAM_STUB_ENGINE_HPP

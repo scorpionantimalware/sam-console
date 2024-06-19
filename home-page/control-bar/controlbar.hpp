@@ -52,7 +52,7 @@ signals:
     /**
      * @brief Signal emitted when the scan button is clicked.
      * 
-     * @note This is used inside the @c ResultsStreamViewer class.
+     * @note This is used inside the @c ScanResultsMonitor class.
      * 
      * @see @c mainwindow.hpp
      * @see @c MainWindow::on_scan_button_clicked()

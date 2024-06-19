@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * results-stream-viewer/resultsstreamviewer.hpp
+ * scananalyzer.cpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,30 +26,24 @@
  * 
  */
 
-#ifndef SAM_RESULTS_STREAM_VIEWER_HPP
-#define SAM_RESULTS_STREAM_VIEWER_HPP
+#include "scananalyzer.hpp"
 
-#include <QTableWidget>
+void ScanAnalyzer::add_malware_pathl(const std::string& pathl) {
+    std::lock_guard<std::mutex> lock(ScanAnalyzer::malware_pathls_mtx);
+    ScanAnalyzer::malware_pathls.push_back(pathl);
+}
 
-class ResultsStreamViewer : public QTableWidget
-{
-public:
-    ResultsStreamViewer();
+void ScanAnalyzer::add_benign_pathl(const std::string& pathl) {
+    std::lock_guard<std::mutex> lock(ScanAnalyzer::benign_pathls_mtx);
+    ScanAnalyzer::benign_pathls.push_back(pathl);
+}
 
-    int append_new_entry(const std::string& filename);
-    
-    void set_result_for_entry(const int& row_index, const float& prediction);
+size_t ScanAnalyzer::get_malware_count() {
+    std::lock_guard<std::mutex> lock(ScanAnalyzer::malware_pathls_mtx);
+    return ScanAnalyzer::malware_pathls.size();
+}
 
-protected:
-    void resizeEvent(QResizeEvent *event) override;
-
-private:
-    void init();
-
-    /**
-     * @brief Update the column widths based on the table's width
-    */
-    void update_column_widths();
-};
-
-#endif // SAM_RESULTS_STREAM_VIEWER_HPP
+size_t ScanAnalyzer::get_benign_count() {
+    std::lock_guard<std::mutex> lock(ScanAnalyzer::benign_pathls_mtx);
+    return ScanAnalyzer::benign_pathls.size();
+}

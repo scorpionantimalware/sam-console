@@ -14,3 +14,6 @@
 
 !/PE-pathls-generator/
 !/PE-pathls-generator/**/*
+
+!/scan-analyzer/
+!/scan-analyzer/**/*

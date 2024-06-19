@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * homepage.hpp
+ * scananalyzer.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,48 +26,32 @@
  * 
  */
 
-#ifndef SAM_HOME_PAGE_HPP
-#define SAM_HOME_PAGE_HPP
+#ifndef SAM_SCAN_STUB_ANALYZER_HPP
+#define SAM_SCAN_STUB_ANALYZER_HPP
 
-#include <QWidget>
-#include <QVBoxLayout>
+#include <iostream>
+#include <mutex>
+#include <string>
+#include <vector>
 
-#include "control-bar/controlbar.hpp"
-#include "engine-status-monitor/enginestatusmonitor.hpp"
-#include "scan-results-monitor/scanresultsmonitor.hpp"
-#include "scan-areas-controller/scanareascontroller.hpp"
+class ScanAnalyzer {
+    public:
+        ScanAnalyzer() = default;
+        ~ScanAnalyzer() = default;
 
-#include "samconsolesplash.hpp"
+        void add_malware_pathl(const std::string& pathl);
+        void add_benign_pathl(const std::string& pathl);
 
-class HomePage : public QWidget
-{
-    Q_OBJECT
+        size_t get_malware_count();
+        size_t get_benign_count();
 
-public:
-    explicit HomePage(QWidget *parent = nullptr);
-    ~HomePage();
+    private:
+        std::vector<std::string> malware_pathls;
+        std::vector<std::string> benign_pathls;
 
-    ControlBar* get_control_bar_p() const;
-    EngineStatusMonitor* get_engine_status_monitor_p() const;
-    ScanResultsMonitor* get_scan_results_monitor_p() const;
+        std::mutex malware_pathls_mtx;
+        std::mutex benign_pathls_mtx;
+}; // class ScanAnalyzer
 
-private slots:
-    void on_scan_button_clicked();
-    void on_stop_button_clicked();
-    void on_pause_button_clicked();
-    void on_resume_button_clicked();
-    void on_scan_areas_controller_button_clicked();
+#endif // SAM_SCAN_STUB_ANALYZER_HPP
 
-private:
-    SAMConsoleSplash *splash_screen;
-
-    QVBoxLayout *main_layout;
-
-    ControlBar* control_bar;
-    EngineStatusMonitor* engine_status_monitor;
-    ScanResultsMonitor* scan_results_monitor;
-
-    ScanAreasController *scan_areas_controller;
-};
-
-#endif // SAM_HOME_PAGE_HPP

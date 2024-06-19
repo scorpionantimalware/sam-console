@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * statusbuiltinterminal.cpp
+ * scanresultsmonitor.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,44 +26,30 @@
  * 
  */
 
-#include "status-builtin-terminal/statusbuiltinterminal.hpp"
-#include <QScrollBar>
+#ifndef SAM_SCAN_RESULTS_MONITOR_HPP
+#define SAM_SCAN_RESULTS_MONITOR_HPP
 
-StatusBuiltinTerminal::StatusBuiltinTerminal()
+#include <QTableWidget>
+
+class ScanResultsMonitor : public QTableWidget
 {
-    this->setReadOnly(true);
+public:
+    ScanResultsMonitor();
 
-    // Set black background
-    QPalette p = palette();
-    p.setColor(QPalette::Base, Qt::black);
-    p.setColor(QPalette::Text, Qt::white);
-    this->setPalette(p);
-}
+    int append_new_entry();
+    
+    void update_entry(const int& row_index, const int& col_index, const std::string& data_buffer, const float& status_prediction = -1.0f);
 
-void StatusBuiltinTerminal::append_message(const std::string& status, const sam_engine::SAMEngine::StatusMessageType& message_type)
-{
-    QColor color;
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
-    switch (message_type) {
-        case sam_engine::SAMEngine::StatusMessageType::INFO:
-            color = Qt::white;
-            break;
-        case sam_engine::SAMEngine::StatusMessageType::ERROR:
-            color = Qt::red;
-            break;
-        default:
-            color = Qt::yellow;
-            break;
-    }
+private:
+    void init();
 
-    // Append message to the text edit with the specified color
-    QTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::End);
-    cursor.insertHtml(QString("<font color=\"%1\">%2</font><br>").arg(color.name(), QString::fromStdString(status)));
-    this->setTextCursor(cursor);
+    /**
+     * @brief Update the column widths based on the table's width
+    */
+    void update_column_widths();
+};
 
-    // Scroll to the bottom
-    QScrollBar *scrollBar = verticalScrollBar();
-    scrollBar->setValue(scrollBar->maximum());
-}
-
+#endif // SAM_SCAN_RESULTS_MONITOR_HPP

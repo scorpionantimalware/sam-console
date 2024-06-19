@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * resultsstreamviewer.cpp - A class that displays the status of the scan.
+ * scanresultsmonitor.cpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,34 +26,35 @@
  * 
  */
 
-#include "results-stream-viewer/resultsstreamviewer.hpp"
+#include "scan-results-monitor/scanresultsmonitor.hpp"
 
 #include <iostream>
 
-ResultsStreamViewer::ResultsStreamViewer()
+ScanResultsMonitor::ScanResultsMonitor()
 {
-    ResultsStreamViewer::init();
+    // TODO: Let the engine do the initialization
+    ScanResultsMonitor::init();
 }
 
-void ResultsStreamViewer::init()
+void ScanResultsMonitor::init()
 {
     // Disable editing for the entire table
     this->setEditTriggers(QAbstractItemView::NoEditTriggers); // Disable editing for the entire table
 
     this->setColumnCount(2); // Set the number of columns
     this->setRowCount(0); // Set the number of rows
-
-    // Set the header labels for the columns
-    this->setHorizontalHeaderLabels(QStringList() << "Filename" << "Status");
+    
+    QStringList headers = { "File", "Status" };
+    this->setHorizontalHeaderLabels(headers);
 }
 
-void ResultsStreamViewer::resizeEvent(QResizeEvent *event)
+void ScanResultsMonitor::resizeEvent(QResizeEvent *event)
 {
     QTableWidget::resizeEvent(event);
-    ResultsStreamViewer::update_column_widths();
+    ScanResultsMonitor::update_column_widths();
 }
 
-void ResultsStreamViewer::update_column_widths()
+void ScanResultsMonitor::update_column_widths()
 {
     int table_width {this->viewport()->width()}; // Use viewport's width to exclude scrollbar width
     int filename_column_width {static_cast<int>(table_width * 0.75f)}; // 75% of table's width for filename column
@@ -62,11 +63,11 @@ void ResultsStreamViewer::update_column_widths()
     this->setColumnWidth(1, status_column_width);
 }
 
-int ResultsStreamViewer::append_new_entry(const std::string& filename) {
+int ScanResultsMonitor::append_new_entry() {
     int row_index {this->rowCount()}; // Get the current row count as the index for the new row
     this->insertRow(row_index);
-    QTableWidgetItem *filename_item = new QTableWidgetItem(QString::fromStdString(filename));
-    QTableWidgetItem *status_item = new QTableWidgetItem("Pending");
+    QTableWidgetItem *filename_item = new QTableWidgetItem();
+    QTableWidgetItem *status_item = new QTableWidgetItem();
     this->setItem(row_index, 0, filename_item); // Set the filename in the first column
     this->setItem(row_index, 1, status_item); // Set the status in the second column
 
@@ -76,32 +77,34 @@ int ResultsStreamViewer::append_new_entry(const std::string& filename) {
     return row_index;
 }
 
-void ResultsStreamViewer::set_result_for_entry(const int& row_index, const float& prediction) {
+void ScanResultsMonitor::update_entry(const int& row_index, const int& col_index, const std::string& data_buffer, const float& status_prediction) {
     if (row_index < 0 || row_index >= this->rowCount()) {
         std::cerr << "Invalid row index: " << row_index << std::endl;
         return; // Invalid row index
     }
 
-    std::cout << "Status for row " << row_index << ": " << prediction << std::endl;
-
-    /*
-        -1.0 is the default value for the buffer that is being sent to the model.
-        If the model is not able to predict the file, it will not fill the buffer.
-    */
-    std::string status {prediction == -1.0f ? "Failed" : prediction > 0.5f ? "Malware" : "Benign"};
-
-    QTableWidgetItem *status_item {this->item(row_index, 1)}; // Get the item in the second column
-
-    if (!status_item) {
-        std::cerr << "Status item not found for row: " << row_index << std::endl;
-        return; // Status item not found
+    if (col_index < 0 || col_index >= this->columnCount()) {
+        std::cerr << "Invalid column index: " << col_index << std::endl;
+        return; // Invalid column index
     }
-        
-    status_item->setText(QString::fromStdString(status)); // Set the status text
+
+    QTableWidgetItem *item {this->item(row_index, col_index)};
+
+    if (!item) {
+        std::cerr << "Status item not found for row: " << row_index << std::endl;
+        return; // Item not found
+    }
+
+    item->setText(QString::fromStdString(data_buffer)); // Set the cell text
+
+    // If the status prediction is not set, do not update the background color
+    if (col_index != 1 || status_prediction == -1.0f) {
+        return;
+    }
 
     // Check https://doc.qt.io/qt-6/qcolor.html#QColor-2 for QColor documentation
-    QBrush brush(QColor((int)(prediction * 255), (int)((1.0 - prediction) * 255), 0, 150)); // Create a brush with the color based on prediction
+    QBrush brush(QColor((int)(status_prediction * 255), (int)((1.0 - status_prediction) * 255), 0, 150)); // Create a brush with the color based on prediction
 
     // Check https://doc.qt.io/qt-6/qtablewidgetitem.html#setBackground for set background documentation
-    status_item->setBackground(brush);
+    item->setBackground(brush);
 }

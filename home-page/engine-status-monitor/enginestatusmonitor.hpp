@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * statusbuiltinterminal.hpp
+ * enginestatusmonitor.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,21 +26,21 @@
  * 
  */
 
-#ifndef SAM_STATUS_BUILTIN_TERMINAL_HPP
-#define SAM_STATUS_BUILTIN_TERMINAL_HPP
+#ifndef SAM_ENGINE_STATUS_MONITOR_HPP
+#define SAM_ENGINE_STATUS_MONITOR_HPP
 
 #include <QTextEdit>
 
 #include "samconsolemain.hpp"
 
-class StatusBuiltinTerminal : public QTextEdit
+class EngineStatusMonitor : public QTextEdit
 {
     Q_OBJECT
 
 public:
-    explicit StatusBuiltinTerminal();
+    explicit EngineStatusMonitor();
 
-    void append_message(const std::string& status, const sam_engine::SAMEngine::StatusMessageType& message_type = sam_engine::SAMEngine::StatusMessageType::INFO);
+    void append_message(const std::string& status_message, const sam_engine::SAMEngine::StatusMessageType& type = sam_engine::SAMEngine::StatusMessageType::INFO);
 };
 
-#endif // SAM_STATUS_BUILTIN_TERMINAL_HPP
+#endif // SAM_ENGINE_STATUS_MONITOR_HPP

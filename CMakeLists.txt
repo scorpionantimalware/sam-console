@@ -97,10 +97,10 @@ file(GLOB SAM_CONSOLE_HPP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/pausebutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/resumebutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/scanareascontrollerbutton.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/results-stream-viewer/resultsstreamviewer.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-results-monitor/scanresultsmonitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-areas-controller/scanareascontroller.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-areas-controller/scanareascolumn.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/status-builtin-terminal/statusbuiltinterminal.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/engine-status-monitor/enginestatusmonitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/page-switcher-bar/pageswitcherbar.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FIM-page/fimpage.hpp
 )
@@ -115,10 +115,10 @@ file(GLOB SAM_CONSOLE_CPP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/pausebutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/resumebutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/scanareascontrollerbutton.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/results-stream-viewer/resultsstreamviewer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-results-monitor/scanresultsmonitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-areas-controller/scanareascontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-areas-controller/scanareascolumn.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/status-builtin-terminal/statusbuiltinterminal.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/engine-status-monitor/enginestatusmonitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/page-switcher-bar/pageswitcherbar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FIM-page/fimpage.cpp
 )

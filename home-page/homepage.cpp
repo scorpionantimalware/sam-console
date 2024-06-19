@@ -33,20 +33,20 @@
 
 #include "samconsolemain.hpp"
 
-HomePage::HomePage(QWidget *parent) : QWidget(parent), main_layout(nullptr), control_bar(nullptr), status_builtin_terminal(nullptr), results_stream_viewer(nullptr), scan_areas_controller(nullptr) {
+HomePage::HomePage(QWidget *parent) : QWidget(parent), main_layout(nullptr), control_bar(nullptr), engine_status_monitor(nullptr), scan_results_monitor(nullptr), scan_areas_controller(nullptr) {
     // Initialize the main layout
     HomePage::main_layout = new QVBoxLayout(this);
     HomePage::main_layout->setSpacing(20);
 
     // Initialize main items
     HomePage::control_bar = new ControlBar();
-    HomePage::status_builtin_terminal = new StatusBuiltinTerminal();
-    HomePage::results_stream_viewer = new ResultsStreamViewer();
+    HomePage::engine_status_monitor = new EngineStatusMonitor();
+    HomePage::scan_results_monitor = new ScanResultsMonitor();
 
     // Add main items to the layout
     HomePage::main_layout->addWidget(HomePage::control_bar, 1); // The control bar will take up 1/8 of the space.
-    HomePage::main_layout->addWidget(HomePage::status_builtin_terminal, 2); // The terminal will take up 2/8 of the space.
-    HomePage::main_layout->addWidget(HomePage::results_stream_viewer, 5); // The viewer will take up 5/8 of the space.
+    HomePage::main_layout->addWidget(HomePage::engine_status_monitor, 2); // The terminal will take up 2/8 of the space.
+    HomePage::main_layout->addWidget(HomePage::scan_results_monitor, 4); // The viewer will take up 5/8 of the space.
 
     // Connect signals and slots
     connect(HomePage::control_bar, &ControlBar::scan_button_clicked, this, &HomePage::on_scan_button_clicked);
@@ -57,10 +57,10 @@ HomePage::HomePage(QWidget *parent) : QWidget(parent), main_layout(nullptr), con
 
 HomePage::~HomePage()
 {
-    if (HomePage::results_stream_viewer)
+    if (HomePage::scan_results_monitor)
     {
-        delete HomePage::results_stream_viewer;
-        HomePage::results_stream_viewer = nullptr;
+        delete HomePage::scan_results_monitor;
+        HomePage::scan_results_monitor = nullptr;
     }
 
     if (HomePage::control_bar)
@@ -86,12 +86,12 @@ ControlBar* HomePage::get_control_bar_p() const {
     return HomePage::control_bar;
 }
 
-StatusBuiltinTerminal* HomePage::get_status_builtin_terminal_p() const {
-    return HomePage::status_builtin_terminal;
+EngineStatusMonitor* HomePage::get_engine_status_monitor_p() const {
+    return HomePage::engine_status_monitor;
 }
 
-ResultsStreamViewer* HomePage::get_results_stream_viewer_p() const {
-    return HomePage::results_stream_viewer;
+ScanResultsMonitor* HomePage::get_scan_results_monitor_p() const {
+    return HomePage::scan_results_monitor;
 }
 
 void HomePage::on_scan_button_clicked()

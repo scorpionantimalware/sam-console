@@ -7,6 +7,7 @@ file(GLOB SAM_STUB_ENGINE_HPP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-processor/scanareasprocessor.hpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/PE-pathls-generator/pepathlsgenerator.hpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/PE-pathls-generator/pepathlscollector.hpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan-analyzer/scananalyzer.hpp 
 )
 
 file(GLOB SAM_STUB_ENGINE_CPP_FILES 
@@ -15,6 +16,7 @@ file(GLOB SAM_STUB_ENGINE_CPP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-processor/scanareasprocessor.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/PE-pathls-generator/pepathlsgenerator.cpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/PE-pathls-generator/pepathlscollector.cpp 
+    ${CMAKE_CURRENT_SOURCE_DIR}/scan-analyzer/scananalyzer.cpp 
 )
 
 # Safety check: Ensure that all the files exist.
@@ -34,6 +36,7 @@ target_include_directories(${SAM_STUB_ENGINE} PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/" 
     "${CMAKE_CURRENT_SOURCE_DIR}/scan-areas-processor/" 
     "${CMAKE_CURRENT_SOURCE_DIR}/PE-pathls-generator/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/scan-analyzer/" 
 )
 
 # This is to build with the console with the engine.
