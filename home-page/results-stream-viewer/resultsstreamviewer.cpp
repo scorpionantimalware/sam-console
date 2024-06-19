@@ -69,6 +69,10 @@ int ResultsStreamViewer::append_new_entry(const std::string& filename) {
     QTableWidgetItem *status_item = new QTableWidgetItem("Pending");
     this->setItem(row_index, 0, filename_item); // Set the filename in the first column
     this->setItem(row_index, 1, status_item); // Set the status in the second column
+
+    // Ensure the newly added item is visible by scrolling to the bottom
+    this->scrollToBottom();
+    
     return row_index;
 }
 
