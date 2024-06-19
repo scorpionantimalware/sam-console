@@ -28,7 +28,7 @@
 
 #include "control-bar/controlbar.hpp"
 
-ControlBar::ControlBar(QWidget *parent) : QWidget(parent), main_layout(nullptr), scan_button(nullptr), stop_button(nullptr), pause_button(nullptr), scan_areas_controller_button(nullptr) {
+ControlBar::ControlBar(QWidget *parent) : QWidget(parent), main_layout(nullptr), scan_button(nullptr), stop_button(nullptr), pause_button(nullptr), resume_button(nullptr), scan_areas_controller_button(nullptr) {
 
     ControlBar::main_layout = new QHBoxLayout(this);
     ControlBar::main_layout->setSpacing(20);
@@ -37,11 +37,13 @@ ControlBar::ControlBar(QWidget *parent) : QWidget(parent), main_layout(nullptr),
     ControlBar::scan_button = new ScanButton();
     ControlBar::stop_button = new StopButton();
     ControlBar::pause_button = new PauseButton();
+    ControlBar::resume_button = new ResumeButton();
     ControlBar::scan_areas_controller_button = new ScanAreasControllerButton();
 
     ControlBar::main_layout->addWidget(ControlBar::scan_button, 1);
     ControlBar::main_layout->addWidget(ControlBar::stop_button, 1);
     ControlBar::main_layout->addWidget(ControlBar::pause_button, 1);
+    ControlBar::main_layout->addWidget(ControlBar::resume_button, 1);
     ControlBar::main_layout->addWidget(ControlBar::scan_areas_controller_button, 1);
 
     this->setLayout(ControlBar::main_layout);
@@ -50,7 +52,15 @@ ControlBar::ControlBar(QWidget *parent) : QWidget(parent), main_layout(nullptr),
     this->connect(ControlBar::scan_button, &QPushButton::released, this, &ControlBar::start_scan);
     this->connect(ControlBar::stop_button, &QPushButton::released, this, &ControlBar::stop_scan);
     this->connect(ControlBar::pause_button, &QPushButton::released, this, &ControlBar::pause_scan);
+    this->connect(ControlBar::resume_button, &QPushButton::released, this, &ControlBar::resume_scan);
     this->connect(ControlBar::scan_areas_controller_button, &QPushButton::released, this, &ControlBar::open_scan_areas_controller);
+
+    // This is temporary until the stop, pause, and resume features are implemented.
+    ControlBar::scan_button->setEnabled(true);
+    ControlBar::stop_button->setEnabled(false);
+    ControlBar::pause_button->setEnabled(false);
+    ControlBar::resume_button->setEnabled(false);
+    ControlBar::scan_areas_controller_button->setEnabled(true);
 }
 
 ControlBar::~ControlBar() {
@@ -69,6 +79,11 @@ ControlBar::~ControlBar() {
         ControlBar::pause_button = nullptr;
     }
 
+    if (ControlBar::resume_button) {
+        delete ControlBar::resume_button;
+        ControlBar::resume_button = nullptr;
+    }
+
     if (ControlBar::scan_areas_controller_button) {
         delete ControlBar::scan_areas_controller_button;
         ControlBar::scan_areas_controller_button = nullptr;
@@ -77,60 +92,6 @@ ControlBar::~ControlBar() {
     if (ControlBar::main_layout) {
         delete ControlBar::main_layout;
         ControlBar::main_layout = nullptr;
-    }
-}
-
-void ControlBar::update_state(const sam_engine::SAMScanner::State& scanner_state) {
-    switch (scanner_state) {
-        case sam_engine::SAMScanner::State::IDLE:
-            ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
-            ControlBar::scan_button->setEnabled(true);
-            ControlBar::stop_button->setEnabled(false);
-            ControlBar::pause_button->setEnabled(false);
-            ControlBar::scan_areas_controller_button->setEnabled(true);
-            break;
-        case sam_engine::SAMScanner::State::SCANNING:
-            ControlBar::scan_button->set_state(ScanButton::TextureState::SCANNING);
-            ControlBar::scan_button->setEnabled(false);
-            ControlBar::stop_button->setEnabled(true);
-            ControlBar::pause_button->setEnabled(true);
-            ControlBar::scan_areas_controller_button->setEnabled(false);
-            break;
-        case sam_engine::SAMScanner::State::PAUSED:
-            ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
-            ControlBar::scan_button->setEnabled(true);
-            ControlBar::stop_button->setEnabled(true);
-            ControlBar::pause_button->setEnabled(false);
-            ControlBar::scan_areas_controller_button->setEnabled(false);
-            break;
-        case sam_engine::SAMScanner::State::STOPPED:
-            ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
-            ControlBar::scan_button->setEnabled(true);
-            ControlBar::stop_button->setEnabled(true);
-            ControlBar::pause_button->setEnabled(true);
-            ControlBar::scan_areas_controller_button->setEnabled(true);
-            break;
-        case sam_engine::SAMScanner::State::COMPLETE:
-            ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
-            ControlBar::scan_button->setEnabled(true);
-            ControlBar::stop_button->setEnabled(true);
-            ControlBar::pause_button->setEnabled(true);
-            ControlBar::scan_areas_controller_button->setEnabled(true);
-            break;
-        case sam_engine::SAMScanner::State::ERROR:
-            ControlBar::scan_button->set_state(ScanButton::TextureState::ERROR);
-            ControlBar::scan_button->setEnabled(false);
-            ControlBar::stop_button->setEnabled(false);
-            ControlBar::pause_button->setEnabled(false);
-            ControlBar::scan_areas_controller_button->setEnabled(false);
-            break;
-        default:
-            ControlBar::scan_button->set_state(ScanButton::TextureState::IDLE);
-            ControlBar::scan_button->setEnabled(true);
-            ControlBar::stop_button->setEnabled(false);
-            ControlBar::pause_button->setEnabled(false);
-            ControlBar::scan_areas_controller_button->setEnabled(true);
-            break;
     }
 }
 
@@ -147,6 +108,7 @@ void ControlBar::pause_scan() {
 }
 
 void ControlBar::resume_scan() {
+    emit resume_button_clicked();
 }
 
 void ControlBar::open_scan_areas_controller() {

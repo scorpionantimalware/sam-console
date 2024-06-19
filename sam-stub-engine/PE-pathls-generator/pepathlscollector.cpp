@@ -42,7 +42,7 @@ bool PEPathlsCollector::get_target_pathl_extensions(std::vector<std::string>& ta
     return status;
 }
 
-bool PEPathlsCollector::collect(pathls& pathls_buffer, const std::string& scan_area) {
+bool PEPathlsCollector::collect(pathls& pathls_buffer, [[maybe_unused]] const std::string& scan_area) {
     bool status {false};
 
     // Fill in with dummy data.
@@ -65,7 +65,7 @@ bool PEPathlsCollector::collect(pathls& pathls_buffer, const std::string& scan_a
 }
 
 
-bool PEPathlsCollector::collect_files(pathls& pathls_buffer, const std::string& scan_area, const std::vector<std::string>& target_pathl_extensions) {
+bool PEPathlsCollector::collect_files([[maybe_unused]] pathls& pathls_buffer, [[maybe_unused]] const std::string& scan_area, [[maybe_unused]] const std::vector<std::string>& target_pathl_extensions) {
     bool status {false};
 
     status = true;

@@ -76,10 +76,10 @@ int main(int argc, char **argv);
 
 namespace sam_callbacks {
 
-int add_new_file_callback(const std::string& filename);
-void set_result_for_file_callback(const int& row_index, const float& prediction);
-void scanner_state_change_callback(const sam_engine::SAMScanner::State& state);
-void update_builtin_status_terminal_callback(const std::string& status, const sam_engine::SAMEngine::StatusMessageType& message_type);
+	int add_new_file_callback(const std::string& filename);
+	void set_result_for_file_callback(const int& row_index, const float& prediction);
+	void scanner_state_change_callback([[maybe_unused]] const sam_engine::SAMScanner::State& state);
+	void update_builtin_status_terminal_callback(const std::string& status, const sam_engine::SAMEngine::StatusMessageType& message_type);
 
 } // namespace sam_callbacks
 

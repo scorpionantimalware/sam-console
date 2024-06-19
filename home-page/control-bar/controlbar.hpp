@@ -35,6 +35,7 @@
 #include "control-bar/scanbutton.hpp"
 #include "control-bar/stopbutton.hpp"
 #include "control-bar/pausebutton.hpp"
+#include "control-bar/resumebutton.hpp"
 #include "control-bar/scanareascontrollerbutton.hpp"
 
 #include "samconsolemain.hpp"
@@ -46,8 +47,6 @@ class ControlBar : public QWidget
 public:
     ControlBar(QWidget *parent = nullptr);
     ~ControlBar();
-
-    void update_state(const sam_engine::SAMScanner::State& scanner_state);
 
 signals:
     /**
@@ -69,6 +68,11 @@ signals:
      * @brief Signal emitted when the pause button is clicked.
     */
     void pause_button_clicked();
+
+    /**
+     * @brief Signal emitted when the resume button is clicked.
+    */
+    void resume_button_clicked();
 
     /**
      * @brief Signal emitted when the scan areas controller button is clicked.
@@ -114,6 +118,7 @@ private:
     ScanButton *scan_button;
     StopButton *stop_button;
     PauseButton *pause_button;
+    ResumeButton *resume_button;
     ScanAreasControllerButton *scan_areas_controller_button;
 };
 

@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * homepage.hpp
+ * resumebutton.cpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,48 +26,36 @@
  * 
  */
 
-#ifndef SAM_HOME_PAGE_HPP
-#define SAM_HOME_PAGE_HPP
+#include "control-bar/resumebutton.hpp"
 
-#include <QWidget>
-#include <QVBoxLayout>
+ResumeButton::ResumeButton() {
+    this->setFixedSize(100, 100);
+}
 
-#include "control-bar/controlbar.hpp"
-#include "status-builtin-terminal/statusbuiltinterminal.hpp"
-#include "results-stream-viewer/resultsstreamviewer.hpp"
-#include "scan-areas-controller/scanareascontroller.hpp"
-
-#include "samconsolesplash.hpp"
-
-class HomePage : public QWidget
+void ResumeButton::paintEvent(QPaintEvent *event)
 {
-    Q_OBJECT
+    QPushButton::paintEvent(event);
 
-public:
-    explicit HomePage(QWidget *parent = nullptr);
-    ~HomePage();
+    QPainter painter = QPainter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
-    ControlBar* get_control_bar_p() const;
-    StatusBuiltinTerminal* get_status_builtin_terminal_p() const;
-    ResultsStreamViewer* get_results_stream_viewer_p() const;
+    int w {this->width()};
+    int h {this->height()};
 
-private slots:
-    void on_scan_button_clicked();
-    void on_stop_button_clicked();
-    void on_pause_button_clicked();
-    void on_resume_button_clicked();
-    void on_scan_areas_controller_button_clicked();
+    float min_side {(float)qMin(w, h)};
+    
+    QPointF center {w * 0.5f, h * 0.5f};
 
-private:
-    SAMConsoleSplash *splash_screen;
+    float vc_length {min_side * 0.25f}; // Length from each triangle's vertex to the center of the widget
 
-    QVBoxLayout *main_layout;
+    // Calculate the vertices of the triangle based on the center of the widget
+    QPointF top_v {center + QPointF(vc_length, 0)};
+    QPointF bottom_left_v {center - QPointF(vc_length, vc_length)};
+    QPointF bottom_right_v {center - QPointF(vc_length, -vc_length)};
 
-    ControlBar* control_bar;
-    StatusBuiltinTerminal* status_builtin_terminal;
-    ResultsStreamViewer* results_stream_viewer;
-
-    ScanAreasController *scan_areas_controller;
-};
-
-#endif // SAM_HOME_PAGE_HPP
+    // Draw the triangle
+    painter.setBrush(Qt::blue);
+    painter.setPen(Qt::NoPen); // Set the pen to Qt::NoPen to remove the stroke
+    painter.drawPolygon(QPolygonF() << top_v << bottom_left_v << bottom_right_v);
+    
+}

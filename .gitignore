@@ -32,30 +32,10 @@
 !/page-switcher-bar/pageswitcherbar.cpp
 
 !/home-page/
-!/home-page/homepage.hpp
-!/home-page/homepage.cpp
-!/home-page/scan-areas-controller/
-!/home-page/scan-areas-controller/**/*
-!/home-page/status-builtin-terminal/
-!/home-page/status-builtin-terminal/**/*
-!/home-page/control-bar/
-!/home-page/control-bar/controlbar.hpp
-!/home-page/control-bar/controlbar.cpp
-!/home-page/control-bar/pausebutton.hpp
-!/home-page/control-bar/pausebutton.cpp
-!/home-page/control-bar/scanbutton.hpp
-!/home-page/control-bar/scanbutton.cpp
-!/home-page/control-bar/stopbutton.hpp
-!/home-page/control-bar/stopbutton.cpp
-!/home-page/control-bar/scanareascontrollerbutton.hpp
-!/home-page/control-bar/scanareascontrollerbutton.cpp
-!/home-page/results-stream-viewer/
-!/home-page/results-stream-viewer/resultsstreamviewer.hpp
-!/home-page/results-stream-viewer/resultsstreamviewer.cpp
+!/home-page/**/*
 
 !/FIM-page/
-!/FIM-page/fimpage.hpp
-!/FIM-page/fimpage.cpp
+!/FIM-page/**/*
 
 !/resources/
 !/resources/asu_logo.png

@@ -46,16 +46,22 @@ namespace sam_engine {
   SAMEngine::SAMEngine() : engine_thread(nullptr), 
                             engine_termination_requested(false), 
                             scanner(nullptr), 
-                            start_scan_requested(false), 
-                            stop_scan_requested(false), 
-                            pause_scan_requested(false), 
-                            resume_scan_requested(false) {} // constructor SAMEngine
+                            start_scan_requested(false) {} // constructor SAMEngine
 
   SAMEngine::~SAMEngine() {
-    SAMEngine::clean();
+    if (SAMEngine::scanner) {
+      delete SAMEngine::scanner;
+    }
+
+    SAMEngine::clean_thread();
   } // destructor SAMEngine
 
   void SAMEngine::engine_main() {
+    if (SAMEngine::engine_thread) {
+      std::cout << "Error: Engine thread already exists" << std::endl;
+      return;
+    }
+
     SAMEngine::engine_thread = new std::thread(&SAMEngine::run, this); 
 
     /*
@@ -63,38 +69,24 @@ namespace sam_engine {
 
       Here in each scan, we will create a new thread so we do not need the current one.
     */
-    SAMEngine::engine_thread->detach();
+    // SAMEngine::engine_thread->detach();
   } // function engine_main
 
   void SAMEngine::fulfill_engine_termination_request() {
-    std::lock_guard<std::mutex> lock(SAMEngine::mtx);
-    SAMEngine::engine_termination_requested = true;
-    SAMEngine::cv.notify_all();
+    {
+      std::lock_guard<std::mutex> lock(SAMEngine::mtx);
+      SAMEngine::engine_termination_requested = true;
+    }
+    SAMEngine::cv.notify_one(); // Notify the engine thread.
   } // function fulfill_engine_termination_request
 
   void SAMEngine::fulfill_start_scan_request() {
-    std::lock_guard<std::mutex> lock(SAMEngine::mtx);
-    SAMEngine::start_scan_requested = true;
-    SAMEngine::cv.notify_all();
+    {
+      std::lock_guard<std::mutex> lock(SAMEngine::mtx);
+      SAMEngine::start_scan_requested = true;
+    }
+    SAMEngine::cv.notify_one(); // Notify the engine thread.
   } // function fulfill_start_scan_request
-
-  void SAMEngine::fulfill_stop_scan_request() {
-    std::lock_guard<std::mutex> lock(SAMEngine::mtx);
-    SAMEngine::stop_scan_requested = true;
-    SAMEngine::cv.notify_all();
-  } // function fulfill_stop_scan_request
-
-  void SAMEngine::fulfill_pause_scan_request() {
-    std::lock_guard<std::mutex> lock(SAMEngine::mtx);
-    SAMEngine::pause_scan_requested = true;
-    SAMEngine::cv.notify_all();
-  } // function fulfill_pause_scan_request
-
-  void SAMEngine::fulfill_resume_scan_request() {
-    std::lock_guard<std::mutex> lock(SAMEngine::mtx);
-    SAMEngine::resume_scan_requested = true;
-    SAMEngine::cv.notify_all();
-  } // function fulfill_resume_scan_request
 
   void SAMEngine::run() {
 
@@ -110,10 +102,7 @@ namespace sam_engine {
 
       cv.wait(lock, [&] { 
         return SAMEngine::engine_termination_requested || 
-                SAMEngine::start_scan_requested ||
-                SAMEngine::stop_scan_requested ||
-                SAMEngine::pause_scan_requested ||
-                SAMEngine::resume_scan_requested;
+                SAMEngine::start_scan_requested;
       });
 
       if (SAMEngine::engine_termination_requested) {
@@ -134,70 +123,36 @@ namespace sam_engine {
           SAMEngine::scanner->scan();
         }
       }
-
-      if (SAMEngine::stop_scan_requested) {
-        SAMEngine::stop_scan_requested = false;
-
-        if (SAMEngine::scanner) {
-          SAMEngine::scanner->stop();
-        }
-      }
-
-      if (SAMEngine::pause_scan_requested) {
-        SAMEngine::pause_scan_requested = false;
-
-        if (SAMEngine::scanner) {
-          SAMEngine::scanner->pause();
-        }
-      }
-
-      if (SAMEngine::resume_scan_requested) {
-        SAMEngine::resume_scan_requested = false;
-
-        if (SAMEngine::scanner) {
-          SAMEngine::scanner->resume();
-        }
-      }
     } // while (true)
 
     std::cout << "Info: Engine is stopped" << std::endl;
   } // function run
 
-  void SAMEngine::clean() {
-    if (SAMEngine::scanner) {
-      delete SAMEngine::scanner;
-    }
-
+  void SAMEngine::clean_thread() const {
     if (SAMEngine::engine_thread) {
+      // Since the engine thread is detached, we can't join it (Detaching disabled)
       if (SAMEngine::engine_thread->joinable()) {
         SAMEngine::engine_thread->join();
       }
       delete SAMEngine::engine_thread;
     }
-  } // function clean
+  } // function clean_thread
 
-  SAMScanner::SAMScanner() : scanner_thread(nullptr), 
-                              termination_requested(false), 
-                              pause_requested(false),
+  SAMScanner::SAMScanner() : scanner_thread(nullptr),
                               current_state(SAMScanner::State::IDLE) {
     
   } // constructor SAMScanner
 
   SAMScanner::~SAMScanner() {
-    if (SAMScanner::scanner_thread) {
-      if (SAMScanner::scanner_thread->joinable()) {
-        SAMScanner::scanner_thread->join();
-      }
-      delete SAMScanner::scanner_thread;
-    }
+      SAMScanner::clean_thread();
   } // destructor SAMScanner
 
   void SAMScanner::scan() {
     // Set the current state to SCANNING.
     SAMScanner::switch_state(SAMScanner::State::SCANNING);
 
-    SAMScanner::termination_requested = false;
-    SAMScanner::pause_requested = false;
+    // Clean the thread before starting a new one.
+    SAMScanner::clean_thread();
 
     SAMScanner::scanner_thread = new std::thread(&SAMScanner::run, this);
 
@@ -206,7 +161,7 @@ namespace sam_engine {
 
       Here in each scan, we will create a new thread so we do not need the current one.
     */
-    SAMScanner::scanner_thread->detach();
+    // SAMScanner::scanner_thread->detach();
   }
 
   void SAMScanner::run() {
@@ -271,7 +226,7 @@ namespace sam_engine {
     // Create our scanning workers
     std::vector<std::thread> scanning_workers;
     for (size_t j {0}; j < SAM_ENGINE_MAX_JOBS; j++) {
-      scanning_workers.emplace_back(&SAMScanner::work, this,
+      scanning_workers.emplace_back(&SAMScanner::work, this, j,
         std::ref(monitor));
     }
 
@@ -296,25 +251,25 @@ namespace sam_engine {
   }
 
   void SAMScanner::stop() {
-    {
-      std::lock_guard<std::mutex> lock(SAMScanner::mtx);
-      SAMScanner::termination_requested = true;
-      SAMScanner::pause_requested = false;
-    }
-    SAMScanner::cv.notify_all();
+
   }
 
   void SAMScanner::pause() {
-    std::lock_guard<std::mutex> lock(SAMScanner::mtx);
-    SAMScanner::pause_requested = true;
+
   }
 
   void SAMScanner::resume() {
-    {
-      std::lock_guard<std::mutex> lock(SAMScanner::mtx);
-      SAMScanner::pause_requested = false;
+
+  }
+
+  void SAMScanner::clean_thread() const {
+    if (SAMScanner::scanner_thread) {
+      // Since the scanner thread is detached, we can't join it (Detaching disabled)
+      if (SAMScanner::scanner_thread->joinable()) {
+        SAMScanner::scanner_thread->join();
+      }
+      delete SAMScanner::scanner_thread;
     }
-    SAMScanner::cv.notify_all();
   }
 
   SAMScanner::State SAMScanner::get_state() const {
@@ -329,36 +284,9 @@ namespace sam_engine {
     // }
   }
 
-  void SAMScanner::work(PEPathlsMonitor &monitor) {
+  void SAMScanner::work([[maybe_unused]] size_t id, PEPathlsMonitor &monitor) {
     std::string pathl_buffer;
-    while (!SAMScanner::termination_requested && monitor.get_pe_pathl(pathl_buffer)) {
-      std::unique_lock<std::mutex> lock(SAMScanner::mtx);
-
-      /**
-       * @brief If the scanner is paused or stopped, wait for the condition.
-       *        If the scanner is stopped, break the loop.
-       * 
-       */
-      SAMScanner::cv.wait(lock, [&] { 
-        return !SAMScanner::pause_requested || 
-                SAMScanner::termination_requested; 
-      });
-
-      if (SAMScanner::termination_requested) {
-        break;
-      }
-
-      /**
-       * @brief We must unlock this for two main reasons:
-       *          1. To allow other threads to work concurrently.
-       *          2. When the @c scanner_thread is deleted, we must have
-       *             the lock unlocked.
-       * 
-       * @todo Solve Race Condition here.
-       * 
-       */
-      lock.unlock();
-      
+    while (monitor.get_pe_pathl(pathl_buffer)) {
       std::cout << "Info: Scanning " << pathl_buffer << std::endl;
 
       /*

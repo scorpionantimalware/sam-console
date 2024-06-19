@@ -103,13 +103,16 @@ void HomePage::on_scan_button_clicked()
 void HomePage::on_stop_button_clicked()
 {
     std::cout << "Stopping..." << std::endl;
-    engine->fulfill_stop_scan_request();
 }
 
 void HomePage::on_pause_button_clicked()
 {
     std::cout << "Pausing..." << std::endl;
-    engine->fulfill_pause_scan_request();
+}
+
+void HomePage::on_resume_button_clicked()
+{
+    std::cout << "Resuming..." << std::endl;
 }
 
 void HomePage::on_scan_areas_controller_button_clicked()

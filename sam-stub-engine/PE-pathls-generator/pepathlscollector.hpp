@@ -41,10 +41,10 @@ class PEPathlsCollector {
 
         bool get_target_pathl_extensions(std::vector<std::string>& target_pathl_extensions_buffer);
 
-        bool collect(pathls& pathls_buffer, const std::string& scan_area);
+        bool collect(pathls& pathls_buffer, [[maybe_unused]] const std::string& scan_area);
 
     private:
-        bool collect_files(pathls& pathls_buffer, const std::string& scan_area, const std::vector<std::string>& target_pathl_extensions);
+        bool collect_files([[maybe_unused]] pathls& pathls_buffer, [[maybe_unused]] const std::string& scan_area, [[maybe_unused]] const std::vector<std::string>& target_pathl_extensions);
 }; // class PEPathlsCollector
 
 #endif // SAM_PE_PATHLS_STUB_COLLECTOR_HPP

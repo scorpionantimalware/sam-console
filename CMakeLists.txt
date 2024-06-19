@@ -95,6 +95,7 @@ file(GLOB SAM_CONSOLE_HPP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/scanbutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/stopbutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/pausebutton.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/resumebutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/scanareascontrollerbutton.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/results-stream-viewer/resultsstreamviewer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-areas-controller/scanareascontroller.hpp
@@ -112,6 +113,7 @@ file(GLOB SAM_CONSOLE_CPP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/scanbutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/stopbutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/pausebutton.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/resumebutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/control-bar/scanareascontrollerbutton.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/results-stream-viewer/resultsstreamviewer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/scan-areas-controller/scanareascontroller.cpp

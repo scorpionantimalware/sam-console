@@ -62,9 +62,6 @@ namespace sam_engine {
         void fulfill_engine_termination_request();
 
         void fulfill_start_scan_request();
-        void fulfill_stop_scan_request();
-        void fulfill_pause_scan_request();
-        void fulfill_resume_scan_request();
 
       private:
       /**
@@ -77,18 +74,15 @@ namespace sam_engine {
 
         std::condition_variable cv;
 
-        std::atomic<bool> engine_termination_requested;
+        bool engine_termination_requested;
 
         SAMScanner* scanner;
 
         bool start_scan_requested;
-        bool stop_scan_requested;
-        bool pause_scan_requested;
-        bool resume_scan_requested;
 
         void run();
 
-        void clean();
+        void clean_thread() const;
     }; // class SAMEngine
 
   class SAMScanner {
@@ -118,11 +112,6 @@ namespace sam_engine {
       private:
         std::thread *scanner_thread;
 
-        std::mutex mtx;
-        std::condition_variable cv;
-        std::atomic<bool> termination_requested;
-        std::atomic<bool> pause_requested;
-
         SAMScanner::State current_state;
 
         /**
@@ -134,13 +123,15 @@ namespace sam_engine {
         std::mutex add_new_file_callback_mtx;
         std::mutex set_result_for_file_callback_mtx;
 
-        void work(PEPathlsMonitor &monitor);
+        void work([[maybe_unused]] size_t id, PEPathlsMonitor &monitor);
 
         void run();
 
         float generate_dummy_prediction();
 
         void switch_state(const SAMScanner::State& new_state);
+
+        void clean_thread() const;
     }; // class SAMScanner
 
   /*

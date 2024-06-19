@@ -130,9 +130,9 @@ namespace sam_callbacks {
         g_home_page->get_results_stream_viewer_p()->set_result_for_entry(row_index, prediction);
     }
 
-    void scanner_state_change_callback(const sam_engine::SAMScanner::State& state)
+    void scanner_state_change_callback([[maybe_unused]] const sam_engine::SAMScanner::State& state)
     {
-        g_home_page->get_control_bar_p()->update_state(state);
+
     }
 
     void update_builtin_status_terminal_callback(const std::string& status, const sam_engine::SAMEngine::StatusMessageType& message_type)

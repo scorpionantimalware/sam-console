@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * homepage.hpp
+ * resumebutton.hpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -26,48 +26,21 @@
  * 
  */
 
-#ifndef SAM_HOME_PAGE_HPP
-#define SAM_HOME_PAGE_HPP
+#ifndef SAM_RESUME_BUTTON_HPP
+#define SAM_RESUME_BUTTON_HPP
 
-#include <QWidget>
-#include <QVBoxLayout>
+#include <QPushButton>
+#include <QPainter>
 
-#include "control-bar/controlbar.hpp"
-#include "status-builtin-terminal/statusbuiltinterminal.hpp"
-#include "results-stream-viewer/resultsstreamviewer.hpp"
-#include "scan-areas-controller/scanareascontroller.hpp"
-
-#include "samconsolesplash.hpp"
-
-class HomePage : public QWidget
+class ResumeButton : public QPushButton
 {
     Q_OBJECT
 
 public:
-    explicit HomePage(QWidget *parent = nullptr);
-    ~HomePage();
+    explicit ResumeButton();
 
-    ControlBar* get_control_bar_p() const;
-    StatusBuiltinTerminal* get_status_builtin_terminal_p() const;
-    ResultsStreamViewer* get_results_stream_viewer_p() const;
-
-private slots:
-    void on_scan_button_clicked();
-    void on_stop_button_clicked();
-    void on_pause_button_clicked();
-    void on_resume_button_clicked();
-    void on_scan_areas_controller_button_clicked();
-
-private:
-    SAMConsoleSplash *splash_screen;
-
-    QVBoxLayout *main_layout;
-
-    ControlBar* control_bar;
-    StatusBuiltinTerminal* status_builtin_terminal;
-    ResultsStreamViewer* results_stream_viewer;
-
-    ScanAreasController *scan_areas_controller;
+protected:
+    void paintEvent(QPaintEvent *event) override;
 };
 
-#endif // SAM_HOME_PAGE_HPP
+#endif // SAM_RESUME_BUTTON_HPP

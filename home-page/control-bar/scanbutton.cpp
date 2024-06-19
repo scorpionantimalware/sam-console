@@ -1,7 +1,7 @@
 /**
  *                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
  * 
- * scanbutton.cpp - A class that represents the scan button in the control bar.
+ * scanbutton.cpp
  * 
  * Copyright (c) 2024-present Scorpion Anti-malware (see AUTHORS.md).
  * 
@@ -27,8 +27,6 @@
  */
 
 #include "control-bar/scanbutton.hpp"
-
-#include <QWidget>
 
 #define LOADING_ARC_CYCLE_DURATION 1500 // Duration of one full rotation
 
