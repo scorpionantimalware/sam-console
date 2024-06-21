@@ -4,8 +4,8 @@
 /*                                                                                */
 /**********************************************************************************/
 /*                                                                                */
-/*    Scorpion Anti-malware is a free Open Source AI-powered Anti-malware         */
-/*    framework for Researchers.                                                  */
+/*    Scorpion Anti-malware Console is a free Open Source Qt-powered frontend     */
+/*    framework for SAM Engine.                                                   */
 /*                                                                                */
 /*    Copyright (c) 2024-present  (see AUTHORS.md).                               */
 /*                                                                                */
