@@ -1,9 +1,0 @@
-/**/*
-
-!/.gitignore
-
-!/CMakeLists.txt
-!/pepathlscollector.hpp
-!/pepathlscollector.cpp
-!/pepathlsgenerator.hpp
-!/pepathlsgenerator.cpp
