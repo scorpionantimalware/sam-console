@@ -47,12 +47,11 @@ sam_engine::SAMEngine *engine {nullptr};
 HomePage *g_home_page {nullptr};
 FIMPage *g_fim_page {nullptr};
 
-int main(int argc, char **argv)
-{
-    std::cout << "Scorpion Anti-malware Console  Copyright (C) 2024-present (see AUTHORS.md)"
-    "This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'."
-    "This is free software, and you are welcome to redistribute it"
-    "under certain conditions; type `show c' for details." << std::endl;
+int main(int argc, char **argv) {
+    std::cout << "Scorpion Anti-malware Console  Copyright (C) 2024-present (see AUTHORS.md)\n"
+    "This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.\n"
+    "This is free software, and you are welcome to redistribute it\n"
+    "under certain conditions; type `show c' for details.\n" << std::endl;
 
     // Make sure the MACRO has a valid directory path.
     if(!fs::exists(SAM_CONSOLE_ROOTDIR) || 
