@@ -42,6 +42,8 @@ namespace sam_engine {
   ScannerStateChangeCallback_t scanner_state_change_callback {nullptr};
   UpdateEngineStatusCallback_t update_engine_status_callback {nullptr};
 
+  FIMNewEventCallback_t fim_new_event_callback {nullptr};
+
   SAMEngine::SAMEngine() : engine_thread(nullptr), 
                             engine_termination_requested(false), 
                             scanner(nullptr), 
@@ -450,4 +452,9 @@ namespace sam_engine {
   void hook_update_engine_status_callback(const UpdateEngineStatusCallback_t& callback) {
     update_engine_status_callback = callback;
   } // function hook_update_engine_status_callback
+
+
+  void hook_fim_new_event_callback(const FIMNewEventCallback_t& callback) {
+    fim_new_event_callback = callback;
+  } // function hook_fim_new_event_callback
 } // namespace sam_engine

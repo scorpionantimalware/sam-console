@@ -40,10 +40,11 @@ void ScanResultsMonitor::init()
     // Disable editing for the entire table
     this->setEditTriggers(QAbstractItemView::NoEditTriggers); // Disable editing for the entire table
 
-    this->setColumnCount(2); // Set the number of columns
+    QStringList headers = { "File", "Status" };
+
+    this->setColumnCount(headers.size()); // Set the number of columns
     this->setRowCount(0); // Set the number of rows
     
-    QStringList headers = { "File", "Status" };
     this->setHorizontalHeaderLabels(headers);
 }
 
@@ -71,7 +72,7 @@ int ScanResultsMonitor::append_new_entry() {
     this->setItem(row_index, 1, status_item); // Set the status in the second column
 
     // Ensure the newly added item is visible by scrolling to the bottom
-    this->scrollToBottom();
+    // this->scrollToBottom();
     
     return row_index;
 }
