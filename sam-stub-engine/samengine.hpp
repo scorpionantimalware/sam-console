@@ -155,7 +155,7 @@ namespace sam_engine {
 
     typedef void (*UpdateEngineStatusCallback_t)(const std::string&, const SAMEngine::StatusMessageType&);
 
-    typedef void (*FIMNewEventCallback_t)();
+    typedef int (*FIMNewEventCallback_t)();
     typedef void (*FIMUpdateEventCallback_t)(const int&, const int&, const std::string&);
 
     void hook_add_new_file_callback(const AddNewFileCallback_t& callback);
