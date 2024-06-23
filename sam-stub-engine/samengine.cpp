@@ -56,10 +56,10 @@ namespace sam_engine {
     SAMEngine::clean_thread();
   } // destructor SAMEngine
 
-  void SAMEngine::engine_main() {
+  int SAMEngine::engine_main() {
     if (SAMEngine::engine_thread) {
       std::cout << "Error: Engine thread already exists" << std::endl;
-      return;
+      return -1;
     }
 
     SAMEngine::engine_thread = new std::thread(&SAMEngine::run, this); 
@@ -70,6 +70,8 @@ namespace sam_engine {
       Here in each scan, we will create a new thread so we do not need the current one.
     */
     // SAMEngine::engine_thread->detach();
+
+    return 0;
   } // function engine_main
 
   void SAMEngine::fulfill_engine_termination_request() {
