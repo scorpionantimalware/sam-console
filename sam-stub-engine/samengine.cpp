@@ -43,6 +43,7 @@ namespace sam_engine {
   UpdateEngineStatusCallback_t update_engine_status_callback {nullptr};
 
   FIMNewEventCallback_t fim_new_event_callback {nullptr};
+  FIMUpdateEventCallback_t fim_update_event_callback {nullptr};
 
   SAMEngine::SAMEngine() : engine_thread(nullptr), 
                             engine_termination_requested(false), 
@@ -461,4 +462,8 @@ namespace sam_engine {
   void hook_fim_new_event_callback(const FIMNewEventCallback_t& callback) {
     fim_new_event_callback = callback;
   } // function hook_fim_new_event_callback
+
+  void hook_fim_update_event_callback(const FIMUpdateEventCallback_t& callback) {
+    fim_update_event_callback = callback;
+  } // function hook_fim_update_event_callback
 } // namespace sam_engine

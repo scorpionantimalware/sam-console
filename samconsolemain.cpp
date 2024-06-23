@@ -69,6 +69,7 @@ int main(int argc, char **argv) {
     sam_engine::hook_update_engine_status_callback(&sam_callbacks::update_engine_status_callback);
 
     sam_engine::hook_fim_new_event_callback(&sam_callbacks::fim_new_event_callback);
+    sam_engine::hook_fim_update_event_callback(&sam_callbacks::fim_update_event_callback);
 
     // Initialize the Engine.
     engine = new sam_engine::SAMEngine();
@@ -148,9 +149,13 @@ namespace sam_callbacks {
         g_home_page->get_engine_status_monitor_p()->append_message(status_message, type);
     }
 
-    void fim_new_event_callback(const int& row_index, const int& col_index, const std::string& data_buffer)
+    void fim_new_event_callback()
     {
         g_fim_page->get_events_monitor_p()->append_new_entry();
+    }
+
+    void fim_update_event_callback(const int& row_index, const int& col_index, const std::string& data_buffer)
+    {
         g_fim_page->get_events_monitor_p()->update_entry(row_index, col_index, data_buffer);
     }
 } // namespace sam_callbacks
