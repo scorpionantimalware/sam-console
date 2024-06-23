@@ -1,6 +1,6 @@
 /**********************************************************************************/
 /*                                                                                */
-/* fimpage.hpp                                                                    */
+/* eventsmonitor.hpp                                                              */
 /*                                                                                */
 /**********************************************************************************/
 /*                                                                                */
@@ -25,28 +25,30 @@
 /**********************************************************************************/
 
 
-#ifndef SAM_FIM_PAGE_HPP
-#define SAM_FIM_PAGE_HPP
+#ifndef SAM_EVENTS_MONITOR_HPP
+#define SAM_EVENTS_MONITOR_HPP
 
-#include <QWidget>
-#include <QVBoxLayout>
+#include <QTableWidget>
 
-#include "events-monitor/eventsmonitor.hpp"
-
-class FIMPage : public QWidget
+class EventsMonitor : public QTableWidget
 {
-    Q_OBJECT
-
 public:
-    explicit FIMPage(QWidget *parent = nullptr);
-    ~FIMPage();
+    EventsMonitor();
 
-    EventsMonitor *get_events_monitor_p() const;
+    int append_new_entry();
+    
+    void update_entry(const int& row_index, const int& col_index, const std::string& data_buffer, const float& status_prediction = -1.0f);
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QVBoxLayout *main_layout;
+    void init();
 
-    EventsMonitor *events_monitor;
+    /**
+     * @brief Update the column widths based on the table's width
+    */
+    void update_column_widths();
 };
 
-#endif // SAM_FIM_PAGE_HPP
+#endif // SAM_EVENTS_MONITOR_HPP

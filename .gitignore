@@ -37,6 +37,9 @@
 !/FIM-page/
 !/FIM-page/**/*
 
+!/about-page/
+!/about-page/**/*
+
 !/resources/
 !/resources/asu_logo.png
 !/resources/asu_eng_logo.png

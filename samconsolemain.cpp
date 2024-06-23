@@ -142,5 +142,10 @@ namespace sam_callbacks {
     {
         g_home_page->get_engine_status_monitor_p()->append_message(status_message, type);
     }
+
+    void fim_new_event_callback()
+    {
+        g_fim_page->get_events_monitor_p()->append_new_entry();
+    }
 } // namespace sam_callbacks
 

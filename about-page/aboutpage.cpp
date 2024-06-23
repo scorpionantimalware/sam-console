@@ -1,6 +1,6 @@
 /**********************************************************************************/
 /*                                                                                */
-/* fimpage.hpp                                                                    */
+/* aboutpage.cpp                                                                  */
 /*                                                                                */
 /**********************************************************************************/
 /*                                                                                */
@@ -25,28 +25,22 @@
 /**********************************************************************************/
 
 
-#ifndef SAM_FIM_PAGE_HPP
-#define SAM_FIM_PAGE_HPP
+#include "aboutpage.hpp"
 
-#include <QWidget>
-#include <QVBoxLayout>
+#include <iostream>
+#include <QTimer>
 
-#include "events-monitor/eventsmonitor.hpp"
+AboutPage::AboutPage(QWidget *parent) : QWidget(parent), main_layout(nullptr) {
+    // Initialize the main layout
+    AboutPage::main_layout = new QVBoxLayout(this);
+    AboutPage::main_layout->setSpacing(20);
+}
 
-class FIMPage : public QWidget
+AboutPage::~AboutPage()
 {
-    Q_OBJECT
-
-public:
-    explicit FIMPage(QWidget *parent = nullptr);
-    ~FIMPage();
-
-    EventsMonitor *get_events_monitor_p() const;
-
-private:
-    QVBoxLayout *main_layout;
-
-    EventsMonitor *events_monitor;
-};
-
-#endif // SAM_FIM_PAGE_HPP
+    if (AboutPage::main_layout)
+    {
+        delete AboutPage::main_layout;
+        AboutPage::main_layout = nullptr;
+    }
+}

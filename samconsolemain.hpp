@@ -79,6 +79,8 @@ namespace sam_callbacks {
 	void scanner_state_change_callback([[maybe_unused]] const sam_engine::SAMScanner::State& scanner_state);
 	void update_engine_status_callback(const std::string& status_message, const sam_engine::SAMEngine::StatusMessageType& type);
 
+	void fim_new_event_callback();
+
 } // namespace sam_callbacks
 
 #endif // SAM_CONSOLE_MAIN_HPP

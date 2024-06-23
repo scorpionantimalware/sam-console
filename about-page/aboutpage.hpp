@@ -1,6 +1,6 @@
 /**********************************************************************************/
 /*                                                                                */
-/* fimpage.hpp                                                                    */
+/* aboutpage.hpp                                                                  */
 /*                                                                                */
 /**********************************************************************************/
 /*                                                                                */
@@ -25,28 +25,22 @@
 /**********************************************************************************/
 
 
-#ifndef SAM_FIM_PAGE_HPP
-#define SAM_FIM_PAGE_HPP
+#ifndef SAM_ABOUT_PAGE_HPP
+#define SAM_ABOUT_PAGE_HPP
 
 #include <QWidget>
 #include <QVBoxLayout>
 
-#include "events-monitor/eventsmonitor.hpp"
-
-class FIMPage : public QWidget
+class AboutPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit FIMPage(QWidget *parent = nullptr);
-    ~FIMPage();
-
-    EventsMonitor *get_events_monitor_p() const;
+    explicit AboutPage(QWidget *parent = nullptr);
+    ~AboutPage();
 
 private:
     QVBoxLayout *main_layout;
-
-    EventsMonitor *events_monitor;
 };
 
-#endif // SAM_FIM_PAGE_HPP
+#endif // SAM_ABOUT_PAGE_HPP

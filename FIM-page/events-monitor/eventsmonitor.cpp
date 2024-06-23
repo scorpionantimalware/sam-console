@@ -1,6 +1,6 @@
 /**********************************************************************************/
 /*                                                                                */
-/* fimpage.hpp                                                                    */
+/* eventsmonitor.cpp                                                              */
 /*                                                                                */
 /**********************************************************************************/
 /*                                                                                */
@@ -25,28 +25,50 @@
 /**********************************************************************************/
 
 
-#ifndef SAM_FIM_PAGE_HPP
-#define SAM_FIM_PAGE_HPP
-
-#include <QWidget>
-#include <QVBoxLayout>
-
 #include "events-monitor/eventsmonitor.hpp"
 
-class FIMPage : public QWidget
+#include <iostream>
+
+EventsMonitor::EventsMonitor()
 {
-    Q_OBJECT
+    // TODO: Let the engine do the initialization
+    EventsMonitor::init();
+}
 
-public:
-    explicit FIMPage(QWidget *parent = nullptr);
-    ~FIMPage();
+void EventsMonitor::init()
+{
+    // Disable editing for the entire table
+    this->setEditTriggers(QAbstractItemView::NoEditTriggers); // Disable editing for the entire table
 
-    EventsMonitor *get_events_monitor_p() const;
+    this->setColumnCount(2); // Set the number of columns
+    this->setRowCount(0); // Set the number of rows
+    
+    // QStringList headers = { };
+    // this->setHorizontalHeaderLabels(headers);
+}
 
-private:
-    QVBoxLayout *main_layout;
+void EventsMonitor::resizeEvent(QResizeEvent *event)
+{
+    QTableWidget::resizeEvent(event);
+    EventsMonitor::update_column_widths();
+}
 
-    EventsMonitor *events_monitor;
-};
+void EventsMonitor::update_column_widths()
+{
+    int table_width {this->viewport()->width()}; // Use viewport's width to exclude scrollbar width
+    int filename_column_width {static_cast<int>(table_width * 0.75f)}; // 75% of table's width for filename column
+    int status_column_width {static_cast<int>(table_width * 0.25f)}; // 25% of table's width for status column
+    this->setColumnWidth(0, filename_column_width);
+    this->setColumnWidth(1, status_column_width);
+}
 
-#endif // SAM_FIM_PAGE_HPP
+int EventsMonitor::append_new_entry() {
+    int row_index {this->rowCount()}; // Get the current row count as the index for the new row
+    this->insertRow(row_index);
+    
+    return row_index;
+}
+
+void EventsMonitor::update_entry(const int& row_index, const int& col_index, const std::string& data_buffer, const float& status_prediction) {
+    
+}

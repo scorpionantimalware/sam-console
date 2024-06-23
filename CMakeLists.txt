@@ -129,6 +129,8 @@ file(GLOB SAM_CONSOLE_HPP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/engine-status-monitor/enginestatusmonitor.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/page-switcher-bar/pageswitcherbar.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FIM-page/fimpage.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FIM-page/events-monitor/eventsmonitor.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/about-page/aboutpage.hpp
 )
 
 file(GLOB SAM_CONSOLE_CPP_FILES 
@@ -147,6 +149,8 @@ file(GLOB SAM_CONSOLE_CPP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/home-page/engine-status-monitor/enginestatusmonitor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/page-switcher-bar/pageswitcherbar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FIM-page/fimpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/FIM-page/events-monitor/eventsmonitor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/about-page/aboutpage.cpp
 )
 
 # Safety check: Ensure that all the files exist.
@@ -162,6 +166,7 @@ set(${SAM_CONSOLE_EXECUTABLE_NAME}_INCLUDE_DIRECTORIES
     "${CMAKE_CURRENT_SOURCE_DIR}/page-switcher-bar/" 
     "${CMAKE_CURRENT_SOURCE_DIR}/home-page/" 
     "${CMAKE_CURRENT_SOURCE_DIR}/FIM-page/" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/about-page/"
 )
 
 if (NOT SAM_LINK_CONSOLE)
