@@ -135,12 +135,24 @@ FIMPage* MainWindow::get_fim_page_p() const
 
 void MainWindow::on_home_page_switch_button_clicked()
 {
+    // If we are in the home page, do nothing
+    if (MainWindow::pages_stack->currentIndex() == 0)
+    {
+        return;
+    }
+
     std::cout << "Showing home page" << std::endl;
     MainWindow::pages_stack->setCurrentIndex(0); // Show the home page
 }
 
 void MainWindow::on_fim_page_switch_button_clicked()
 {
+    // If we are in the FIM page, do nothing
+    if (MainWindow::pages_stack->currentIndex() == 1)
+    {
+        return;
+    }
+
     std::cout << "Showing FIM page" << std::endl;
     MainWindow::pages_stack->setCurrentIndex(1); // Show the FIM page
 }
