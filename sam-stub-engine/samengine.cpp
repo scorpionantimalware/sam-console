@@ -92,6 +92,10 @@ namespace sam_engine {
     SAMEngine::cv.notify_one(); // Notify the engine thread.
   } // function fulfill_start_scan_request
 
+  void SAMEngine::fulfill_start_fim_request() {
+    
+  } // function fulfill_start_fim_request
+
   void SAMEngine::run() {
 
     std::cout << "Info: Engine made it" << std::endl;

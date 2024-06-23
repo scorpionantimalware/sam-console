@@ -63,6 +63,8 @@ namespace sam_engine {
 
         void fulfill_start_scan_request();
 
+        void fulfill_start_fim_request();
+
       private:
       /**
        * @brief The engine will be running in a separate thread.
