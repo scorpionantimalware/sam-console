@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
     w.show();
 
     // Start the FIM
-    engine->fulfill_start_fim_request();
+    // engine->fulfill_start_fim_request();
 
     int ret {sam_console_app.exec()};
 
