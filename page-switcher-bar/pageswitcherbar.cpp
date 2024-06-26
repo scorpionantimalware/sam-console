@@ -67,12 +67,10 @@ PageSwitcherBar::~PageSwitcherBar()
     }
 }
 
-void PageSwitcherBar::switch_to_home_page()
-{
+void PageSwitcherBar::switch_to_home_page() const {
     emit home_page_switch_button_clicked();
 }
 
-void PageSwitcherBar::switch_to_fim_page()
-{
+void PageSwitcherBar::switch_to_fim_page() const {
     emit fim_page_switch_button_clicked();
 }

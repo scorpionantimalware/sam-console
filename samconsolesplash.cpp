@@ -30,8 +30,7 @@
 #define SAM_LOGO_ORIGINAL_WIDTH 1014.873f
 #define SAM_LOGO_ORIGINAL_HEIGHT 412.133f
 
-SAMConsoleSplash::SAMConsoleSplash(QWidget *parent) : QWidget(parent), splash_layout(nullptr), svg_widget(nullptr)
-{
+SAMConsoleSplash::SAMConsoleSplash(QWidget *parent) : QWidget(parent), splash_layout(nullptr), svg_widget(nullptr) {
     SAMConsoleSplash::splash_layout = new QVBoxLayout(this);
 
     SAMConsoleSplash::svg_widget = new QSvgWidget(QString(SAM_CONSOLE_ROOTDIR) + '/' + QString("logo.svg"), this);

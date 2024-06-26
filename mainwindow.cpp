@@ -133,8 +133,7 @@ FIMPage* MainWindow::get_fim_page_p() const
     return MainWindow::fim_page;
 }
 
-void MainWindow::on_home_page_switch_button_clicked()
-{
+void MainWindow::on_home_page_switch_button_clicked() const {
     // If we are in the home page, do nothing
     if (MainWindow::pages_stack->currentIndex() == 0)
     {
@@ -145,8 +144,7 @@ void MainWindow::on_home_page_switch_button_clicked()
     MainWindow::pages_stack->setCurrentIndex(0); // Show the home page
 }
 
-void MainWindow::on_fim_page_switch_button_clicked()
-{
+void MainWindow::on_fim_page_switch_button_clicked() const {
     // If we are in the FIM page, do nothing
     if (MainWindow::pages_stack->currentIndex() == 1)
     {

@@ -77,7 +77,7 @@ int ScanResultsMonitor::append_new_entry() {
     return row_index;
 }
 
-void ScanResultsMonitor::update_entry(const int& row_index, const int& col_index, const std::string& data_buffer, const float& status_prediction) {
+void ScanResultsMonitor::update_entry(const int& row_index, const int& col_index, const std::string& data_buffer, const float& status_prediction) const {
     if (row_index < 0 || row_index >= this->rowCount()) {
         std::cerr << "Invalid row index: " << row_index << std::endl;
         return; // Invalid row index

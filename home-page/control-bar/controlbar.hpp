@@ -56,22 +56,22 @@ signals:
      * @see @c mainwindow.hpp
      * @see @c MainWindow::on_scan_button_clicked()
     */
-    void scan_button_clicked();
+    void scan_button_clicked() const;
 
     /**
      * @brief Signal emitted when the stop button is clicked.
     */
-    void stop_button_clicked();
+    void stop_button_clicked() const;
 
     /**
      * @brief Signal emitted when the pause button is clicked.
     */
-    void pause_button_clicked();
+    void pause_button_clicked() const;
 
     /**
      * @brief Signal emitted when the resume button is clicked.
     */
-    void resume_button_clicked();
+    void resume_button_clicked() const;
 
     /**
      * @brief Signal emitted when the scan areas controller button is clicked.
@@ -83,33 +83,33 @@ signals:
      * @see @c mainwindow.hpp
      * @see @c MainWindow::on_scan_areas_controller_button_clicked
     */
-    void scan_areas_controller_button_clicked();
+    void scan_areas_controller_button_clicked() const;
 
 private slots:
     /**
      * @brief Slot to start the scan.
     */
-    void start_scan();
+    void start_scan() const;
 
     /**
      * @brief Slot to stop the scan.
     */
-    void stop_scan();
+    void stop_scan() const;
 
     /**
      * @brief Slot to pause the scan.
     */
-    void pause_scan();
+    void pause_scan() const;
 
     /**
      * @brief Slot to resume the scan.
     */
-    void resume_scan();
+    void resume_scan() const;
 
     /**
      * @brief Slot to show the scan areas controller.
     */
-    void open_scan_areas_controller();
+    void open_scan_areas_controller() const;
 
 private:
     QHBoxLayout *main_layout;

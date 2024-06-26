@@ -101,19 +101,15 @@ ScanAreasController::~ScanAreasController()
     }
 }
 
-void ScanAreasController::add_new_area()
-{
+void ScanAreasController::add_new_area() const {
 }
 
-void ScanAreasController::edit_existing_area()
-{
+void ScanAreasController::edit_existing_area() const {
 }
 
-void ScanAreasController::browse_filesystem_for_area()
-{
+void ScanAreasController::browse_filesystem_for_area() const {
     emit area_browse_button_clicked();
 }
 
-void ScanAreasController::delete_existing_area()
-{
+void ScanAreasController::delete_existing_area() const {
 }

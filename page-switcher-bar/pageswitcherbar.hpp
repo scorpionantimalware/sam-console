@@ -41,11 +41,11 @@ public:
     ~PageSwitcherBar();
 
 signals:
-    void home_page_switch_button_clicked();
-    void fim_page_switch_button_clicked();
+    void home_page_switch_button_clicked() const;
+    void fim_page_switch_button_clicked() const;
 
 private slots:
-    void switch_to_home_page();
+    void switch_to_home_page() const;
 
     /**
      * @brief File Integrity Manager or FIM is a feature that allows users to
@@ -53,7 +53,7 @@ private slots:
      *        FIM page. 
      * 
      */
-    void switch_to_fim_page();
+    void switch_to_fim_page() const;
 
 private:
     QVBoxLayout *main_layout;

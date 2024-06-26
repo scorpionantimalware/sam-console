@@ -47,12 +47,12 @@ signals:
     /**
      * @brief Signal emitted when the new area button is clicked.
     */
-    void new_area_add_button_clicked();
+    void new_area_add_button_clicked() const;
 
     /**
      * @brief Signal emitted when the edit area button is clicked.
     */
-    void area_edit_button_clicked();
+    void area_edit_button_clicked() const;
 
     /**
      * @brief Signal emitted when the browse area button is clicked.
@@ -65,33 +65,33 @@ signals:
      * @see @c scan-areas-processor/scanareasprocessor.hpp
      * @see @c ScanAreasColumn::on_browse_area_button_clicked
     */
-    void area_browse_button_clicked();
+    void area_browse_button_clicked() const;
 
     /**
      * @brief Signal emitted when the delete area button is clicked.
     */
-    void area_delete_button_clicked();
+    void area_delete_button_clicked() const;
 
 private slots:
     /**
      * @brief Slot to add a new area.
     */
-    void add_new_area();
+    void add_new_area() const;
 
     /**
      * @brief Slot to edit an area.
     */
-    void edit_existing_area();
+    void edit_existing_area() const;
 
     /**
      * @brief Slot to browse an area.
     */
-    void browse_filesystem_for_area();
+    void browse_filesystem_for_area() const;
 
     /**
      * @brief Slot to delete an area.
     */
-    void delete_existing_area();
+    void delete_existing_area() const;
 
 private:
     QHBoxLayout *main_layout;

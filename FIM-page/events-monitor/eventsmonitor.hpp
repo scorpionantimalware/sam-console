@@ -37,7 +37,7 @@ public:
 
     int append_new_entry();
     
-    void update_entry(const int& row_index, const int& col_index, const std::string& data_buffer);
+    void update_entry(const int& row_index, const int& col_index, const std::string& data_buffer) const;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

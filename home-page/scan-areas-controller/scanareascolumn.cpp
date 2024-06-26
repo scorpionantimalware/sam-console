@@ -63,8 +63,7 @@ void ScanAreasColumn::resizeEvent(QResizeEvent *event)
     ScanAreasColumn::update_column_widths();
 }
 
-void ScanAreasColumn::on_area_browse_button_clicked()
-{
+void ScanAreasColumn::on_area_browse_button_clicked() {
     // Open the file explorer to select a directory
     std::string new_area { QFileDialog::getExistingDirectory(nullptr, "Select an area to scan", QDir::homePath()).toStdString() };
 

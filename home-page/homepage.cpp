@@ -93,29 +93,24 @@ ScanResultsMonitor* HomePage::get_scan_results_monitor_p() const {
     return HomePage::scan_results_monitor;
 }
 
-void HomePage::on_scan_button_clicked()
-{
+void HomePage::on_scan_button_clicked() const {
     std::cout << "Scanning..." << std::endl;
     engine->fulfill_start_scan_request();
 }
 
-void HomePage::on_stop_button_clicked()
-{
+void HomePage::on_stop_button_clicked() const {
     std::cout << "Stopping..." << std::endl;
 }
 
-void HomePage::on_pause_button_clicked()
-{
+void HomePage::on_pause_button_clicked() const {
     std::cout << "Pausing..." << std::endl;
 }
 
-void HomePage::on_resume_button_clicked()
-{
+void HomePage::on_resume_button_clicked() const {
     std::cout << "Resuming..." << std::endl;
 }
 
-void HomePage::on_scan_areas_controller_button_clicked()
-{
+void HomePage::on_scan_areas_controller_button_clicked() {
     std::cout << "Scan areas controller clicked" << std::endl;
 
     if (!HomePage::scan_areas_controller)

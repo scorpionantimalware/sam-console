@@ -51,10 +51,10 @@ public:
     ScanResultsMonitor* get_scan_results_monitor_p() const;
 
 private slots:
-    void on_scan_button_clicked();
-    void on_stop_button_clicked();
-    void on_pause_button_clicked();
-    void on_resume_button_clicked();
+    void on_scan_button_clicked() const;
+    void on_stop_button_clicked() const;
+    void on_pause_button_clicked() const;
+    void on_resume_button_clicked() const;
     void on_scan_areas_controller_button_clicked();
 
 private:

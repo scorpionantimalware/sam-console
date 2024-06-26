@@ -51,8 +51,8 @@ public:
     FIMPage* get_fim_page_p() const;
 
 private slots:
-    void on_home_page_switch_button_clicked();
-    void on_fim_page_switch_button_clicked();
+    void on_home_page_switch_button_clicked() const;
+    void on_fim_page_switch_button_clicked() const;
 
 private:
     SAMConsoleSplash *splash_screen;

@@ -94,22 +94,22 @@ ControlBar::~ControlBar() {
     }
 }
 
-void ControlBar::start_scan() {
+void ControlBar::start_scan() const {
     emit scan_button_clicked();
 }
 
-void ControlBar::stop_scan() {
+void ControlBar::stop_scan() const {
     emit stop_button_clicked();
 }
 
-void ControlBar::pause_scan() {
+void ControlBar::pause_scan() const {
     emit pause_button_clicked();
 }
 
-void ControlBar::resume_scan() {
+void ControlBar::resume_scan() const {
     emit resume_button_clicked();
 }
 
-void ControlBar::open_scan_areas_controller() {
+void ControlBar::open_scan_areas_controller() const {
     emit scan_areas_controller_button_clicked();
 }

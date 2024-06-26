@@ -35,12 +35,11 @@ EventsMonitor::EventsMonitor()
     EventsMonitor::init();
 }
 
-void EventsMonitor::init()
-{
+void EventsMonitor::init() {
     // Disable editing for the entire table
     this->setEditTriggers(QAbstractItemView::NoEditTriggers); // Disable editing for the entire table
 
-    QStringList headers = { "Filename", "Action", "New Hash", "Old Hash", "Time" };
+    QStringList headers {{ "Filename", "Action", "New Hash", "Old Hash", "Time" }};
 
     this->setColumnCount(headers.size()); // Set the number of columns
     this->setRowCount(0); // Set the number of rows
@@ -48,14 +47,12 @@ void EventsMonitor::init()
     this->setHorizontalHeaderLabels(headers);
 }
 
-void EventsMonitor::resizeEvent(QResizeEvent *event)
-{
+void EventsMonitor::resizeEvent(QResizeEvent *event) {
     QTableWidget::resizeEvent(event);
     EventsMonitor::update_column_widths();
 }
 
-void EventsMonitor::update_column_widths()
-{
+void EventsMonitor::update_column_widths() {
     int table_width {this->viewport()->width()}; // Use viewport's width to exclude scrollbar width
     int filename_column_width {static_cast<int>(table_width * 0.2f)};
     int action_column_width {static_cast<int>(table_width * 0.1f)};
@@ -86,7 +83,7 @@ int EventsMonitor::append_new_entry() {
     return row_index;
 }
 
-void EventsMonitor::update_entry(const int& row_index, const int& col_index, const std::string& data_buffer) {
+void EventsMonitor::update_entry(const int& row_index, const int& col_index, const std::string& data_buffer) const {
     if (row_index < 0 || row_index >= this->rowCount()) {
         std::cerr << "Invalid row index: " << row_index << std::endl;
         return; // Invalid row index
