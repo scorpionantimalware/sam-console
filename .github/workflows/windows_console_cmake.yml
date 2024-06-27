@@ -1,0 +1,32 @@
+name: 'Windows Run CMake for the Console'
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        ref: 'master'
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.5.0'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_msvc2019_64'
+
+    - name: Run CMake
+      run: |
+        cmake -S . -B .build/ -G "Visual Studio 17 2022" -DSAM_LINK_CONSOLE=ON -DCMAKE_PREFIX_PATH=$env:Qt6_DIR
+      shell: powershell
