@@ -7,8 +7,8 @@ An independent Qt-powered frontend for [Scorpion Anti-malware's engine](https://
 
 | System | Status |
 |----------|--------|
-| Windows  | ![Build Status (Windows)](https://github.com/scorpionantimalware/scorpion-antimalware/actions/workflows/windows_console_cmake.yml/badge.svg) |
-| Windows  | ![Build Status (Windows)](https://github.com/scorpionantimalware/scorpion-antimalware/actions/workflows/windows_console_build.yml/badge.svg) |
+| Windows  | ![Build Status (Windows)](https://github.com/scorpionantimalware/sam-console/actions/workflows/windows_console_cmake.yml/badge.svg) |
+| Windows  | ![Build Status (Windows)](https://github.com/scorpionantimalware/sam-console/actions/workflows/windows_console_build.yml/badge.svg) |
 | Linux    | N/A |
 | Mac      | N/A |
 
