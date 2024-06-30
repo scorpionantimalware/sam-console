@@ -70,17 +70,17 @@
 
 extern sam_engine::SAMEngine *engine;
 
-int main(int argc, char **argv);
+extern int main(int argc, char **argv);
 
 namespace sam_callbacks {
 
-	int add_new_file_callback();
-	void update_new_file_callback(const int& row_index, const int& col_index, const std::string& data_buffer, const float& status_prediction = -1.0f);
-	void scanner_state_change_callback([[maybe_unused]] const sam_engine::SAMScanner::State& scanner_state);
-	void update_engine_status_callback(const std::string& status_message, const sam_engine::SAMEngine::StatusMessageType& type);
+	extern int add_new_file_callback();
+	extern void update_new_file_callback(const int& row_index, const int& col_index, const std::string& data_buffer, const float& status_prediction = -1.0f);
+	extern void scanner_state_change_callback([[maybe_unused]] const sam_engine::SAMScanner::State& scanner_state);
+	extern void update_engine_status_callback(const std::string& status_message, const sam_engine::SAMEngine::StatusMessageType& type);
 
-	int fim_new_event_callback();
-	void fim_update_event_callback(const int& row_index, const int& col_index, const std::string& data_buffer);
+	extern int fim_new_event_callback();
+	extern void fim_update_event_callback(const int& row_index, const int& col_index, const std::string& data_buffer);
 
 } // namespace sam_callbacks
 
