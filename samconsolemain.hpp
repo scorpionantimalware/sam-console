@@ -70,8 +70,6 @@
 
 extern sam_engine::SAMEngine *engine;
 
-extern int main(int argc, char **argv);
-
 namespace sam_callbacks {
 
 	extern int add_new_file_callback();
