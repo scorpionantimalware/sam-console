@@ -268,6 +268,6 @@ endif()
 
 if (SAM_CONSOLE_BUILD_TESTS)
     message(STATUS "Building Scorpion Anti-malware console tests...")
-    set(SAM_CONSOLE_TESTS_ROOTDIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+    set(SAM_CONSOLE_TESTS_ROOTDIR "${SAM_CONSOLE_ROOTDIR}/tests")
     add_subdirectory(${SAM_CONSOLE_TESTS_ROOTDIR})
 endif()
