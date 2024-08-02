@@ -24,22 +24,20 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_RESUME_BUTTON_HPP
 #define SAM_RESUME_BUTTON_HPP
 
-#include <QPushButton>
 #include <QPainter>
+#include <QPushButton>
 
-class ResumeButton : public QPushButton
-{
-    Q_OBJECT
+class ResumeButton : public QPushButton {
+	Q_OBJECT
 
 public:
-    explicit ResumeButton();
+	explicit ResumeButton();
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
+	void paintEvent(QPaintEvent *event) override;
 };
 
 #endif // SAM_RESUME_BUTTON_HPP

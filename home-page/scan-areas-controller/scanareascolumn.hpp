@@ -24,37 +24,34 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_SCAN_AREAS_COLUMN_HPP
 #define SAM_SCAN_AREAS_COLUMN_HPP
 
 #include <QTableWidget>
-#include <vector>
 #include <string>
+#include <vector>
 
-class ScanAreasColumn : public QTableWidget
-{
+class ScanAreasColumn : public QTableWidget {
 public:
-    ScanAreasColumn();
+	ScanAreasColumn();
 
-    int append_new_entry(const std::string& area);
+	int append_new_entry(const std::string &area);
 
 public slots:
-    void on_area_browse_button_clicked();
+	void on_area_browse_button_clicked();
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
+	void resizeEvent(QResizeEvent *event) override;
 
 private:
-    std::vector<std::string> scan_areas;
+	std::vector<std::string> scan_areas;
 
-    void init();
+	void init();
 
-/**
- * @brief Update the column widths based on the table's width
-*/    
-    void update_column_widths();
-
+	/**
+	 * @brief Update the column widths based on the table's width
+	 */
+	void update_column_widths();
 };
 
 #endif // SAM_SCAN_AREAS_COLUMN_HPP

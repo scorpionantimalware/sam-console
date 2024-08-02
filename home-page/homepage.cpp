@@ -24,100 +24,94 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #include "homepage.hpp"
 
-#include <iostream>
 #include <QTimer>
+#include <iostream>
 
 #include "samconsolemain.hpp"
 
-HomePage::HomePage(QWidget *parent) : QWidget(parent), main_layout(nullptr), control_bar(nullptr), engine_status_monitor(nullptr), scan_results_monitor(nullptr), scan_areas_controller(nullptr) {
-    // Initialize the main layout
-    HomePage::main_layout = new QVBoxLayout(this);
-    HomePage::main_layout->setSpacing(20);
+HomePage::HomePage(QWidget *parent) :
+		QWidget(parent), main_layout(nullptr), control_bar(nullptr), engine_status_monitor(nullptr), scan_results_monitor(nullptr), scan_areas_controller(nullptr) {
+	// Initialize the main layout
+	HomePage::main_layout = new QVBoxLayout(this);
+	HomePage::main_layout->setSpacing(20);
 
-    // Initialize main items
-    HomePage::control_bar = new ControlBar();
-    HomePage::engine_status_monitor = new EngineStatusMonitor();
-    HomePage::scan_results_monitor = new ScanResultsMonitor();
+	// Initialize main items
+	HomePage::control_bar = new ControlBar();
+	HomePage::engine_status_monitor = new EngineStatusMonitor();
+	HomePage::scan_results_monitor = new ScanResultsMonitor();
 
-    // Add main items to the layout
-    HomePage::main_layout->addWidget(HomePage::control_bar, 1); // The control bar will take up 1/8 of the space.
-    HomePage::main_layout->addWidget(HomePage::engine_status_monitor, 2); // The terminal will take up 2/8 of the space.
-    HomePage::main_layout->addWidget(HomePage::scan_results_monitor, 4); // The viewer will take up 5/8 of the space.
+	// Add main items to the layout
+	HomePage::main_layout->addWidget(HomePage::control_bar, 1); // The control bar will take up 1/8 of the space.
+	HomePage::main_layout->addWidget(HomePage::engine_status_monitor, 2); // The terminal will take up 2/8 of the space.
+	HomePage::main_layout->addWidget(HomePage::scan_results_monitor, 4); // The viewer will take up 5/8 of the space.
 
-    // Connect signals and slots
-    connect(HomePage::control_bar, &ControlBar::scan_button_clicked, this, &HomePage::on_scan_button_clicked);
-    connect(HomePage::control_bar, &ControlBar::stop_button_clicked, this, &HomePage::on_stop_button_clicked);
-    connect(HomePage::control_bar, &ControlBar::pause_button_clicked, this, &HomePage::on_pause_button_clicked);
-    connect(HomePage::control_bar, &ControlBar::scan_areas_controller_button_clicked, this, &HomePage::on_scan_areas_controller_button_clicked);
+	// Connect signals and slots
+	connect(HomePage::control_bar, &ControlBar::scan_button_clicked, this, &HomePage::on_scan_button_clicked);
+	connect(HomePage::control_bar, &ControlBar::stop_button_clicked, this, &HomePage::on_stop_button_clicked);
+	connect(HomePage::control_bar, &ControlBar::pause_button_clicked, this, &HomePage::on_pause_button_clicked);
+	connect(HomePage::control_bar, &ControlBar::scan_areas_controller_button_clicked, this, &HomePage::on_scan_areas_controller_button_clicked);
 }
 
-HomePage::~HomePage()
-{
-    if (HomePage::scan_results_monitor)
-    {
-        delete HomePage::scan_results_monitor;
-        HomePage::scan_results_monitor = nullptr;
-    }
+HomePage::~HomePage() {
+	if (HomePage::scan_results_monitor) {
+		delete HomePage::scan_results_monitor;
+		HomePage::scan_results_monitor = nullptr;
+	}
 
-    if (HomePage::control_bar)
-    {
-        delete HomePage::control_bar;
-        HomePage::control_bar = nullptr;
-    }
+	if (HomePage::control_bar) {
+		delete HomePage::control_bar;
+		HomePage::control_bar = nullptr;
+	}
 
-    if (HomePage::scan_areas_controller)
-    {
-        delete HomePage::scan_areas_controller;
-        HomePage::scan_areas_controller = nullptr;
-    }
+	if (HomePage::scan_areas_controller) {
+		delete HomePage::scan_areas_controller;
+		HomePage::scan_areas_controller = nullptr;
+	}
 
-    if (HomePage::main_layout)
-    {
-        delete HomePage::main_layout;
-        HomePage::main_layout = nullptr;
-    }
+	if (HomePage::main_layout) {
+		delete HomePage::main_layout;
+		HomePage::main_layout = nullptr;
+	}
 }
 
-ControlBar* HomePage::get_control_bar_p() const {
-    return HomePage::control_bar;
+ControlBar *HomePage::get_control_bar_p() const {
+	return HomePage::control_bar;
 }
 
-EngineStatusMonitor* HomePage::get_engine_status_monitor_p() const {
-    return HomePage::engine_status_monitor;
+EngineStatusMonitor *HomePage::get_engine_status_monitor_p() const {
+	return HomePage::engine_status_monitor;
 }
 
-ScanResultsMonitor* HomePage::get_scan_results_monitor_p() const {
-    return HomePage::scan_results_monitor;
+ScanResultsMonitor *HomePage::get_scan_results_monitor_p() const {
+	return HomePage::scan_results_monitor;
 }
 
 void HomePage::on_scan_button_clicked() const {
-    std::cout << "Scanning..." << std::endl;
-    engine->fulfill_start_scan_request();
+	std::cout << "Scanning..." << std::endl;
+	engine->fulfill_start_scan_request();
 }
 
 void HomePage::on_stop_button_clicked() const {
-    std::cout << "Stopping..." << std::endl;
+	std::cout << "Stopping..." << std::endl;
 }
 
 void HomePage::on_pause_button_clicked() const {
-    std::cout << "Pausing..." << std::endl;
+	std::cout << "Pausing..." << std::endl;
 }
 
 void HomePage::on_resume_button_clicked() const {
-    std::cout << "Resuming..." << std::endl;
+	std::cout << "Resuming..." << std::endl;
 }
 
 void HomePage::on_scan_areas_controller_button_clicked() {
-    std::cout << "Scan areas controller clicked" << std::endl;
+	std::cout << "Scan areas controller clicked" << std::endl;
 
-    if (!HomePage::scan_areas_controller)
-    {
-        // TODO: Make the controller block the main window.
-        HomePage::scan_areas_controller = new ScanAreasController();
-    }
-    
-    HomePage::scan_areas_controller->show();
+	if (!HomePage::scan_areas_controller) {
+		// TODO: Make the controller block the main window.
+		HomePage::scan_areas_controller = new ScanAreasController();
+	}
+
+	HomePage::scan_areas_controller->show();
 }

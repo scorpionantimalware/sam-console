@@ -24,46 +24,43 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #include "control-bar/pausebutton.hpp"
 
 #include <QWidget>
 
-PauseButton::PauseButton()
-{
-    this->setFixedSize(100, 100);
+PauseButton::PauseButton() {
+	this->setFixedSize(100, 100);
 }
 
-void PauseButton::paintEvent(QPaintEvent *event)
-{
-    QPushButton::paintEvent(event);
+void PauseButton::paintEvent(QPaintEvent *event) {
+	QPushButton::paintEvent(event);
 
-    QPainter painter = QPainter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+	QPainter painter = QPainter(this);
+	painter.setRenderHint(QPainter::Antialiasing);
 
-    int w {this->width()};
-    int h {this->height()};
+	int w{ this->width() };
+	int h{ this->height() };
 
-    float min_side {(float)qMin(w, h)};
+	float min_side{ (float)qMin(w, h) };
 
-    // Use Multiplication instead of Division as it is faster
-    QPointF center {w * 0.5f, h * 0.5f};
+	// Use Multiplication instead of Division as it is faster
+	QPointF center{ w * 0.5f, h * 0.5f };
 
-    float max_height {min_side * 0.18f}; // Max height of the pause symbol from the center.
-    float separation {min_side * 0.15f};
-    float pen_width {separation};
+	float max_height{ min_side * 0.18f }; // Max height of the pause symbol from the center.
+	float separation{ min_side * 0.15f };
+	float pen_width{ separation };
 
-    QPen pen(Qt::black);
-    pen.setWidth(pen_width);
-    painter.setPen(pen);
+	QPen pen(Qt::black);
+	pen.setWidth(pen_width);
+	painter.setPen(pen);
 
-    /*
-        From top to bottom, draw the left part.
-    */
-    painter.drawLine(center - QPointF(separation, max_height), center - QPointF(separation, -max_height));
+	/*
+		From top to bottom, draw the left part.
+	*/
+	painter.drawLine(center - QPointF(separation, max_height), center - QPointF(separation, -max_height));
 
-    /*
-        From top to bottom, draw the right part.
-    */
-    painter.drawLine(center + QPointF(separation, -max_height), center + QPointF(separation, max_height));
+	/*
+		From top to bottom, draw the right part.
+	*/
+	painter.drawLine(center + QPointF(separation, -max_height), center + QPointF(separation, max_height));
 }

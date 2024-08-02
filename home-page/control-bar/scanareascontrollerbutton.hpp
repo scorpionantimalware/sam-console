@@ -24,22 +24,20 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_SCAN_AREAS_PROCESSOR_BUTTON_HPP
 #define SAM_SCAN_AREAS_PROCESSOR_BUTTON_HPP
 
-#include <QPushButton>
 #include <QPainter>
+#include <QPushButton>
 
-class ScanAreasControllerButton : public QPushButton
-{
-    Q_OBJECT
+class ScanAreasControllerButton : public QPushButton {
+	Q_OBJECT
 
 public:
-    explicit ScanAreasControllerButton();
+	explicit ScanAreasControllerButton();
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
+	void paintEvent(QPaintEvent *event) override;
 };
 
 #endif // SAM_SCAN_AREAS_PROCESSOR_BUTTON_HPP

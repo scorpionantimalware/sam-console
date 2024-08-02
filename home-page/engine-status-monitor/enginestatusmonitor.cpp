@@ -24,54 +24,50 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #include "engine-status-monitor/enginestatusmonitor.hpp"
 
-EngineStatusMonitor::EngineStatusMonitor()
-{
-    this->setReadOnly(true);
+EngineStatusMonitor::EngineStatusMonitor() {
+	this->setReadOnly(true);
 
-    // Set black background
-    QPalette p = this->palette();
-    p.setColor(QPalette::Base, Qt::black);
-    p.setColor(QPalette::Text, Qt::white);
-    this->setPalette(p);
+	// Set black background
+	QPalette p = this->palette();
+	p.setColor(QPalette::Base, Qt::black);
+	p.setColor(QPalette::Text, Qt::white);
+	this->setPalette(p);
 
-    QFont font = this->font();
-    font.setPointSize(12); // Set font size to 12
-    this->setFont(font);
-
+	QFont font = this->font();
+	font.setPointSize(12); // Set font size to 12
+	this->setFont(font);
 }
 
-void EngineStatusMonitor::append_message(const std::string& status_message, const sam_engine::SAMEngine::StatusMessageType& type) {
-    // Determine the color based on the message type
-    QColor color;
-    switch (type) {
-        case sam_engine::SAMEngine::StatusMessageType::INFO:
-            color = QColor(Qt::white);
-            break;
-        case sam_engine::SAMEngine::StatusMessageType::WARNING:
-            color = QColor(Qt::yellow);
-            break;
-        case sam_engine::SAMEngine::StatusMessageType::ERROR:
-            color = QColor(Qt::red);
-            break;
-        default:
-            color = QColor(Qt::white);
-            break;
-    }
+void EngineStatusMonitor::append_message(const std::string &status_message, const sam_engine::SAMEngine::StatusMessageType &type) {
+	// Determine the color based on the message type
+	QColor color;
+	switch (type) {
+		case sam_engine::SAMEngine::StatusMessageType::INFO:
+			color = QColor(Qt::white);
+			break;
+		case sam_engine::SAMEngine::StatusMessageType::WARNING:
+			color = QColor(Qt::yellow);
+			break;
+		case sam_engine::SAMEngine::StatusMessageType::ERROR:
+			color = QColor(Qt::red);
+			break;
+		default:
+			color = QColor(Qt::white);
+			break;
+	}
 
-    // Move the text cursor to the end
-    QTextCursor cursor = this->textCursor();
-    cursor.movePosition(QTextCursor::End);
+	// Move the text cursor to the end
+	QTextCursor cursor = this->textCursor();
+	cursor.movePosition(QTextCursor::End);
 
-    // Set the text color and append the message
-    QTextCharFormat format;
-    format.setForeground(color);
-    cursor.setCharFormat(format);
-    cursor.insertText(QString::fromStdString(status_message + "\n"));
+	// Set the text color and append the message
+	QTextCharFormat format;
+	format.setForeground(color);
+	cursor.setCharFormat(format);
+	cursor.insertText(QString::fromStdString(status_message + "\n"));
 
-    // Ensure the new text is visible
-    this->ensureCursorVisible();
+	// Ensure the new text is visible
+	this->ensureCursorVisible();
 }
-

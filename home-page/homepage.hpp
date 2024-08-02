@@ -24,49 +24,47 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_HOME_PAGE_HPP
 #define SAM_HOME_PAGE_HPP
 
-#include <QWidget>
 #include <QVBoxLayout>
+#include <QWidget>
 
 #include "control-bar/controlbar.hpp"
 #include "engine-status-monitor/enginestatusmonitor.hpp"
-#include "scan-results-monitor/scanresultsmonitor.hpp"
 #include "scan-areas-controller/scanareascontroller.hpp"
+#include "scan-results-monitor/scanresultsmonitor.hpp"
 
 #include "samconsolesplash.hpp"
 
-class HomePage : public QWidget
-{
-    Q_OBJECT
+class HomePage : public QWidget {
+	Q_OBJECT
 
 public:
-    explicit HomePage(QWidget *parent = nullptr);
-    ~HomePage();
+	explicit HomePage(QWidget *parent = nullptr);
+	~HomePage();
 
-    ControlBar* get_control_bar_p() const;
-    EngineStatusMonitor* get_engine_status_monitor_p() const;
-    ScanResultsMonitor* get_scan_results_monitor_p() const;
+	ControlBar *get_control_bar_p() const;
+	EngineStatusMonitor *get_engine_status_monitor_p() const;
+	ScanResultsMonitor *get_scan_results_monitor_p() const;
 
 private slots:
-    void on_scan_button_clicked() const;
-    void on_stop_button_clicked() const;
-    void on_pause_button_clicked() const;
-    void on_resume_button_clicked() const;
-    void on_scan_areas_controller_button_clicked();
+	void on_scan_button_clicked() const;
+	void on_stop_button_clicked() const;
+	void on_pause_button_clicked() const;
+	void on_resume_button_clicked() const;
+	void on_scan_areas_controller_button_clicked();
 
 private:
-    SAMConsoleSplash *splash_screen;
+	SAMConsoleSplash *splash_screen;
 
-    QVBoxLayout *main_layout;
+	QVBoxLayout *main_layout;
 
-    ControlBar* control_bar;
-    EngineStatusMonitor* engine_status_monitor;
-    ScanResultsMonitor* scan_results_monitor;
+	ControlBar *control_bar;
+	EngineStatusMonitor *engine_status_monitor;
+	ScanResultsMonitor *scan_results_monitor;
 
-    ScanAreasController *scan_areas_controller;
+	ScanAreasController *scan_areas_controller;
 };
 
 #endif // SAM_HOME_PAGE_HPP

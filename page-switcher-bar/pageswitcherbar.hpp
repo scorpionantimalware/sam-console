@@ -24,44 +24,42 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_PAGE_SWITCHER_BAR_HPP
 #define SAM_PAGE_SWITCHER_BAR_HPP
 
-#include <QWidget>
-#include <QVBoxLayout>
 #include <QPushButton>
+#include <QVBoxLayout>
+#include <QWidget>
 
-class PageSwitcherBar : public QWidget
-{
-    Q_OBJECT
+class PageSwitcherBar : public QWidget {
+	Q_OBJECT
 
 public:
-    explicit PageSwitcherBar(QWidget *parent = nullptr);
-    ~PageSwitcherBar();
+	explicit PageSwitcherBar(QWidget *parent = nullptr);
+	~PageSwitcherBar();
 
 signals:
-    void home_page_switch_button_clicked() const;
-    void fim_page_switch_button_clicked() const;
+	void home_page_switch_button_clicked() const;
+	void fim_page_switch_button_clicked() const;
 
 private slots:
-    void switch_to_home_page() const;
+	void switch_to_home_page() const;
 
-    /**
-     * @brief File Integrity Manager or FIM is a feature that allows users to
-     *        monitor changes to files and directories. This function shows the
-     *        FIM page. 
-     * 
-     */
-    void switch_to_fim_page() const;
+	/**
+	 * @brief File Integrity Manager or FIM is a feature that allows users to
+	 *        monitor changes to files and directories. This function shows the
+	 *        FIM page.
+	 *
+	 */
+	void switch_to_fim_page() const;
 
 private:
-    QVBoxLayout *main_layout;
+	QVBoxLayout *main_layout;
 
-    QPushButton *home_page_button;
-    QPushButton *fim_page_button;
+	QPushButton *home_page_button;
+	QPushButton *fim_page_button;
 
-    // TODO: Add About page
+	// TODO: Add About page
 };
 
 #endif // SAM_PAGE_SWITCHER_BAR_HPP

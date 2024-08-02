@@ -24,25 +24,24 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #include "scanareasprocessor.hpp"
 
-bool ScanAreasProcessor::load_or_init(pathls& scan_areas) {
-    bool status {false};
+bool ScanAreasProcessor::load_or_init(pathls &scan_areas) {
+	bool status{ false };
 
-    scan_areas.push_back("C:/pesamples1");
-    scan_areas.push_back("C:/pesamples2");
-    scan_areas.push_back("C:/pesamples3");
+	scan_areas.push_back("C:/pesamples1");
+	scan_areas.push_back("C:/pesamples2");
+	scan_areas.push_back("C:/pesamples3");
 
-    status = true;
+	status = true;
 
-    return status;
+	return status;
 }
 
-bool ScanAreasProcessor::add_area([[maybe_unused]] const std::string& area) {
-    bool status {false};
+bool ScanAreasProcessor::add_area([[maybe_unused]] const std::string &area) {
+	bool status{ false };
 
-    status = true;
+	status = true;
 
-    return status;
+	return status;
 }

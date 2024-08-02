@@ -24,31 +24,29 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_SCAN_RESULTS_MONITOR_HPP
 #define SAM_SCAN_RESULTS_MONITOR_HPP
 
 #include <QTableWidget>
 
-class ScanResultsMonitor : public QTableWidget
-{
+class ScanResultsMonitor : public QTableWidget {
 public:
-    ScanResultsMonitor();
+	ScanResultsMonitor();
 
-    int append_new_entry();
-    
-    void update_entry(const int& row_index, const int& col_index, const std::string& data_buffer, const float& status_prediction = -1.0f) const;
+	int append_new_entry();
+
+	void update_entry(const int &row_index, const int &col_index, const std::string &data_buffer, const float &status_prediction = -1.0f) const;
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
+	void resizeEvent(QResizeEvent *event) override;
 
 private:
-    void init();
+	void init();
 
-    /**
-     * @brief Update the column widths based on the table's width
-    */
-    void update_column_widths();
+	/**
+	 * @brief Update the column widths based on the table's width
+	 */
+	void update_column_widths();
 };
 
 #endif // SAM_SCAN_RESULTS_MONITOR_HPP

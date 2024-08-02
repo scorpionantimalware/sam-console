@@ -24,22 +24,20 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_PAUSE_BUTTON_HPP
 #define SAM_PAUSE_BUTTON_HPP
 
-#include <QPushButton>
 #include <QPainter>
+#include <QPushButton>
 
-class PauseButton : public QPushButton
-{
-    Q_OBJECT
+class PauseButton : public QPushButton {
+	Q_OBJECT
 
 public:
-    explicit PauseButton();
-    
+	explicit PauseButton();
+
 protected:
-    void paintEvent(QPaintEvent *event) override;
+	void paintEvent(QPaintEvent *event) override;
 };
 
 #endif // SAM_PAUSE_BUTTON_HPP

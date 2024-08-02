@@ -24,23 +24,21 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_CONSOLE_SPLASH_HPP
 #define SAM_CONSOLE_SPLASH_HPP
 
-#include <QWidget>
-#include <QVBoxLayout>
 #include <QSvgWidget>
+#include <QVBoxLayout>
+#include <QWidget>
 
-class SAMConsoleSplash : public QWidget
-{
+class SAMConsoleSplash : public QWidget {
 public:
-    SAMConsoleSplash(QWidget *parent = nullptr);
-    ~SAMConsoleSplash();
+	SAMConsoleSplash(QWidget *parent = nullptr);
+	~SAMConsoleSplash();
 
 private:
-    QVBoxLayout *splash_layout;
-    QSvgWidget *svg_widget;
+	QVBoxLayout *splash_layout;
+	QSvgWidget *svg_widget;
 };
 
 #endif // SAM_CONSOLE_SPLASH_HPP

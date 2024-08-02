@@ -24,50 +24,48 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #include "pepathlscollector.hpp"
 
 #include <filesystem>
 
 #include <iostream>
 
-bool PEPathlsCollector::get_target_pathl_extensions(std::vector<std::string>& target_pathl_extensions_buffer) {
-    bool status {false};
-    target_pathl_extensions_buffer.push_back(".exe");
-    target_pathl_extensions_buffer.push_back(".dll");
-    target_pathl_extensions_buffer.push_back(".lib");
-    target_pathl_extensions_buffer.push_back(".msi");
-    status = true;
-    return status;
+bool PEPathlsCollector::get_target_pathl_extensions(std::vector<std::string> &target_pathl_extensions_buffer) {
+	bool status{ false };
+	target_pathl_extensions_buffer.push_back(".exe");
+	target_pathl_extensions_buffer.push_back(".dll");
+	target_pathl_extensions_buffer.push_back(".lib");
+	target_pathl_extensions_buffer.push_back(".msi");
+	status = true;
+	return status;
 }
 
-bool PEPathlsCollector::collect(pathls& pathls_buffer, [[maybe_unused]] const std::string& scan_area) {
-    bool status {false};
+bool PEPathlsCollector::collect(pathls &pathls_buffer, [[maybe_unused]] const std::string &scan_area) {
+	bool status{ false };
 
-    // Fill in with dummy data.
-    pathls_buffer.push_back("C:/pesamples1/sample1.exe");
-    pathls_buffer.push_back("C:/pesamples1/sample2.dll");
-    pathls_buffer.push_back("C:/pesamples1/sample3.lib");
-    pathls_buffer.push_back("C:/pesamples1/sample4.msi");
-    pathls_buffer.push_back("C:/pesamples2/sample5.exe");
-    pathls_buffer.push_back("C:/pesamples2/sample6.dll");
-    pathls_buffer.push_back("C:/pesamples2/sample7.lib");
-    pathls_buffer.push_back("C:/pesamples2/sample8.msi");
-    pathls_buffer.push_back("C:/pesamples3/sample9.exe");
-    pathls_buffer.push_back("C:/pesamples3/sample10.dll");
-    pathls_buffer.push_back("C:/pesamples3/sample11.lib");
-    pathls_buffer.push_back("C:/pesamples3/sample12.msi");
+	// Fill in with dummy data.
+	pathls_buffer.push_back("C:/pesamples1/sample1.exe");
+	pathls_buffer.push_back("C:/pesamples1/sample2.dll");
+	pathls_buffer.push_back("C:/pesamples1/sample3.lib");
+	pathls_buffer.push_back("C:/pesamples1/sample4.msi");
+	pathls_buffer.push_back("C:/pesamples2/sample5.exe");
+	pathls_buffer.push_back("C:/pesamples2/sample6.dll");
+	pathls_buffer.push_back("C:/pesamples2/sample7.lib");
+	pathls_buffer.push_back("C:/pesamples2/sample8.msi");
+	pathls_buffer.push_back("C:/pesamples3/sample9.exe");
+	pathls_buffer.push_back("C:/pesamples3/sample10.dll");
+	pathls_buffer.push_back("C:/pesamples3/sample11.lib");
+	pathls_buffer.push_back("C:/pesamples3/sample12.msi");
 
-    status = true;
+	status = true;
 
-    return status;
+	return status;
 }
 
+bool PEPathlsCollector::collect_files([[maybe_unused]] pathls &pathls_buffer, [[maybe_unused]] const std::string &scan_area, [[maybe_unused]] const std::vector<std::string> &target_pathl_extensions) {
+	bool status{ false };
 
-bool PEPathlsCollector::collect_files([[maybe_unused]] pathls& pathls_buffer, [[maybe_unused]] const std::string& scan_area, [[maybe_unused]] const std::vector<std::string>& target_pathl_extensions) {
-    bool status {false};
+	status = true;
 
-    status = true;
-
-    return status;
+	return status;
 }

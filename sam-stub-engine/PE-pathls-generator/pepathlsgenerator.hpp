@@ -24,7 +24,6 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_PE_PATHLS_STUB_GENERATOR_HPP
 #define SAM_PE_PATHLS_STUB_GENERATOR_HPP
 
@@ -33,14 +32,14 @@
 const std::string PE_PATHLS_FILENAME = "pepathlsgenerator_output.pathl";
 
 class PEPathlsGenerator {
- public:
-  PEPathlsGenerator() = default;
-  ~PEPathlsGenerator();
+public:
+	PEPathlsGenerator() = default;
+	~PEPathlsGenerator();
 
-  bool generate(const std::string& scan_area);
+	bool generate(const std::string &scan_area);
 
 private:
-  bool clean();
+	bool clean();
 }; // class PEPathlsGenerator
 
 #endif // SAM_PE_PATHLS_STUB_GENERATOR_HPP

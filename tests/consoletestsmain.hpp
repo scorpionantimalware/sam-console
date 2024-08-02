@@ -24,9 +24,7 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_CONSOLE_TESTS_MAIN_HPP
 #define SAM_CONSOLE_TESTS_MAIN_HPP
 
 #endif // SAM_CONSOLE_TESTS_MAIN_HPP
-

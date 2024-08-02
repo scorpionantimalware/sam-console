@@ -24,53 +24,48 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #include "pageswitcherbar.hpp"
 
+PageSwitcherBar::PageSwitcherBar(QWidget *parent) :
+		QWidget(parent), main_layout(nullptr), home_page_button(nullptr), fim_page_button(nullptr) {
+	// Initialize the main layout
+	PageSwitcherBar::main_layout = new QVBoxLayout(this);
 
-PageSwitcherBar::PageSwitcherBar(QWidget *parent) : QWidget(parent), main_layout(nullptr), home_page_button(nullptr), fim_page_button(nullptr) {
-    // Initialize the main layout
-    PageSwitcherBar::main_layout = new QVBoxLayout(this);
+	// Initialize the home page button
+	PageSwitcherBar::home_page_button = new QPushButton("Home");
 
-    // Initialize the home page button
-    PageSwitcherBar::home_page_button = new QPushButton("Home");
+	// Initialize the FIM page button
+	PageSwitcherBar::fim_page_button = new QPushButton("FIM");
 
-    // Initialize the FIM page button
-    PageSwitcherBar::fim_page_button = new QPushButton("FIM");
+	PageSwitcherBar::main_layout->addWidget(PageSwitcherBar::home_page_button);
+	PageSwitcherBar::main_layout->addWidget(PageSwitcherBar::fim_page_button);
+	PageSwitcherBar::main_layout->addStretch();
 
-    PageSwitcherBar::main_layout->addWidget(PageSwitcherBar::home_page_button);
-    PageSwitcherBar::main_layout->addWidget(PageSwitcherBar::fim_page_button);
-    PageSwitcherBar::main_layout->addStretch();
-
-    connect(PageSwitcherBar::home_page_button, &QPushButton::released, this, &PageSwitcherBar::switch_to_home_page);
-    connect(PageSwitcherBar::fim_page_button, &QPushButton::released, this, &PageSwitcherBar::switch_to_fim_page);
+	connect(PageSwitcherBar::home_page_button, &QPushButton::released, this, &PageSwitcherBar::switch_to_home_page);
+	connect(PageSwitcherBar::fim_page_button, &QPushButton::released, this, &PageSwitcherBar::switch_to_fim_page);
 }
 
-PageSwitcherBar::~PageSwitcherBar()
-{
-    if (PageSwitcherBar::home_page_button)
-    {
-        delete PageSwitcherBar::home_page_button;
-        PageSwitcherBar::home_page_button = nullptr;
-    }
+PageSwitcherBar::~PageSwitcherBar() {
+	if (PageSwitcherBar::home_page_button) {
+		delete PageSwitcherBar::home_page_button;
+		PageSwitcherBar::home_page_button = nullptr;
+	}
 
-    if (PageSwitcherBar::fim_page_button)
-    {
-        delete PageSwitcherBar::fim_page_button;
-        PageSwitcherBar::fim_page_button = nullptr;
-    }
+	if (PageSwitcherBar::fim_page_button) {
+		delete PageSwitcherBar::fim_page_button;
+		PageSwitcherBar::fim_page_button = nullptr;
+	}
 
-    if (PageSwitcherBar::main_layout)
-    {
-        delete PageSwitcherBar::main_layout;
-        PageSwitcherBar::main_layout = nullptr;
-    }
+	if (PageSwitcherBar::main_layout) {
+		delete PageSwitcherBar::main_layout;
+		PageSwitcherBar::main_layout = nullptr;
+	}
 }
 
 void PageSwitcherBar::switch_to_home_page() const {
-    emit home_page_switch_button_clicked();
+	emit home_page_switch_button_clicked();
 }
 
 void PageSwitcherBar::switch_to_fim_page() const {
-    emit fim_page_switch_button_clicked();
+	emit fim_page_switch_button_clicked();
 }

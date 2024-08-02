@@ -24,7 +24,6 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_ENGINE_STATUS_MONITOR_HPP
 #define SAM_ENGINE_STATUS_MONITOR_HPP
 
@@ -32,14 +31,13 @@
 
 #include "samconsolemain.hpp"
 
-class EngineStatusMonitor : public QTextEdit
-{
-    Q_OBJECT
+class EngineStatusMonitor : public QTextEdit {
+	Q_OBJECT
 
 public:
-    explicit EngineStatusMonitor();
+	explicit EngineStatusMonitor();
 
-    void append_message(const std::string& status_message, const sam_engine::SAMEngine::StatusMessageType& type = sam_engine::SAMEngine::StatusMessageType::INFO);
+	void append_message(const std::string &status_message, const sam_engine::SAMEngine::StatusMessageType &type = sam_engine::SAMEngine::StatusMessageType::INFO);
 };
 
 #endif // SAM_ENGINE_STATUS_MONITOR_HPP

@@ -24,36 +24,33 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #include "samconsolesplash.hpp"
 
 #define SAM_LOGO_ORIGINAL_WIDTH 1014.873f
 #define SAM_LOGO_ORIGINAL_HEIGHT 412.133f
 
-SAMConsoleSplash::SAMConsoleSplash(QWidget *parent) : QWidget(parent), splash_layout(nullptr), svg_widget(nullptr) {
-    SAMConsoleSplash::splash_layout = new QVBoxLayout(this);
+SAMConsoleSplash::SAMConsoleSplash(QWidget *parent) :
+		QWidget(parent), splash_layout(nullptr), svg_widget(nullptr) {
+	SAMConsoleSplash::splash_layout = new QVBoxLayout(this);
 
-    SAMConsoleSplash::svg_widget = new QSvgWidget(QString(SAM_CONSOLE_ROOTDIR) + '/' + QString("logo.svg"), this);
+	SAMConsoleSplash::svg_widget = new QSvgWidget(QString(SAM_CONSOLE_ROOTDIR) + '/' + QString("logo.svg"), this);
 
-    // Calculate the desired size while maintaining aspect ratio
-    const float desired_width {350.0f}; // Desired width
-    float desired_height {desired_width * SAM_LOGO_ORIGINAL_HEIGHT / SAM_LOGO_ORIGINAL_WIDTH}; // Calculate height to maintain aspect ratio
-    SAMConsoleSplash::svg_widget->setFixedSize((int)desired_width, (int)desired_height);
-    SAMConsoleSplash::splash_layout->addWidget(SAMConsoleSplash::svg_widget);
-    SAMConsoleSplash::splash_layout->setAlignment(Qt::AlignCenter);
+	// Calculate the desired size while maintaining aspect ratio
+	const float desired_width{ 350.0f }; // Desired width
+	float desired_height{ desired_width * SAM_LOGO_ORIGINAL_HEIGHT / SAM_LOGO_ORIGINAL_WIDTH }; // Calculate height to maintain aspect ratio
+	SAMConsoleSplash::svg_widget->setFixedSize((int)desired_width, (int)desired_height);
+	SAMConsoleSplash::splash_layout->addWidget(SAMConsoleSplash::svg_widget);
+	SAMConsoleSplash::splash_layout->setAlignment(Qt::AlignCenter);
 }
 
-SAMConsoleSplash::~SAMConsoleSplash()
-{
-    if (SAMConsoleSplash::svg_widget)
-    {
-        delete SAMConsoleSplash::svg_widget;
-        SAMConsoleSplash::svg_widget = nullptr;
-    }
+SAMConsoleSplash::~SAMConsoleSplash() {
+	if (SAMConsoleSplash::svg_widget) {
+		delete SAMConsoleSplash::svg_widget;
+		SAMConsoleSplash::svg_widget = nullptr;
+	}
 
-    if (SAMConsoleSplash::splash_layout)
-    {
-        delete SAMConsoleSplash::splash_layout;
-        SAMConsoleSplash::splash_layout = nullptr;
-    }
+	if (SAMConsoleSplash::splash_layout) {
+		delete SAMConsoleSplash::splash_layout;
+		SAMConsoleSplash::splash_layout = nullptr;
+	}
 }

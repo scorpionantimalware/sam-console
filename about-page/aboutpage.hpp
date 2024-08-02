@@ -24,23 +24,21 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_ABOUT_PAGE_HPP
 #define SAM_ABOUT_PAGE_HPP
 
-#include <QWidget>
 #include <QVBoxLayout>
+#include <QWidget>
 
-class AboutPage : public QWidget
-{
-    Q_OBJECT
+class AboutPage : public QWidget {
+	Q_OBJECT
 
 public:
-    explicit AboutPage(QWidget *parent = nullptr);
-    ~AboutPage();
+	explicit AboutPage(QWidget *parent = nullptr);
+	~AboutPage();
 
 private:
-    QVBoxLayout *main_layout;
+	QVBoxLayout *main_layout;
 };
 
 #endif // SAM_ABOUT_PAGE_HPP

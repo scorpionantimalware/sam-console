@@ -24,23 +24,21 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #include "aboutpage.hpp"
 
-#include <iostream>
 #include <QTimer>
+#include <iostream>
 
-AboutPage::AboutPage(QWidget *parent) : QWidget(parent), main_layout(nullptr) {
-    // Initialize the main layout
-    AboutPage::main_layout = new QVBoxLayout(this);
-    AboutPage::main_layout->setSpacing(20);
+AboutPage::AboutPage(QWidget *parent) :
+		QWidget(parent), main_layout(nullptr) {
+	// Initialize the main layout
+	AboutPage::main_layout = new QVBoxLayout(this);
+	AboutPage::main_layout->setSpacing(20);
 }
 
-AboutPage::~AboutPage()
-{
-    if (AboutPage::main_layout)
-    {
-        delete AboutPage::main_layout;
-        AboutPage::main_layout = nullptr;
-    }
+AboutPage::~AboutPage() {
+	if (AboutPage::main_layout) {
+		delete AboutPage::main_layout;
+		AboutPage::main_layout = nullptr;
+	}
 }

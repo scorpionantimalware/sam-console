@@ -24,31 +24,29 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_EVENTS_MONITOR_HPP
 #define SAM_EVENTS_MONITOR_HPP
 
 #include <QTableWidget>
 
-class EventsMonitor : public QTableWidget
-{
+class EventsMonitor : public QTableWidget {
 public:
-    EventsMonitor();
+	EventsMonitor();
 
-    int append_new_entry();
-    
-    void update_entry(const int& row_index, const int& col_index, const std::string& data_buffer) const;
+	int append_new_entry();
+
+	void update_entry(const int &row_index, const int &col_index, const std::string &data_buffer) const;
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
+	void resizeEvent(QResizeEvent *event) override;
 
 private:
-    void init();
+	void init();
 
-    /**
-     * @brief Update the column widths based on the table's width
-    */
-    void update_column_widths();
+	/**
+	 * @brief Update the column widths based on the table's width
+	 */
+	void update_column_widths();
 };
 
 #endif // SAM_EVENTS_MONITOR_HPP

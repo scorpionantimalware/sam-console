@@ -24,7 +24,6 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_SCAN_AREAS_STUB_PROCESSOR_HPP
 #define SAM_SCAN_AREAS_STUB_PROCESSOR_HPP
 
@@ -33,16 +32,16 @@
 
 typedef std::vector<std::string> pathls; // path lines are vector of strings.
 
-const std::string SCAN_AREAS_FILENAME {"scanareasprocessor_output.pathl"};
+const std::string SCAN_AREAS_FILENAME{ "scanareasprocessor_output.pathl" };
 
 class ScanAreasProcessor {
 public:
-    ScanAreasProcessor() = default;
-    ~ScanAreasProcessor() = default;
+	ScanAreasProcessor() = default;
+	~ScanAreasProcessor() = default;
 
-    bool load_or_init(pathls& scan_areas);
+	bool load_or_init(pathls &scan_areas);
 
-    bool add_area([[maybe_unused]] const std::string& area);
+	bool add_area([[maybe_unused]] const std::string &area);
 };
 
 #endif // SAM_SCAN_AREAS_STUB_PROCESSOR_HPP

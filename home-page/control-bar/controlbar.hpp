@@ -24,101 +24,99 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_CONTROL_BAR_HPP
 #define SAM_CONTROL_BAR_HPP
 
-#include <QWidget>
 #include <QHBoxLayout>
+#include <QWidget>
 
-#include "control-bar/scanbutton.hpp"
-#include "control-bar/stopbutton.hpp"
 #include "control-bar/pausebutton.hpp"
 #include "control-bar/resumebutton.hpp"
 #include "control-bar/scanareascontrollerbutton.hpp"
+#include "control-bar/scanbutton.hpp"
+#include "control-bar/stopbutton.hpp"
 
 #include "samconsolemain.hpp"
 
-class ControlBar : public QWidget
-{
-    Q_OBJECT
+class ControlBar : public QWidget {
+	Q_OBJECT
 
 public:
-    ControlBar(QWidget *parent = nullptr);
-    ~ControlBar();
+	ControlBar(QWidget *parent = nullptr);
+	~ControlBar();
 
 signals:
-    /**
-     * @brief Signal emitted when the scan button is clicked.
-     * 
-     * @note This is used inside the @c ScanResultsMonitor class.
-     * 
-     * @see @c mainwindow.hpp
-     * @see @c MainWindow::on_scan_button_clicked()
-    */
-    void scan_button_clicked() const;
+	/**
+	 * @brief Signal emitted when the scan button is clicked.
+	 *
+	 * @note This is used inside the @c ScanResultsMonitor class.
+	 *
+	 * @see @c mainwindow.hpp
+	 * @see @c MainWindow::on_scan_button_clicked()
+	 */
+	void scan_button_clicked() const;
 
-    /**
-     * @brief Signal emitted when the stop button is clicked.
-    */
-    void stop_button_clicked() const;
+	/**
+	 * @brief Signal emitted when the stop button is clicked.
+	 */
+	void stop_button_clicked() const;
 
-    /**
-     * @brief Signal emitted when the pause button is clicked.
-    */
-    void pause_button_clicked() const;
+	/**
+	 * @brief Signal emitted when the pause button is clicked.
+	 */
+	void pause_button_clicked() const;
 
-    /**
-     * @brief Signal emitted when the resume button is clicked.
-    */
-    void resume_button_clicked() const;
+	/**
+	 * @brief Signal emitted when the resume button is clicked.
+	 */
+	void resume_button_clicked() const;
 
-    /**
-     * @brief Signal emitted when the scan areas controller button is clicked.
-     * 
-     * @note This is used inside the @c MainWindow class and opens
-     *       the @c ScanAreasController class.
-     * 
-     * @see @c scan-areas-controller/scanareascontroller.hpp
-     * @see @c mainwindow.hpp
-     * @see @c MainWindow::on_scan_areas_controller_button_clicked
-    */
-    void scan_areas_controller_button_clicked() const;
+	/**
+	 * @brief Signal emitted when the scan areas controller button is clicked.
+	 *
+	 * @note This is used inside the @c MainWindow class and opens
+	 *       the @c ScanAreasController class.
+	 *
+	 * @see @c scan-areas-controller/scanareascontroller.hpp
+	 * @see @c mainwindow.hpp
+	 * @see @c MainWindow::on_scan_areas_controller_button_clicked
+	 */
+	void scan_areas_controller_button_clicked() const;
 
 private slots:
-    /**
-     * @brief Slot to start the scan.
-    */
-    void start_scan() const;
+	/**
+	 * @brief Slot to start the scan.
+	 */
+	void start_scan() const;
 
-    /**
-     * @brief Slot to stop the scan.
-    */
-    void stop_scan() const;
+	/**
+	 * @brief Slot to stop the scan.
+	 */
+	void stop_scan() const;
 
-    /**
-     * @brief Slot to pause the scan.
-    */
-    void pause_scan() const;
+	/**
+	 * @brief Slot to pause the scan.
+	 */
+	void pause_scan() const;
 
-    /**
-     * @brief Slot to resume the scan.
-    */
-    void resume_scan() const;
+	/**
+	 * @brief Slot to resume the scan.
+	 */
+	void resume_scan() const;
 
-    /**
-     * @brief Slot to show the scan areas controller.
-    */
-    void open_scan_areas_controller() const;
+	/**
+	 * @brief Slot to show the scan areas controller.
+	 */
+	void open_scan_areas_controller() const;
 
 private:
-    QHBoxLayout *main_layout;
+	QHBoxLayout *main_layout;
 
-    ScanButton *scan_button;
-    StopButton *stop_button;
-    PauseButton *pause_button;
-    ResumeButton *resume_button;
-    ScanAreasControllerButton *scan_areas_controller_button;
+	ScanButton *scan_button;
+	StopButton *stop_button;
+	PauseButton *pause_button;
+	ResumeButton *resume_button;
+	ScanAreasControllerButton *scan_areas_controller_button;
 };
 
 #endif // SAM_CONTROL_BAR_HPP

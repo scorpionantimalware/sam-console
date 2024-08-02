@@ -24,50 +24,48 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_MAIN_WINDOW_HPP
 #define SAM_MAIN_WINDOW_HPP
 
-#include <QWidget>
 #include <QHBoxLayout>
 #include <QStackedWidget>
+#include <QWidget>
 
 #include "samconsolemain.hpp"
 
-#include "samconsolesplash.hpp"
-#include "pageswitcherbar.hpp"
-#include "homepage.hpp"
 #include "fimpage.hpp"
+#include "homepage.hpp"
+#include "pageswitcherbar.hpp"
+#include "samconsolesplash.hpp"
 
-class MainWindow : public QWidget
-{
-    Q_OBJECT
+class MainWindow : public QWidget {
+	Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+	explicit MainWindow(QWidget *parent = nullptr);
+	~MainWindow();
 
-    HomePage* get_home_page_p() const;
-    FIMPage* get_fim_page_p() const;
+	HomePage *get_home_page_p() const;
+	FIMPage *get_fim_page_p() const;
 
 private slots:
-    void on_home_page_switch_button_clicked() const;
-    void on_fim_page_switch_button_clicked() const;
+	void on_home_page_switch_button_clicked() const;
+	void on_fim_page_switch_button_clicked() const;
 
 private:
-    SAMConsoleSplash *splash_screen;
+	SAMConsoleSplash *splash_screen;
 
-    QHBoxLayout *main_layout;
+	QHBoxLayout *main_layout;
 
-    PageSwitcherBar *page_switcher_bar;
-    
-    QStackedWidget *pages_stack;
+	PageSwitcherBar *page_switcher_bar;
 
-    HomePage *home_page;
+	QStackedWidget *pages_stack;
 
-    FIMPage *fim_page;
+	HomePage *home_page;
 
-    void show_main_ui();
+	FIMPage *fim_page;
+
+	void show_main_ui();
 };
 
 #endif // SAM_MAIN_WINDOW_HPP

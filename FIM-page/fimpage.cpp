@@ -24,39 +24,34 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #include "fimpage.hpp"
 
-#include <iostream>
 #include <QTimer>
+#include <iostream>
 
-FIMPage::FIMPage(QWidget *parent) : QWidget(parent), main_layout(nullptr), events_monitor(nullptr) {
-    // Initialize the main layout
-    FIMPage::main_layout = new QVBoxLayout(this);
-    FIMPage::main_layout->setSpacing(20);
+FIMPage::FIMPage(QWidget *parent) :
+		QWidget(parent), main_layout(nullptr), events_monitor(nullptr) {
+	// Initialize the main layout
+	FIMPage::main_layout = new QVBoxLayout(this);
+	FIMPage::main_layout->setSpacing(20);
 
-    FIMPage::events_monitor = new EventsMonitor();
+	FIMPage::events_monitor = new EventsMonitor();
 
-    FIMPage::main_layout->addWidget(FIMPage::events_monitor, 1);
+	FIMPage::main_layout->addWidget(FIMPage::events_monitor, 1);
 }
 
-FIMPage::~FIMPage()
-{
-    if (FIMPage::events_monitor)
-    {
-        delete FIMPage::events_monitor;
-        FIMPage::events_monitor = nullptr;
-    }
+FIMPage::~FIMPage() {
+	if (FIMPage::events_monitor) {
+		delete FIMPage::events_monitor;
+		FIMPage::events_monitor = nullptr;
+	}
 
-    if (FIMPage::main_layout)
-    {
-        delete FIMPage::main_layout;
-        FIMPage::main_layout = nullptr;
-    }
+	if (FIMPage::main_layout) {
+		delete FIMPage::main_layout;
+		FIMPage::main_layout = nullptr;
+	}
 }
 
-EventsMonitor *FIMPage::get_events_monitor_p() const
-{
-    return FIMPage::events_monitor;
+EventsMonitor *FIMPage::get_events_monitor_p() const {
+	return FIMPage::events_monitor;
 }
-

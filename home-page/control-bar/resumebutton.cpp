@@ -24,37 +24,34 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #include "control-bar/resumebutton.hpp"
 
 ResumeButton::ResumeButton() {
-    this->setFixedSize(100, 100);
+	this->setFixedSize(100, 100);
 }
 
-void ResumeButton::paintEvent(QPaintEvent *event)
-{
-    QPushButton::paintEvent(event);
+void ResumeButton::paintEvent(QPaintEvent *event) {
+	QPushButton::paintEvent(event);
 
-    QPainter painter = QPainter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+	QPainter painter = QPainter(this);
+	painter.setRenderHint(QPainter::Antialiasing);
 
-    int w {this->width()};
-    int h {this->height()};
+	int w{ this->width() };
+	int h{ this->height() };
 
-    float min_side {(float)qMin(w, h)};
-    
-    QPointF center {w * 0.5f, h * 0.5f};
+	float min_side{ (float)qMin(w, h) };
 
-    float vc_length {min_side * 0.25f}; // Length from each triangle's vertex to the center of the widget
+	QPointF center{ w * 0.5f, h * 0.5f };
 
-    // Calculate the vertices of the triangle based on the center of the widget
-    QPointF top_v {center + QPointF(vc_length, 0)};
-    QPointF bottom_left_v {center - QPointF(vc_length, vc_length)};
-    QPointF bottom_right_v {center - QPointF(vc_length, -vc_length)};
+	float vc_length{ min_side * 0.25f }; // Length from each triangle's vertex to the center of the widget
 
-    // Draw the triangle
-    painter.setBrush(Qt::blue);
-    painter.setPen(Qt::NoPen); // Set the pen to Qt::NoPen to remove the stroke
-    painter.drawPolygon(QPolygonF() << top_v << bottom_left_v << bottom_right_v);
-    
+	// Calculate the vertices of the triangle based on the center of the widget
+	QPointF top_v{ center + QPointF(vc_length, 0) };
+	QPointF bottom_left_v{ center - QPointF(vc_length, vc_length) };
+	QPointF bottom_right_v{ center - QPointF(vc_length, -vc_length) };
+
+	// Draw the triangle
+	painter.setBrush(Qt::blue);
+	painter.setPen(Qt::NoPen); // Set the pen to Qt::NoPen to remove the stroke
+	painter.drawPolygon(QPolygonF() << top_v << bottom_left_v << bottom_right_v);
 }

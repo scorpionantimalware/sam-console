@@ -24,46 +24,43 @@
 /*                                                                                */
 /**********************************************************************************/
 
-
 #ifndef SAM_SCAN_BUTTON_HPP
 #define SAM_SCAN_BUTTON_HPP
 
-#include <QPushButton>
 #include <QPainter>
 #include <QPropertyAnimation>
+#include <QPushButton>
 
-class ScanButton : public QPushButton
-{
-    Q_OBJECT
-    Q_PROPERTY(int loading_arc_angle READ loading_arc_angle WRITE set_loading_arc_angle NOTIFY loading_arc_angle_changed)
+class ScanButton : public QPushButton {
+	Q_OBJECT
+	Q_PROPERTY(int loading_arc_angle READ loading_arc_angle WRITE set_loading_arc_angle NOTIFY loading_arc_angle_changed)
 
 public:
-    explicit ScanButton();
-    ~ScanButton();
+	explicit ScanButton();
+	~ScanButton();
 
-    enum class TextureState
-    {
-        IDLE,
-        SCANNING,
-        ERROR
-    };
+	enum class TextureState {
+		IDLE,
+		SCANNING,
+		ERROR
+	};
 
-    void set_state(const ScanButton::TextureState& new_state);
+	void set_state(const ScanButton::TextureState &new_state);
 
-    int loading_arc_angle() const;
-    void set_loading_arc_angle(const int& angle);
+	int loading_arc_angle() const;
+	void set_loading_arc_angle(const int &angle);
 
 signals:
-    void loading_arc_angle_changed();
+	void loading_arc_angle_changed();
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
+	void paintEvent(QPaintEvent *event) override;
 
 private:
-    TextureState state;
-    int current_loading_arc_angle;
-    
-    QPropertyAnimation* loading_arc_animator;
+	TextureState state;
+	int current_loading_arc_angle;
+
+	QPropertyAnimation *loading_arc_animator;
 };
 
 #endif // SAM_SCAN_BUTTON_HPP
