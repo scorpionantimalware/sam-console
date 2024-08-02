@@ -15,3 +15,6 @@
 # revs in that file:
 #
 #                                     git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Total reformating of the codebase
+39072967c33cf2a3839503a3fecceab27a4bdfa7
